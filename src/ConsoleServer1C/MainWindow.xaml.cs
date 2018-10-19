@@ -29,6 +29,7 @@ namespace ConsoleServer1C
         }
 
         public ObservableCollection<Models.InfoBase> ListBases { get; private set; }
+        public AppSettings AppSettings { get; set; } = new AppSettings();
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
