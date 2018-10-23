@@ -35,6 +35,8 @@ namespace ConsoleServer1C
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
                     RefreshDataContextListBase(UpdateInfoMainWindowEvents.InfoBases);
+                    NotUpdating = true;
+                    ButtonConnect.IsEnabled = NotUpdating;
                 }));
             };
         }
@@ -46,6 +48,9 @@ namespace ConsoleServer1C
             set { _selectedItemListBases = value; DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions; }
         }
         public AppSettings AppSettings { get; set; } = new AppSettings();
+
+        public bool NotUpdating { get; private set; } = true;
+
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
@@ -65,6 +70,9 @@ namespace ConsoleServer1C
 
         private async void UpdateListBases()
         {
+            NotUpdating = false;
+            ButtonConnect.IsEnabled = NotUpdating;
+
             ListBases.Clear();
             try
             {

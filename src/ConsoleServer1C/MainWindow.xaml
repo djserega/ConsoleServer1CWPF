@@ -44,8 +44,10 @@
                      Width="200"
                      Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="4"
+                    x:Name="ButtonConnect"
                     Content="Подключиться"
                     Click="ButtonConnect_Click"/>
+                    <!--IsEnabled="{Binding ElementName=WindowMain, Path=DataContext.NotUpdating}"-->
 
             <Button Grid.Column="6"
                     Content="Закрыть"
