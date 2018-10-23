@@ -28,7 +28,7 @@ namespace ConsoleServer1C
             get => _filterInfoBaseName;
             set
             {
-                _filterInfoBaseName = value;
+                _filterInfoBaseName = value ?? string.Empty;
                 _listFilterInfoBaseName.Clear();
                 foreach (string item in _filterInfoBaseName.Split(';'))
                 {
@@ -38,7 +38,7 @@ namespace ConsoleServer1C
                 }
             }
         }
-        
+
 
         public void Dispose()
         {
@@ -267,12 +267,17 @@ namespace ConsoleServer1C
 
         private bool CurrentInfoBaseNameContainedInListFilter(string infoBaseName)
         {
-            foreach (string filter in _listFilterInfoBaseName)
+            if (_listFilterInfoBaseName.Count > 0)
             {
-                if (infoBaseName.Contains(filter))
-                    return true;
+                foreach (string filter in _listFilterInfoBaseName)
+                {
+                    if (infoBaseName.Contains(filter))
+                        return true;
+                }
+                return false;
             }
-            return false;
+            else
+                return true;
         }
     }
 }
