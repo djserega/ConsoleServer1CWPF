@@ -38,6 +38,10 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="2"/>
@@ -60,7 +64,16 @@
                     Click="ButtonConnect_Click"/>
                 <!--IsEnabled="{Binding ElementName=WindowMain, Path=DataContext.NotUpdating}"-->
 
-                <Button Grid.Column="6"
+                <Label Grid.Column="6"
+                       Content="Фильтр по имени базы"
+                       VerticalAlignment="Bottom"/>
+
+                <TextBox Grid.Column="8"
+                         Width="150"
+                         ToolTip="Текст поиска в названии базы. Без учета регистра. Можно указать несколько баз через ';'."
+                         Text="{Binding ElementName=WindowMain, Path=AppSettings.FilterInfoBaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button Grid.Column="10"
                     Content="Закрыть"
                     Click="ButtonClose_Click"/>
             </Grid>

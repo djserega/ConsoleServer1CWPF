@@ -34,6 +34,7 @@ namespace ConsoleServer1C
 
         public string ServerName { get; set; }
         public int UpdateSessionMinute { get; set; }
+        public string FilterInfoBaseName { get; set; }
 
 
         internal void GetAllSettings()

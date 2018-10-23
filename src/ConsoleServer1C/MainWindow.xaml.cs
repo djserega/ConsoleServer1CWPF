@@ -88,6 +88,8 @@ namespace ConsoleServer1C
 
                     //connectToAgent.UpdateOnlySeansInfo = updateOnlySeansInfo;
 
+                    connectToAgent.FilterInfoBaseName = AppSettings.FilterInfoBaseName;
+
                     connectToAgent.InfoBases.Clear();
                     foreach (Models.InfoBase item in ListBases)
                         connectToAgent.InfoBases.Add(item);

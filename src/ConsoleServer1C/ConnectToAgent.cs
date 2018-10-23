@@ -13,6 +13,8 @@ namespace ConsoleServer1C
         private readonly string _serverName;
         private COMConnector _comConnector;
         private IServerAgentConnection _serverAgent;
+        private string _filterInfoBaseName = string.Empty;
+        private List<string> _listFilterInfoBaseName = new List<string>();
 
         internal ConnectToAgent(string serverName)
         {
@@ -21,6 +23,22 @@ namespace ConsoleServer1C
 
         internal List<Models.InfoBase> InfoBases { get; set; } = new List<Models.InfoBase>();
         internal bool UpdateSessions { get; set; }
+        internal string FilterInfoBaseName
+        {
+            get => _filterInfoBaseName;
+            set
+            {
+                _filterInfoBaseName = value;
+                _listFilterInfoBaseName.Clear();
+                foreach (string item in _filterInfoBaseName.Split(';'))
+                {
+                    string partNameInfoBase = item.Trim();
+                    if (!string.IsNullOrWhiteSpace(partNameInfoBase))
+                        _listFilterInfoBaseName.Add(partNameInfoBase.ToUpper());
+                }
+            }
+        }
+        
 
         public void Dispose()
         {
@@ -55,7 +73,7 @@ namespace ConsoleServer1C
             {
                 _serverAgent.Authenticate(clusterInfo, "", "");
                 List<Models.InfoBase> infoBasesCluster = await Task.Run(() => GetListInfoBaseFromClusterInfo(_comConnector, _serverAgent, clusterInfo));
-                
+
                 foreach (Models.InfoBase item in infoBasesCluster)
                     InfoBases.Add(item);
 
@@ -124,8 +142,7 @@ namespace ConsoleServer1C
 
             foreach (IInfoBaseInfo infoBaseInfo in infoBases)
             {
-                if (infoBaseInfo.Name.ToUpper() == "TEST_PARFUMS_SG"
-                    || infoBaseInfo.Name.ToUpper() == "TEST_PARFUMS_DG")
+                if (CurrentInfoBaseNameContainedInListFilter(infoBaseInfo.Name.ToUpper()))
                 {
                     IInfoBaseConnectionInfo infoBaseConnectionComConsole = FillInfoBase(workingProcessConnection, infoBaseInfo, listInfoBasesTask);
                     if (infoBaseConnectionComConsole != null)
@@ -180,8 +197,7 @@ namespace ConsoleServer1C
             Array sessions = serverAgent.GetSessions(clusterInfo);
             foreach (ISessionInfo sessionInfo in sessions)
             {
-                if (sessionInfo.infoBase.Name.ToUpper() == "TEST_PARFUMS_SG"
-                    || sessionInfo.infoBase.Name.ToUpper() == "TEST_PARFUMS_DG")
+                if (CurrentInfoBaseNameContainedInListFilter(sessionInfo.infoBase.Name.ToUpper()))
                 {
                     if (sessionInfo.AppID != "COMConsole"
                         && sessionInfo.AppID != "SrvrConsole")
@@ -218,7 +234,6 @@ namespace ConsoleServer1C
             return workingProcessConnection;
         }
 
-
         private static void AddAuthentificationWorkingProcess(IWorkingProcessConnection workingProcessConnection)
         {
             workingProcessConnection.AddAuthentication("", "");
@@ -250,5 +265,14 @@ namespace ConsoleServer1C
             }
         }
 
+        private bool CurrentInfoBaseNameContainedInListFilter(string infoBaseName)
+        {
+            foreach (string filter in _listFilterInfoBaseName)
+            {
+                if (infoBaseName.Contains(filter))
+                    return true;
+            }
+            return false;
+        }
     }
 }
