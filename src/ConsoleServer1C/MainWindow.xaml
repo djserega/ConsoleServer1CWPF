@@ -5,64 +5,74 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConsoleServer1C"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1000"
+        Title="Консоль сервера 1С" Height="450" Width="1000"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"        
-        Background="{DynamicResource MaterialDesignPaper}"
+        Background="Transparent"
+        AllowsTransparency="True"
         FontFamily="{DynamicResource MaterialDesignFont}"
         WindowStyle="None"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         x:Name="WindowMain">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="35"/>
-        </Grid.RowDefinitions>
+    <Border Background="{DynamicResource MaterialDesignPaper}"
+            BorderThickness="2"
+            CornerRadius="10 10 5 5"
+            BorderBrush="#6600b6">
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
 
-            <Label Grid.Column="0"
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="2"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0"
                    Content="Адрес сервера"
                    VerticalAlignment="Bottom"/>
-            <TextBox Grid.Column="2"
+                
+                <TextBox Grid.Column="2"
                      x:Name="TextBoxServerName"
-                     Width="200"
+                     Width="150"
+                     ToolTip="IP или имя сервера на котором установлен сервер 1С."
                      Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="TextBoxServerName_KeyDown"/>
-            <Button Grid.Column="4"
+              
+                <Button Grid.Column="4"
                     x:Name="ButtonConnect"
                     Content="Подключиться"
                     Click="ButtonConnect_Click"/>
-                    <!--IsEnabled="{Binding ElementName=WindowMain, Path=DataContext.NotUpdating}"-->
+                <!--IsEnabled="{Binding ElementName=WindowMain, Path=DataContext.NotUpdating}"-->
 
-            <Button Grid.Column="6"
+                <Button Grid.Column="6"
                     Content="Закрыть"
                     Click="ButtonClose_Click"/>
-        </Grid>
+            </Grid>
 
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <DataGrid Grid.Column="0"
+                <DataGrid Grid.Column="0"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       CanUserAddRows="False"
@@ -72,26 +82,26 @@
                       CanUserResizeRows="False"
                       SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}">
-                <DataGrid.Columns>
-                    <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
-                    <md:MaterialDataGridTextColumn Header="Сеансов"         Binding="{Binding ConnectionCount}"/>
-                    <md:MaterialDataGridTextColumn Header="Соединений"      Binding="{Binding SessionCount}"/>
-                    <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                    <DataGrid.Columns>
+                        <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
+                        <md:MaterialDataGridTextColumn Header="Сеансов"         Binding="{Binding ConnectionCount}"/>
+                        <md:MaterialDataGridTextColumn Header="Соединений"      Binding="{Binding SessionCount}"/>
+                        <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
-            <Border Grid.Column="1">
-                <Border.Background>
-                    <RadialGradientBrush>
-                        <GradientStop Color="#FFAEAEAE" Offset="0.75"/>
-                        <GradientStop Color="White" Offset="1"/>
-                        <GradientStop Color="White"/>
-                        <GradientStop Color="#FFC5C5C5" Offset="0.25"/>
-                    </RadialGradientBrush>
-                </Border.Background>
-            </Border>
+                <Border Grid.Column="1">
+                    <Border.Background>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#FFAA5CE8" Offset="0.75"/>
+                            <GradientStop Color="White" Offset="1"/>
+                            <GradientStop Color="White"/>
+                            <GradientStop Color="#FFAA5CE8" Offset="0.25"/>
+                        </RadialGradientBrush>
+                    </Border.Background>
+                </Border>
 
-            <DataGrid Grid.Column="2"
+                <DataGrid Grid.Column="2"
                       x:Name="DataGridListSessions"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
@@ -100,33 +110,35 @@
                       CanUserReorderColumns="False"
                       CanUserResizeColumns="False"
                       CanUserResizeRows="False">
-                <DataGrid.Columns>
-                    <md:MaterialDataGridTextColumn Header="Приложение"      Binding="{Binding AppID}"/>
-                    <md:MaterialDataGridTextColumn Header="№ сеанса"        Binding="{Binding SessionID}"/>
-                    <md:MaterialDataGridTextColumn Header="Пользователь"    Binding="{Binding UserName}"/>
-                    <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcInfo}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                    <DataGrid.Columns>
+                        <md:MaterialDataGridTextColumn Header="Приложение"      Binding="{Binding AppID}"/>
+                        <md:MaterialDataGridTextColumn Header="№ сеанса"        Binding="{Binding SessionID}"/>
+                        <md:MaterialDataGridTextColumn Header="Пользователь"    Binding="{Binding UserName}"/>
+                        <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcInfo}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
-        </Grid>
+            </Grid>
 
-        <Grid Grid.Row="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0"
+                <Label Grid.Column="0"
                    Content="Автообновление"
                    VerticalAlignment="Bottom"/>
-            <TextBox Grid.Column="1"
+                <TextBox Grid.Column="1"
                      Width="30"
+                     ToolTip="Автообновление списка баз и сеансов. Указывается в секундах."
                      Text="{Binding ElementName=WindowMain, Path=AppSettings.UpdateSessionMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Grid.Column="3"
+                <Label Grid.Column="3"
                    Content="с."
                    VerticalAlignment="Bottom"/>
-        </Grid>
+            </Grid>
 
-    </Grid>
+        </Grid>
+    </Border>
 </Window>
