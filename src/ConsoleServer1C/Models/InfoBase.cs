@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,7 +21,7 @@ namespace ConsoleServer1C.Models
         public bool HaveAccess { get; set; }
         public string LastUpdate { get; private set; }
 
-        internal List<Session> ListSessions { get; set; }
+        public List<Session> ListSessions { get; set; } = new List<Session>();
 
         internal void Fill(InfoBase infoBase)
         {

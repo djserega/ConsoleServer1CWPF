@@ -35,7 +35,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            
+
             <Label Grid.Column="0"
                    Content="Адрес сервера"
                    VerticalAlignment="Bottom"/>
@@ -44,7 +44,8 @@
                      Width="200"
                      Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="4"
-                    Content="Подключиться"/>
+                    Content="Подключиться"
+                    Click="ButtonConnect_Click"/>
 
             <Button Grid.Column="6"
                     Content="Закрыть"
@@ -54,10 +55,19 @@
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+
             <DataGrid Grid.Column="0"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="False"
+                      CanUserResizeColumns="False"
+                      CanUserResizeRows="False"
+                      SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}">
                 <DataGrid.Columns>
                     <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
@@ -66,6 +76,7 @@
                     <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}"/>
                 </DataGrid.Columns>
             </DataGrid>
+
             <Border Grid.Column="1">
                 <Border.Background>
                     <RadialGradientBrush>
@@ -76,14 +87,24 @@
                     </RadialGradientBrush>
                 </Border.Background>
             </Border>
-            <DataGrid Grid.Column="2">
+
+            <DataGrid Grid.Column="2"
+                      x:Name="DataGridListSessions"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="False"
+                      CanUserResizeColumns="False"
+                      CanUserResizeRows="False">
                 <DataGrid.Columns>
-                    <md:MaterialDataGridTextColumn Header="Приложение"/>
-                    <md:MaterialDataGridTextColumn Header="№ сеанса"/>
-                    <md:MaterialDataGridTextColumn Header="Пользователь"/>
-                    <md:MaterialDataGridTextColumn Header="Захвачено СУБД"/>
+                    <md:MaterialDataGridTextColumn Header="Приложение"      Binding="{Binding AppID}"/>
+                    <md:MaterialDataGridTextColumn Header="№ сеанса"        Binding="{Binding SessionID}"/>
+                    <md:MaterialDataGridTextColumn Header="Пользователь"    Binding="{Binding UserName}"/>
+                    <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcInfo}"/>
                 </DataGrid.Columns>
             </DataGrid>
+
         </Grid>
 
         <Grid Grid.Row="4">
@@ -103,6 +124,6 @@
                    Content="с."
                    VerticalAlignment="Bottom"/>
         </Grid>
-        
+
     </Grid>
 </Window>

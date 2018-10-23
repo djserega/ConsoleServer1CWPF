@@ -70,6 +70,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="ConnectToAgent.cs" />
+    <Compile Include="Events.cs" />
     <Compile Include="Exception.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -78,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\InfoBase.cs" />
+    <Compile Include="Models\ListNoAccessBase.cs" />
     <Compile Include="Models\NotifyPropertyChangedClass.cs" />
     <Compile Include="Models\Session.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

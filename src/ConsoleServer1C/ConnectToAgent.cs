@@ -1,0 +1,254 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using V83;
+
+namespace ConsoleServer1C
+{
+    internal class ConnectToAgent : IDisposable
+    {
+        private readonly string _serverName;
+        private COMConnector _comConnector;
+        private IServerAgentConnection _serverAgent;
+
+        internal ConnectToAgent(string serverName)
+        {
+            _serverName = serverName;
+        }
+
+        internal List<Models.InfoBase> InfoBases { get; set; } = new List<Models.InfoBase>();
+        internal bool UpdateSessions { get; set; }
+
+        public void Dispose()
+        {
+            _serverAgent = null;
+            _comConnector = null;
+        }
+
+        internal async Task GetListBaseAsync()
+        {
+            await Task.Run(() => GetListBaseFromComAsync());
+        }
+
+        private async void GetListBaseFromComAsync()
+        {
+            InitializeComConnector();
+
+            Models.ListNoAccessBase.List.Clear();
+
+            if (UpdateSessions)
+                for (int i = 0; i < InfoBases.Count; i++)
+                    InfoBases[i].ClearSessionInfo();
+
+            await FillInfoBasesAllClusters();
+
+            UpdateInfoMainWindowEvents.InfoBases = InfoBases;
+            UpdateInfoMainWindowEvents.EvokeUpdateListBasesMainWindow();
+        }
+
+        private async Task FillInfoBasesAllClusters()
+        {
+            foreach (IClusterInfo clusterInfo in _serverAgent.GetClusters())
+            {
+                _serverAgent.Authenticate(clusterInfo, "", "");
+                List<Models.InfoBase> infoBasesCluster = await Task.Run(() => GetListInfoBaseFromClusterInfo(_comConnector, _serverAgent, clusterInfo));
+                
+                foreach (Models.InfoBase item in infoBasesCluster)
+                    InfoBases.Add(item);
+
+                InitializeComConnector();
+                _serverAgent.Authenticate(clusterInfo, "", "");
+                GetInfoSessions(_serverAgent, clusterInfo);
+            }
+        }
+
+        private async Task<List<Models.InfoBase>> GetListInfoBaseFromClusterInfo(COMConnector comConnector, IServerAgentConnection serverAgent, IClusterInfo clusterInfo)
+        {
+            List<Models.InfoBase> infoBasesCluster = new List<Models.InfoBase>();
+
+            Array workingProcesses = null;
+
+            try
+            {
+                workingProcesses = serverAgent.GetWorkingProcesses(clusterInfo);
+            }
+            catch (Exception ex)
+            {
+                return infoBasesCluster;
+            }
+
+            if (workingProcesses == null)
+                return infoBasesCluster;
+
+            List<Task> tasks = new List<Task>();
+
+            foreach (IWorkingProcessInfo workProcess in workingProcesses)
+                tasks.Add(FillInfoBaseFromWorkProcessAsync(comConnector, workProcess));
+
+            await Task.WhenAll(tasks);
+
+            foreach (Task<List<Models.InfoBase>> item in tasks)
+            {
+                foreach (Models.InfoBase itemResult in item.Result)
+                {
+                    if (itemResult != null)
+                    {
+                        Models.InfoBase infoBase = infoBasesCluster.FirstOrDefault(f => f.NameToUpper == itemResult.NameToUpper);
+                        if (infoBase == null)
+                            infoBasesCluster.Add(itemResult);
+                        else
+                        {
+                            infoBase.ConnectionCount += itemResult.ConnectionCount;
+                            infoBase.HaveAccess = itemResult.HaveAccess;
+                        }
+                    }
+                }
+            }
+
+            return infoBasesCluster;
+        }
+
+        private async Task<List<Models.InfoBase>> FillInfoBaseFromWorkProcessAsync(COMConnector comConnector, IWorkingProcessInfo workProcess)
+        {
+            return await Task.Run(() => FillInfoBaseFromWorkProcess(GetWorkingProcessConnection(comConnector, workProcess)));
+        }
+
+        private List<Models.InfoBase> FillInfoBaseFromWorkProcess(IWorkingProcessConnection workingProcessConnection)
+        {
+            List<Models.InfoBase> listInfoBasesTask = new List<Models.InfoBase>();
+
+            Array infoBases = workingProcessConnection.GetInfoBases();
+
+            foreach (IInfoBaseInfo infoBaseInfo in infoBases)
+            {
+                if (infoBaseInfo.Name.ToUpper() == "TEST_PARFUMS_SG"
+                    || infoBaseInfo.Name.ToUpper() == "TEST_PARFUMS_DG")
+                {
+                    IInfoBaseConnectionInfo infoBaseConnectionComConsole = FillInfoBase(workingProcessConnection, infoBaseInfo, listInfoBasesTask);
+                    if (infoBaseConnectionComConsole != null)
+                        workingProcessConnection.Disconnect(infoBaseConnectionComConsole);
+                }
+            }
+
+            return listInfoBasesTask;
+        }
+
+        private IInfoBaseConnectionInfo FillInfoBase(IWorkingProcessConnection workingProcessConnection, IInfoBaseInfo infoBaseInfo, List<Models.InfoBase> listInfoBasesTask)
+        {
+            IInfoBaseConnectionInfo infoBaseConnectionComConsole = null;
+            bool haveAccess = true;
+            int connections = 0;
+            try
+            {
+                foreach (IInfoBaseConnectionInfo infoBaseConnectionInfo in workingProcessConnection.GetInfoBaseConnections(infoBaseInfo))
+                    if (infoBaseConnectionInfo.AppID == "COMConsole")
+                        infoBaseConnectionComConsole = infoBaseConnectionInfo;
+                    else if (infoBaseConnectionInfo.AppID != "SrvrConsole")
+                        connections++;
+            }
+            catch (Exception)
+            {
+                haveAccess = false;
+            }
+
+            Models.InfoBase infoBase = listInfoBasesTask.FirstOrDefault(f => f.NameToUpper == infoBaseInfo.Name.ToUpper());
+            if (infoBase == null)
+            {
+                infoBase = new Models.InfoBase()
+                {
+                    Name = infoBaseInfo.Name,
+                    Descr = infoBaseInfo.Descr,
+                    HaveAccess = haveAccess
+                };
+                infoBase.ConnectionCount += connections;
+                listInfoBasesTask.Add(infoBase);
+            }
+            else
+            {
+                infoBase.ConnectionCount += connections;
+                infoBase.HaveAccess = haveAccess;
+            }
+
+            return infoBaseConnectionComConsole;
+        }
+
+        private void GetInfoSessions(IServerAgentConnection serverAgent, IClusterInfo clusterInfo)
+        {
+            Array sessions = serverAgent.GetSessions(clusterInfo);
+            foreach (ISessionInfo sessionInfo in sessions)
+            {
+                if (sessionInfo.infoBase.Name.ToUpper() == "TEST_PARFUMS_SG"
+                    || sessionInfo.infoBase.Name.ToUpper() == "TEST_PARFUMS_DG")
+                {
+                    if (sessionInfo.AppID != "COMConsole"
+                        && sessionInfo.AppID != "SrvrConsole")
+                    {
+                        Models.InfoBase infoBase = InfoBases.FirstOrDefault(f => f.NameToUpper == sessionInfo.infoBase.Name.ToUpper());
+                        if (infoBase != null)
+                        {
+                            infoBase.SessionCount++;
+                            infoBase.DbProcTook += ((float)sessionInfo.dbProcTook / 1000);
+                            infoBase.DbProcInfo += sessionInfo.dbProcInfo;
+                            infoBase.ListSessions.Add(new Models.Session(clusterInfo, sessionInfo));
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        private IWorkingProcessConnection GetWorkingProcessConnection(COMConnector comConnector, IWorkingProcessInfo workProcess)
+        {
+            IWorkingProcessConnection workingProcessConnection;
+            try
+            {
+                workingProcessConnection = comConnector.ConnectWorkingProcess($"{_serverName}:{workProcess.MainPort}");
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            AddAuthentificationWorkingProcess(workingProcessConnection);
+
+            return workingProcessConnection;
+        }
+
+
+        private static void AddAuthentificationWorkingProcess(IWorkingProcessConnection workingProcessConnection)
+        {
+            workingProcessConnection.AddAuthentication("", "");
+        }
+
+        private void InitializeComConnector()
+        {
+            if (string.IsNullOrWhiteSpace(_serverName))
+            {
+                throw new ArgumentException("Не указано имя сервера.");
+            }
+
+            try
+            {
+                _comConnector = new COMConnector();
+            }
+            catch (Exception ex)
+            {
+                throw new CreateV83ComConnector(ex.Message);
+            }
+
+            try
+            {
+                _serverAgent = _comConnector.ConnectAgent(_serverName);
+            }
+            catch (Exception ex)
+            {
+                throw new ConnectAgentException(ex.Message);
+            }
+        }
+
+    }
+}
