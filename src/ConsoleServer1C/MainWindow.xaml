@@ -42,7 +42,8 @@
             <TextBox Grid.Column="2"
                      x:Name="TextBoxServerName"
                      Width="200"
-                     Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                     Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     KeyDown="TextBoxServerName_KeyDown"/>
             <Button Grid.Column="4"
                     x:Name="ButtonConnect"
                     Content="Подключиться"

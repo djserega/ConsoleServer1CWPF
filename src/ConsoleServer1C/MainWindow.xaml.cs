@@ -144,5 +144,10 @@ namespace ConsoleServer1C
                 ListBases.Add(item);
         }
 
+        private void TextBoxServerName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                UpdateListBases();
+        }
     }
 }
