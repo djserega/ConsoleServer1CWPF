@@ -43,7 +43,7 @@ namespace ConsoleServer1C
         public Models.InfoBase SelectedItemListBases
         {
             get => _selectedItemListBases;
-            set { _selectedItemListBases = value; DataGridListSessions.ItemsSource = _selectedItemListBases.ListSessions; }
+            set { _selectedItemListBases = value; DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions; }
         }
         public AppSettings AppSettings { get; set; } = new AppSettings();
 
@@ -65,6 +65,7 @@ namespace ConsoleServer1C
 
         private async void UpdateListBases()
         {
+            ListBases.Clear();
             try
             {
                 using (ConnectToAgent connectToAgent = new ConnectToAgent(AppSettings.ServerName))
