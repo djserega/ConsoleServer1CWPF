@@ -73,6 +73,7 @@
     <Compile Include="ConnectToAgent.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Exception.cs" />
+    <Compile Include="InfoBaseWithoutAccess.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

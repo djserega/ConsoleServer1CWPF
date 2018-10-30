@@ -155,6 +155,9 @@ namespace ConsoleServer1C
 
         private IInfoBaseConnectionInfo FillInfoBase(IWorkingProcessConnection workingProcessConnection, IInfoBaseInfo infoBaseInfo, List<Models.InfoBase> listInfoBasesTask)
         {
+            if (InfoBaseWithoutAccess.InfoBaseContains(infoBaseInfo.DBName))
+                return null;
+
             IInfoBaseConnectionInfo infoBaseConnectionComConsole = null;
             bool haveAccess = true;
             int connections = 0;
@@ -189,6 +192,9 @@ namespace ConsoleServer1C
                 infoBase.HaveAccess = haveAccess;
             }
 
+            if (!haveAccess)
+                InfoBaseWithoutAccess.AddInfoBase(infoBaseInfo.DBName);
+
             return infoBaseConnectionComConsole;
         }
 
@@ -214,8 +220,6 @@ namespace ConsoleServer1C
                 }
             }
         }
-
-
 
         private IWorkingProcessConnection GetWorkingProcessConnection(COMConnector comConnector, IWorkingProcessInfo workProcess)
         {
