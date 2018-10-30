@@ -63,8 +63,8 @@ namespace ConsoleServer1C
 
             await FillInfoBasesAllClusters();
 
-            UpdateInfoMainWindowEvents.InfoBases = InfoBases;
-            UpdateInfoMainWindowEvents.EvokeUpdateListBasesMainWindow();
+            Events.UpdateInfoMainWindowEvents.InfoBases = InfoBases;
+            Events.UpdateInfoMainWindowEvents.EvokeUpdateListBasesMainWindow();
         }
 
         private async Task FillInfoBasesAllClusters()

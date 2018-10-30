@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleServer1C
+namespace ConsoleServer1C.Events
 {
     internal delegate void UpdateListBasesMainWindowEvent();
     internal class UpdateInfoMainWindowEvents : EventArgs

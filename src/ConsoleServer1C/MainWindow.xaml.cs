@@ -30,11 +30,11 @@ namespace ConsoleServer1C
 
             DataContext = this;
 
-            UpdateInfoMainWindowEvents.UpdateListBasesMainWindowEvent += () =>
+            Events.UpdateInfoMainWindowEvents.UpdateListBasesMainWindowEvent += () =>
             {
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
-                    RefreshDataContextListBase(UpdateInfoMainWindowEvents.InfoBases);
+                    RefreshDataContextListBase(Events.UpdateInfoMainWindowEvents.InfoBases);
                     NotUpdating = true;
                     ButtonConnect.IsEnabled = NotUpdating;
                 }));
