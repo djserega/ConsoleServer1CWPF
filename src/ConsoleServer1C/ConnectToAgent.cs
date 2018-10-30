@@ -57,6 +57,8 @@ namespace ConsoleServer1C
 
             Models.ListNoAccessBase.List.Clear();
 
+            Events.ConnectionStatusEvents.ClearState();
+
             if (UpdateSessions)
                 for (int i = 0; i < InfoBases.Count; i++)
                     InfoBases[i].ClearSessionInfo();
@@ -69,7 +71,11 @@ namespace ConsoleServer1C
 
         private async Task FillInfoBasesAllClusters()
         {
-            foreach (IClusterInfo clusterInfo in _serverAgent.GetClusters())
+            Array arrayClusters = _serverAgent.GetClusters();
+
+            Events.ConnectionStatusEvents.CountClusters = arrayClusters.Length;
+
+            foreach (IClusterInfo clusterInfo in arrayClusters)
             {
                 _serverAgent.Authenticate(clusterInfo, "", "");
                 List<Models.InfoBase> infoBasesCluster = await Task.Run(() => GetListInfoBaseFromClusterInfo(_comConnector, _serverAgent, clusterInfo));
@@ -80,6 +86,8 @@ namespace ConsoleServer1C
                 InitializeComConnector();
                 _serverAgent.Authenticate(clusterInfo, "", "");
                 GetInfoSessions(_serverAgent, clusterInfo);
+
+                Events.ConnectionStatusEvents.CurrentCluster++;
             }
         }
 
@@ -102,6 +110,8 @@ namespace ConsoleServer1C
                 return infoBasesCluster;
 
             List<Task> tasks = new List<Task>();
+
+            Events.ConnectionStatusEvents.CountWorkProcesses += workingProcesses.Length;
 
             foreach (IWorkingProcessInfo workProcess in workingProcesses)
                 tasks.Add(FillInfoBaseFromWorkProcessAsync(comConnector, workProcess));
@@ -140,6 +150,8 @@ namespace ConsoleServer1C
 
             Array infoBases = workingProcessConnection.GetInfoBases();
 
+            Events.ConnectionStatusEvents.CountInfoBases += infoBases.Length;
+
             foreach (IInfoBaseInfo infoBaseInfo in infoBases)
             {
                 if (CurrentInfoBaseNameContainedInListFilter(infoBaseInfo.Name.ToUpper()))
@@ -148,7 +160,10 @@ namespace ConsoleServer1C
                     if (infoBaseConnectionComConsole != null)
                         workingProcessConnection.Disconnect(infoBaseConnectionComConsole);
                 }
+                Events.ConnectionStatusEvents.CurrentInfoBases++;
             }
+
+            Events.ConnectionStatusEvents.CurrentWorkProcesses++;
 
             return listInfoBasesTask;
         }

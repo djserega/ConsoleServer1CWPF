@@ -39,6 +39,16 @@ namespace ConsoleServer1C
                     ButtonConnect.IsEnabled = NotUpdating;
                 }));
             };
+
+            Events.ConnectionStatusEvents.ConnectionStatusEvent += () =>
+            {
+                Dispatcher.Invoke(new ThreadStart(delegate
+                {
+                    ProgressBarValue = Events.ConnectionStatusEvents.CurrentStateProgress;
+                    BindingOperations.GetBindingExpression(ProgressBarStatusConnection, ProgressBar.ValueProperty).UpdateTarget();
+                    BindingOperations.GetBindingExpression(TextBlockStatusConnection, TextBlock.TextProperty).UpdateTarget();
+                }));
+            };
         }
 
         public ObservableCollection<Models.InfoBase> ListBases { get; private set; } = new ObservableCollection<Models.InfoBase>();
@@ -48,6 +58,7 @@ namespace ConsoleServer1C
             set { _selectedItemListBases = value; DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions; }
         }
         public AppSettings AppSettings { get; set; } = new AppSettings();
+        public int ProgressBarValue { get; set; } = 0;
 
         public bool NotUpdating { get; private set; } = true;
 

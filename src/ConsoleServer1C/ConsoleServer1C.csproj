@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="AppSettings.cs" />
     <Compile Include="ConnectToAgent.cs" />
+    <Compile Include="Events\ConnectionStatusEvents.cs" />
     <Compile Include="Events\UpdateInfoMainWindowEvents.cs" />
     <Compile Include="Exception.cs" />
     <Compile Include="InfoBaseWithoutAccess.cs" />

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConsoleServer1C"
         mc:Ignorable="d"
-        Title="Консоль сервера 1С" Height="450" Width="1000"
+        Title="Консоль сервера 1С" Height="600" Width="1300"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -138,6 +138,9 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0"
@@ -150,6 +153,22 @@
                 <Label Grid.Column="3"
                    Content="с."
                    VerticalAlignment="Bottom"/>
+                <ProgressBar Grid.Column="4"
+                             x:Name="ProgressBarStatusConnection"
+                             Width="200"
+                             Value="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
+                <StackPanel Grid.Column="5" Orientation="Horizontal">
+                    <Separator Width="5"
+                               Background="{x:Null}"/>
+                    <TextBlock x:Name="TextBlockStatusConnection"
+                               Width="25"
+                               VerticalAlignment="Center"
+                               Foreground="#FFAA5CE8"
+                               Text="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
+                    <Label Content="%"
+                           VerticalAlignment="Center"
+                           Foreground="#FFAA5CE8"/>
+                </StackPanel>
             </Grid>
 
         </Grid>
