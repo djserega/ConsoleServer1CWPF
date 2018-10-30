@@ -78,16 +78,6 @@ namespace ConsoleServer1C
             {
                 using (ConnectToAgent connectToAgent = new ConnectToAgent(AppSettings.ServerName))
                 {
-                    //if (infoBaseUpdate != null)
-                    //{
-                    //    connectToAgent.InfoBaseUpdate = infoBaseUpdate;
-                    //    connectToAgent.SetListInfoBases(_listBases.ToList());
-                    //}
-                    //else if (updateOnlySeansInfo)
-                    //    connectToAgent.SetListInfoBases(_listBases.ToList());
-
-                    //connectToAgent.UpdateOnlySeansInfo = updateOnlySeansInfo;
-
                     connectToAgent.FilterInfoBaseName = AppSettings.FilterInfoBaseName;
 
                     connectToAgent.InfoBases.Clear();
@@ -96,10 +86,6 @@ namespace ConsoleServer1C
 
                     await connectToAgent.GetListBaseAsync();
                 }
-
-                //LastUpdate = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
-
-                //BindingOperations.GetBindingExpression(TextBlockLastUpdate, TextBlock.TextProperty).UpdateTarget();
             }
             catch (ArgumentException ex)
             {
