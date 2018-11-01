@@ -39,7 +39,6 @@ namespace ConsoleServer1C
             }
         }
 
-
         public void Dispose()
         {
             _serverAgent = null;
@@ -78,13 +77,21 @@ namespace ConsoleServer1C
             foreach (IClusterInfo clusterInfo in arrayClusters)
             {
                 _serverAgent.Authenticate(clusterInfo, "", "");
-                List<Models.InfoBase> infoBasesCluster = await Task.Run(() => GetListInfoBaseFromClusterInfo(_comConnector, _serverAgent, clusterInfo));
 
-                foreach (Models.InfoBase item in infoBasesCluster)
-                    InfoBases.Add(item);
+                if (!UpdateSessions)
+                {
+                    List<Models.InfoBase> infoBasesCluster = await Task.Run(() => GetListInfoBaseFromClusterInfo(_comConnector, _serverAgent, clusterInfo));
 
-                InitializeComConnector();
-                _serverAgent.Authenticate(clusterInfo, "", "");
+                    foreach (Models.InfoBase item in infoBasesCluster)
+                        InfoBases.Add(item);
+                }
+
+                if (_serverAgent == null)
+                {
+                    InitializeComConnector();
+                    _serverAgent.Authenticate(clusterInfo, "", "");
+                }
+
                 GetInfoSessions(_serverAgent, clusterInfo);
 
                 Events.ConnectionStatusEvents.CurrentCluster++;

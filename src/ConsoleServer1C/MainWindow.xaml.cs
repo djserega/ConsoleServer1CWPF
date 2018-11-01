@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using timers = System.Timers;
+
 namespace ConsoleServer1C
 {
     /// <summary>
@@ -23,6 +25,7 @@ namespace ConsoleServer1C
     public partial class MainWindow : Window
     {
         private Models.InfoBase _selectedItemListBases = new Models.InfoBase();
+        private timers.Timer _timer = new timers.Timer();
 
         public MainWindow()
         {
@@ -35,8 +38,10 @@ namespace ConsoleServer1C
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
                     RefreshDataContextListBase(Events.UpdateInfoMainWindowEvents.InfoBases);
+                    DataGridListBases.Items.Refresh();
                     NotUpdating = true;
                     ButtonConnect.IsEnabled = NotUpdating;
+                    StartStopAutoUpdating();
                 }));
             };
 
@@ -49,6 +54,11 @@ namespace ConsoleServer1C
                     BindingOperations.GetBindingExpression(TextBlockStatusConnection, TextBlock.TextProperty).UpdateTarget();
                 }));
             };
+
+            _timer.Elapsed += (object sender, timers.ElapsedEventArgs e) =>
+            {
+                Dispatcher.Invoke(new ThreadStart(delegate { UpdateListBases(true); }));
+            };
         }
 
         public ObservableCollection<Models.InfoBase> ListBases { get; private set; } = new ObservableCollection<Models.InfoBase>();
@@ -59,7 +69,6 @@ namespace ConsoleServer1C
         }
         public AppSettings AppSettings { get; set; } = new AppSettings();
         public int ProgressBarValue { get; set; } = 0;
-
         public bool NotUpdating { get; private set; } = true;
 
 
@@ -79,17 +88,21 @@ namespace ConsoleServer1C
             UpdateListBases();
         }
 
-        private async void UpdateListBases()
+        private async void UpdateListBases(bool updateSessionInfo = false)
         {
             NotUpdating = false;
             ButtonConnect.IsEnabled = NotUpdating;
+            StartStopAutoUpdating();
 
-            ListBases.Clear();
+            if (!updateSessionInfo)
+                ListBases.Clear();
+
             try
             {
                 using (ConnectToAgent connectToAgent = new ConnectToAgent(AppSettings.ServerName))
                 {
                     connectToAgent.FilterInfoBaseName = AppSettings.FilterInfoBaseName;
+                    connectToAgent.UpdateSessions = updateSessionInfo;
 
                     connectToAgent.InfoBases.Clear();
                     foreach (Models.InfoBase item in ListBases)
@@ -147,6 +160,26 @@ namespace ConsoleServer1C
         {
             if (e.Key == Key.Enter)
                 UpdateListBases();
+        }
+
+        private void TextBoxUpdateSessionMinute_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            StartStopAutoUpdating();
+        }
+
+        private void StartStopAutoUpdating()
+        {
+            if (!NotUpdating || (AppSettings.UpdateSessionMinute == 0 || ListBases.Count == 0))
+            {
+                _timer.Stop();
+                BorderUpdateSessionMinute.Background = new SolidColorBrush();
+            }
+            else
+            {
+                _timer.Interval = AppSettings.UpdateSessionMinute * 1000;
+                _timer.Start();
+                BorderUpdateSessionMinute.Background = (Brush)new BrushConverter().ConvertFrom("#C7DFFC");
+            }
         }
     }
 }

@@ -50,14 +50,14 @@
                 <Label Grid.Column="0"
                    Content="Адрес сервера"
                    VerticalAlignment="Bottom"/>
-                
+
                 <TextBox Grid.Column="2"
                      x:Name="TextBoxServerName"
                      Width="150"
                      ToolTip="IP или имя сервера на котором установлен сервер 1С."
                      Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="TextBoxServerName_KeyDown"/>
-              
+
                 <Button Grid.Column="4"
                     x:Name="ButtonConnect"
                     Content="Подключиться"
@@ -86,15 +86,16 @@
                 </Grid.ColumnDefinitions>
 
                 <DataGrid Grid.Column="0"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserReorderColumns="False"
-                      CanUserResizeColumns="False"
-                      CanUserResizeRows="False"
-                      SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}">
+                          x:Name="DataGridListBases"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserReorderColumns="False"
+                          CanUserResizeColumns="False"
+                          CanUserResizeRows="False"
+                          SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}">
                     <DataGrid.Columns>
                         <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
                         <md:MaterialDataGridTextColumn Header="Сеансов"         Binding="{Binding ConnectionCount}"/>
@@ -115,14 +116,14 @@
                 </Border>
 
                 <DataGrid Grid.Column="2"
-                      x:Name="DataGridListSessions"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserReorderColumns="False"
-                      CanUserResizeColumns="False"
-                      CanUserResizeRows="False">
+                          x:Name="DataGridListSessions"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserReorderColumns="False"
+                          CanUserResizeColumns="False"
+                          CanUserResizeRows="False">
                     <DataGrid.Columns>
                         <md:MaterialDataGridTextColumn Header="Приложение"      Binding="{Binding AppID}"/>
                         <md:MaterialDataGridTextColumn Header="№ сеанса"        Binding="{Binding SessionID}"/>
@@ -144,15 +145,24 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0"
-                   Content="Автообновление"
-                   VerticalAlignment="Bottom"/>
-                <TextBox Grid.Column="1"
-                     Width="30"
-                     ToolTip="Автообновление списка баз и сеансов. Указывается в секундах."
-                     Text="{Binding ElementName=WindowMain, Path=AppSettings.UpdateSessionMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                       Content="Автообновление"
+                       VerticalAlignment="Bottom"/>
+                <Border Grid.Column="1"
+                        x:Name="BorderUpdateSessionMinute"
+                        VerticalAlignment="Bottom"
+                        Height="25"
+                        BorderThickness="1"
+                        CornerRadius="10 10 5 5"
+                        BorderBrush="#6600b6">
+                    <TextBox Width="30"
+                             HorizontalContentAlignment="Center"
+                             ToolTip="Автообновление списка баз и сеансов. Указывается в секундах."
+                             Text="{Binding ElementName=WindowMain, Path=AppSettings.UpdateSessionMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="TextBoxUpdateSessionMinute_TextChanged"/>
+                </Border>
                 <Label Grid.Column="3"
-                   Content="с."
-                   VerticalAlignment="Bottom"/>
+                       Content="с."
+                       VerticalAlignment="Bottom"/>
                 <ProgressBar Grid.Column="4"
                              x:Name="ProgressBarStatusConnection"
                              Width="200"
