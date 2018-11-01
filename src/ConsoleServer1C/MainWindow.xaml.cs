@@ -39,6 +39,7 @@ namespace ConsoleServer1C
                 {
                     RefreshDataContextListBase(Events.UpdateInfoMainWindowEvents.InfoBases);
                     DataGridListBases.Items.Refresh();
+                    DataGridListSessions.Items.Refresh();
                     NotUpdating = true;
                     ButtonConnect.IsEnabled = NotUpdating;
                     StartStopAutoUpdating();

@@ -128,7 +128,7 @@
                         <md:MaterialDataGridTextColumn Header="Приложение"      Binding="{Binding AppID}"/>
                         <md:MaterialDataGridTextColumn Header="№ сеанса"        Binding="{Binding SessionID}"/>
                         <md:MaterialDataGridTextColumn Header="Пользователь"    Binding="{Binding UserName}"/>
-                        <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcInfo}"/>
+                        <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
