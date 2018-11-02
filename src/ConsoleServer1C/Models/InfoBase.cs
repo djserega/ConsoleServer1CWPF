@@ -10,16 +10,15 @@ namespace ConsoleServer1C.Models
 {
     public class InfoBase : NotifyPropertyChangedClass
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string NameToUpper { get => Name.ToUpper(); }
-        public string Descr { get; set; }
+        public string Descr { get; set; } = string.Empty;
         public int ConnectionCount { get; set; }
         public int SessionCount { get; set; }
-        public string DbProcInfo { get; set; }
+        public string DbProcInfo { get; set; } = string.Empty;
         public float DbProcTook { get; set; }
 
         public bool HaveAccess { get; set; }
-        public string LastUpdate { get; private set; }
 
         public List<Session> ListSessions { get; set; } = new List<Session>();
 
