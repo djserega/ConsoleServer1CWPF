@@ -26,6 +26,8 @@ namespace ConsoleServer1C
     {
         private Models.InfoBase _selectedItemListBases = new Models.InfoBase();
         private timers.Timer _timer = new timers.Timer();
+        private bool _formIsWidenSizeWE = false;
+        private bool _formIsWidenSizeNS = false;
 
         public MainWindow()
         {
@@ -81,7 +83,8 @@ namespace ConsoleServer1C
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
-                DragMove();
+                if (!_formIsWidenSizeWE && !_formIsWidenSizeNS)
+                    DragMove();
         }
 
         private void ButtonConnect_Click(object sender, RoutedEventArgs e)
@@ -182,5 +185,97 @@ namespace ConsoleServer1C
                 BorderUpdateSessionMinute.Background = (Brush)new BrushConverter().ConvertFrom("#C7DFFC");
             }
         }
+
+        #region Change size main window
+
+        private void RectangleSizeWE_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeWE = true;
+        }
+
+        private void RectangleSizeWE_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeWE = false;
+            ((Rectangle)sender).ReleaseMouseCapture();
+        }
+
+        private void RectangleSizeWE_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed)
+                _formIsWidenSizeWE = false;
+
+            if (_formIsWidenSizeWE)
+            {
+                ((Rectangle)sender).CaptureMouse();
+
+                double newWidth = e.GetPosition(this).X + 1;
+                if (newWidth > 0)
+                    Width = newWidth;
+            }
+        }
+
+        private void RectangleSizeNS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeNS = true;
+        }
+
+        private void RectangleSizeNS_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeNS = false;
+            ((Rectangle)sender).ReleaseMouseCapture();
+        }
+
+        private void RectangleSizeNS_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed)
+                _formIsWidenSizeNS = false;
+
+            if (_formIsWidenSizeNS)
+            {
+                ((Rectangle)sender).CaptureMouse();
+
+                double newHeight = e.GetPosition(this).Y + 1;
+                if (newHeight > 0)
+                    Height = newHeight;
+            }
+        }
+
+        private void RectangleSizeNWSE_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeNS = true;
+            _formIsWidenSizeWE = true;
+        }
+
+        private void RectangleSizeNWSE_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeNS = false;
+            _formIsWidenSizeWE = false;
+            ((Rectangle)sender).ReleaseMouseCapture();
+        }
+
+        private void RectangleSizeNWSE_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                _formIsWidenSizeNS = false;
+                _formIsWidenSizeWE = false;
+            }
+
+            if (_formIsWidenSizeNS && _formIsWidenSizeWE)
+            {
+                ((Rectangle)sender).CaptureMouse();
+
+                double newHeight = e.GetPosition(this).Y + 1;
+                if (newHeight > 0)
+                    Height = newHeight;
+
+                double newWidth = e.GetPosition(this).X + 1;
+                if (newWidth > 0)
+                    Width = newWidth;
+            }
+        }
+
+        #endregion
+
     }
 }
