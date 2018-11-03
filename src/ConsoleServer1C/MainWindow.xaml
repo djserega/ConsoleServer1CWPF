@@ -83,7 +83,8 @@
                     <TextBox Grid.Column="8"
                              Width="150"
                              ToolTip="Текст поиска в названии базы. Без учета регистра. Можно указать несколько баз через ';'."
-                             Text="{Binding ElementName=WindowMain, Path=AppSettings.FilterInfoBaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding ElementName=WindowMain, Path=AppSettings.FilterInfoBaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             KeyDown="TextBoxFilterInfoBaseName_KeyDown"/>
 
                     <Button Grid.Column="10"
                             Content="Закрыть"

@@ -166,6 +166,12 @@ namespace ConsoleServer1C
                 UpdateListBases();
         }
 
+        private void TextBoxFilterInfoBaseName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                UpdateListBases();
+        }
+
         private void TextBoxUpdateSessionMinute_TextChanged(object sender, TextChangedEventArgs e)
         {
             StartStopAutoUpdating();
