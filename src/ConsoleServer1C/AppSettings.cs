@@ -83,7 +83,7 @@ namespace ConsoleServer1C
                         if (keyEmpty || key == "UpdateSessionMinute")
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "UpdateSessionMinute", UpdateSessionMinute, keyEmpty || saveCurrent);
                         if (keyEmpty || key == "FilterInfoBaseName")
-                            SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "FilterInfoBaseName", FilterInfoBaseName, keyEmpty | saveCurrent);
+                            SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "FilterInfoBaseName", FilterInfoBaseName, keyEmpty || saveCurrent);
                     }
                 }
             }
