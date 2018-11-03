@@ -46,8 +46,11 @@ namespace ConsoleServer1C
                     using (RegistryKey registryKeyApplication = currentUser.OpenSubKey(_prefixRegistryKey, true))
                     {
                         ServerName = GetValue(registryKeyApplication, "ServerName");
+
                         int.TryParse(GetValue(registryKeyApplication, "UpdateSessionMinute"), out int updateSessionMinute);
                         UpdateSessionMinute = updateSessionMinute;
+
+                        FilterInfoBaseName = GetValue(registryKeyApplication, "FilterInfoBaseName");
                     }
                 }
             }
@@ -79,6 +82,8 @@ namespace ConsoleServer1C
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "ServerName", ServerName, keyEmpty || saveCurrent);
                         if (keyEmpty || key == "UpdateSessionMinute")
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "UpdateSessionMinute", UpdateSessionMinute, keyEmpty || saveCurrent);
+                        if (keyEmpty || key == "FilterInfoBaseName")
+                            SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "FilterInfoBaseName", FilterInfoBaseName, keyEmpty | saveCurrent);
                     }
                 }
             }
