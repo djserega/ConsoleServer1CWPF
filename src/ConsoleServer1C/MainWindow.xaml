@@ -54,7 +54,11 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="2"/>
                     </Grid.ColumnDefinitions>
@@ -86,7 +90,16 @@
                              Text="{Binding ElementName=WindowMain, Path=AppSettings.FilterInfoBaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              KeyDown="TextBoxFilterInfoBaseName_KeyDown"/>
 
-                    <Button Grid.Column="10"
+                    <Label Grid.Column="10"
+                           Content="Сортировать 'Захвачено СУБД'"
+                           VerticalAlignment="Bottom"/>
+
+                    <CheckBox Grid.Column="12"
+                              VerticalAlignment="Bottom"
+                              Margin="0 3"
+                              IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.SortDbProcTook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Button Grid.Column="14"
                             Content="Закрыть"
                             Click="ButtonClose_Click"/>
                 </Grid>

@@ -35,7 +35,7 @@ namespace ConsoleServer1C
         public string ServerName { get; set; }
         public int UpdateSessionMinute { get; set; }
         public string FilterInfoBaseName { get; set; }
-
+        public bool SortDbProcTook { get; set; }
 
         internal void GetAllSettings()
         {
@@ -51,6 +51,9 @@ namespace ConsoleServer1C
                         UpdateSessionMinute = updateSessionMinute;
 
                         FilterInfoBaseName = GetValue(registryKeyApplication, "FilterInfoBaseName");
+
+                        bool.TryParse(GetValue(registryKeyApplication, "SortDbProcTook"), out bool sortDbProcTook);
+                        SortDbProcTook = sortDbProcTook;
                     }
                 }
             }
@@ -84,6 +87,8 @@ namespace ConsoleServer1C
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "UpdateSessionMinute", UpdateSessionMinute, keyEmpty || saveCurrent);
                         if (keyEmpty || key == "FilterInfoBaseName")
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "FilterInfoBaseName", FilterInfoBaseName, keyEmpty || saveCurrent);
+                        if (keyEmpty || key == "SortDbProcTook")
+                            SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "SortDbProcTook", SortDbProcTook, keyEmpty || saveCurrent);
                     }
                 }
             }
@@ -104,6 +109,15 @@ namespace ConsoleServer1C
             }
         }
         private void SetValueIfNotFinded(RegistryKey regKey, string[] names, string key, int value = 0, bool initialize = false)
+        {
+            if (!string.IsNullOrWhiteSpace(names.FirstOrDefault(f => f == key)) || initialize)
+            {
+                string currentValue = GetValue(regKey, key);
+                if (string.IsNullOrEmpty(currentValue) || initialize)
+                    SetValue(regKey, key, value.ToString());
+            }
+        }
+        private void SetValueIfNotFinded(RegistryKey regKey, string[] names, string key, bool value = false, bool initialize = false)
         {
             if (!string.IsNullOrWhiteSpace(names.FirstOrDefault(f => f == key)) || initialize)
             {
