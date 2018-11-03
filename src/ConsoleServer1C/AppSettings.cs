@@ -87,7 +87,7 @@ namespace ConsoleServer1C
 
         private string GetValue(RegistryKey regKey, string keyName) => regKey.GetValue(keyName)?.ToString();
 
-        private void SetValue(RegistryKey regKey, string key, string value) => regKey?.SetValue(key, value);
+        private void SetValue(RegistryKey regKey, string key, string value) => regKey?.SetValue(key, value ?? string.Empty);
 
         private void SetValueIfNotFinded(RegistryKey regKey, string[] names, string key, string value = "", bool initialize = false)
         {
