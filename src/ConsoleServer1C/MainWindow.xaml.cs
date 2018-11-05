@@ -53,8 +53,8 @@ namespace ConsoleServer1C
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
                     ProgressBarValue = Events.ConnectionStatusEvents.CurrentStateProgress;
-                    BindingOperations.GetBindingExpression(ProgressBarStatusConnection, ProgressBar.ValueProperty).UpdateTarget();
-                    BindingOperations.GetBindingExpression(TextBlockStatusConnection, TextBlock.TextProperty).UpdateTarget();
+                    UpdateBindingTarget(ProgressBarStatusConnection, ProgressBar.ValueProperty);
+                    UpdateBindingTarget(TextBlockStatusConnection, TextBlock.TextProperty);
                 }));
             };
 
@@ -68,8 +68,14 @@ namespace ConsoleServer1C
         public Models.InfoBase SelectedItemListBases
         {
             get => _selectedItemListBases;
-            set { _selectedItemListBases = value; DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions; }
+            set { _selectedItemListBases = value; SetItemSourceListSession(); }
         }
+
+        private void SetItemSourceListSession()
+        {
+            DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions;
+        }
+
         public AppSettings AppSettings { get; set; } = new AppSettings();
         public int ProgressBarValue { get; set; } = 0;
         public bool NotUpdating { get; private set; } = true;
@@ -158,6 +164,31 @@ namespace ConsoleServer1C
 
             foreach (Models.InfoBase item in newListBases)
                 ListBases.Add(item);
+
+            SortListBasesToDbProcTook();
+        }
+
+        private void SortListBasesToDbProcTook()
+        {
+            Dispatcher.Invoke(new ThreadStart(delegate
+            {
+                if (AppSettings.SortDbProcTook)
+                {
+                    ListBases = new ObservableCollection<Models.InfoBase>(ListBases.OrderBy(f => -f.DbProcTook));
+                    UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
+                    for (int i = 0; i < ListBases.Count; i++)
+                    {
+                        ListBases[i].ListSessions = new List<Models.Session>(ListBases[i].ListSessions.OrderBy(f => -f.DbProcTook));
+                    }
+                    SetItemSourceListSession();
+                    UpdateBindingTarget(DataGridListSessions, DataGrid.ItemsSourceProperty);
+                }
+                else
+                {
+                    SetItemSourceListSession();
+                    UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
+                }
+            }));
         }
 
         private void TextBoxServerName_KeyDown(object sender, KeyEventArgs e)
@@ -283,5 +314,16 @@ namespace ConsoleServer1C
 
         #endregion
 
+        private static void UpdateBindingTarget(DependencyObject target, DependencyProperty dp)
+        {
+            try
+            {
+                BindingOperations.GetBindingExpression(target, dp).UpdateTarget();
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
