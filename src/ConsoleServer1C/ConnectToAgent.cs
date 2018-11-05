@@ -177,6 +177,9 @@ namespace ConsoleServer1C
 
         private IInfoBaseConnectionInfo FillInfoBase(IWorkingProcessConnection workingProcessConnection, IInfoBaseInfo infoBaseInfo, List<Models.InfoBase> listInfoBasesTask)
         {
+            if (workingProcessConnection == null)
+                return null;
+
             if (InfoBaseWithoutAccess.InfoBaseContains(infoBaseInfo.DBName))
                 return null;
 
