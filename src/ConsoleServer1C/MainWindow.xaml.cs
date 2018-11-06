@@ -70,6 +70,7 @@ namespace ConsoleServer1C
             get => _selectedItemListBases;
             set { _selectedItemListBases = value; SetItemSourceListSession(); }
         }
+        public Models.Session SelectedItemSession { get; set; }
 
         private void SetItemSourceListSession()
         {
@@ -323,6 +324,21 @@ namespace ConsoleServer1C
             catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void MenuItemSessionTerminateSession_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItemSession != null)
+            {
+                try
+                {
+                    new ConnectToAgent(AppSettings.ServerName).TerminateSession(SelectedItemSession);
+                }
+                catch (TerminateSessionException ex)
+                {
+                    MessageBox.Show("Не удалось отключить сессию.\n" + ex.Message);
+                }
             }
         }
     }

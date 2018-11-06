@@ -308,5 +308,36 @@ namespace ConsoleServer1C
             else
                 return true;
         }
+
+        internal void TerminateSession(Models.Session session)
+        {
+            if (session == null)
+                return;
+
+            InitializeComConnector();
+
+            try
+            {
+                foreach (IClusterInfo itemClusterInfo in _serverAgent.GetClusters())
+                {
+                    _serverAgent.Authenticate(itemClusterInfo, "", "");
+
+                    // Terminate
+                    foreach (ISessionInfo itemSessionInfo in _serverAgent.GetSessions(itemClusterInfo))
+                    {
+                        if (itemSessionInfo.infoBase.Name == session.InfoBaseShort.Name
+                            && itemSessionInfo.SessionID == session.SessionID)
+                        {
+                            _serverAgent.TerminateSession(itemClusterInfo, itemSessionInfo);
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new TerminateSessionException(ex.Message);
+            }
+        }
     }
 }

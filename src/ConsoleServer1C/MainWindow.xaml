@@ -149,13 +149,20 @@
                               CanUserDeleteRows="False"
                               CanUserReorderColumns="False"
                               CanUserResizeColumns="False"
-                              CanUserResizeRows="False">
+                              CanUserResizeRows="False"
+                              SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
                             <md:MaterialDataGridTextColumn Header="Приложение"      Binding="{Binding AppID}"/>
                             <md:MaterialDataGridTextColumn Header="№ сеанса"        Binding="{Binding SessionID}"/>
                             <md:MaterialDataGridTextColumn Header="Пользователь"    Binding="{Binding UserName}"/>
                             <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}"/>
                         </DataGrid.Columns>
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Отключить сеанс" Click="MenuItemSessionTerminateSession_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                     </DataGrid>
 
                 </Grid>
