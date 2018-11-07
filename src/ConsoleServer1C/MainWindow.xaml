@@ -152,10 +152,11 @@
                               CanUserResizeRows="False"
                               SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
-                            <md:MaterialDataGridTextColumn Header="Приложение"      Binding="{Binding AppID}"/>
-                            <md:MaterialDataGridTextColumn Header="№ сеанса"        Binding="{Binding SessionID}"/>
-                            <md:MaterialDataGridTextColumn Header="Пользователь"    Binding="{Binding UserName}"/>
-                            <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}"/>
+                            <md:MaterialDataGridTextColumn Header="Приложение"          Binding="{Binding AppID}"/>
+                            <md:MaterialDataGridTextColumn Header="№ сеанса"            Binding="{Binding SessionID}"/>
+                            <md:MaterialDataGridTextColumn Header="Пользователь"        Binding="{Binding UserName}"/>
+                            <md:MaterialDataGridTextColumn Header="Захвачено СУБД"      Binding="{Binding DbProcTook}"/>
+                            <md:MaterialDataGridTextColumn Header="Дата начала сеанса"  Binding="{Binding StartedAt, StringFormat=\{0:dd.MM.yyyy HH:mm:ss\}}"/>
                         </DataGrid.Columns>
 
                         <DataGrid.ContextMenu>
