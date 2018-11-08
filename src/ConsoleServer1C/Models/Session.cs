@@ -23,6 +23,8 @@ namespace ConsoleServer1C.Models
             DbProcTook = ((float)sessionInfo.dbProcTook / 1000);
             StartedAt = sessionInfo.StartedAt;
             ConnID = Connection == null ? 0 : Connection.ConnID;
+            DbmsBytesLast5Min = sessionInfo.dbmsBytesLast5Min;
+            MemoryLast5Min = sessionInfo.MemoryLast5Min;
         }
 
         public IClusterInfo ClusterInfo { get; private set; }
@@ -36,6 +38,10 @@ namespace ConsoleServer1C.Models
         public float DbProcTook { get; private set; }
         public string DbProcInfo { get; private set; }
         public DateTime StartedAt { get; private set; }
+        public ulong DbmsBytesLast5Min { get; private set; }
+        public string DbmsBytesLast5MinString { get => DataConverters.BytesToString(DbmsBytesLast5Min); }
+        public long MemoryLast5Min { get; private set; }
+        public string MemoryLast5MinString { get => DataConverters.BytesToString(MemoryLast5Min); }
         public int ConnID { get; private set; }
 
         internal void Fill(Session session)
@@ -52,6 +58,8 @@ namespace ConsoleServer1C.Models
             DbProcInfo = session.DbProcInfo;
             StartedAt = session.StartedAt;
             ConnID = session.ConnID;
+            DbmsBytesLast5Min = session.DbmsBytesLast5Min;
+            MemoryLast5Min = session.MemoryLast5Min;
         }
 
     }
