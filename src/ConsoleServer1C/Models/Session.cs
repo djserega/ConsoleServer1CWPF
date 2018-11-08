@@ -19,7 +19,6 @@ namespace ConsoleServer1C.Models
             UserName = sessionInfo.userName;
             Process = sessionInfo.process;
             Connection = sessionInfo.connection;
-            DbProcInfo = sessionInfo.dbProcInfo;
             DbProcTook = ((float)sessionInfo.dbProcTook / 1000);
             StartedAt = sessionInfo.StartedAt;
             ConnID = Connection == null ? 0 : Connection.ConnID;
@@ -36,7 +35,6 @@ namespace ConsoleServer1C.Models
         public IWorkingProcessInfo Process { get; private set; }
         public IConnectionShort Connection { get; private set; }
         public float DbProcTook { get; private set; }
-        public string DbProcInfo { get; private set; }
         public DateTime StartedAt { get; private set; }
         public ulong DbmsBytesLast5Min { get; private set; }
         public string DbmsBytesLast5MinString { get => Converters.DataConverters.BytesToString(DbmsBytesLast5Min); }
@@ -55,7 +53,6 @@ namespace ConsoleServer1C.Models
             Process = session.Process;
             Connection = session.Connection;
             DbProcTook = session.DbProcTook;
-            DbProcInfo = session.DbProcInfo;
             StartedAt = session.StartedAt;
             ConnID = session.ConnID;
             DbmsBytesLast5Min = session.DbmsBytesLast5Min;
