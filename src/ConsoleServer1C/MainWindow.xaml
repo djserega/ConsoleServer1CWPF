@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ConsoleServer1C"
+        xmlns:localConverters="clr-namespace:ConsoleServer1C.Converters"
         mc:Ignorable="d"
         Title="Консоль сервера 1С" Height="600" Width="1300"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -18,6 +19,10 @@
         WindowStyle="None"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         x:Name="WindowMain">
+    <Window.Resources>
+        <localConverters:ExceededThresholdDbProcTookConverter x:Key="ExceededThresholdDbProcTook"/>
+    </Window.Resources>
+
     <Border Background="{DynamicResource MaterialDesignPaper}"
             BorderThickness="2"
             CornerRadius="10 10 5 5"
@@ -32,7 +37,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
-            
+
             <Grid Grid.Column="0"
                   Grid.Row="0"
                   Margin="5 5 0 0">
@@ -78,7 +83,7 @@
                             x:Name="ButtonConnect"
                             Content="Подключиться"
                             Click="ButtonConnect_Click"/>
-                            <!--IsEnabled="{Binding ElementName=WindowMain, Path=DataContext.NotUpdating}"-->
+                    <!--IsEnabled="{Binding ElementName=WindowMain, Path=DataContext.NotUpdating}"-->
 
                     <Label Grid.Column="6"
                            Content="Фильтр по имени базы"
@@ -126,7 +131,13 @@
                             <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
                             <md:MaterialDataGridTextColumn Header="Сеансов"         Binding="{Binding ConnectionCount}"/>
                             <md:MaterialDataGridTextColumn Header="Соединений"      Binding="{Binding SessionCount}"/>
-                            <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}"/>
+                            <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}">
+                                <md:MaterialDataGridTextColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                        <Setter Property="Background" Value="{Binding DbProcTook, Converter={StaticResource ExceededThresholdDbProcTook}}"/>
+                                    </Style>
+                                </md:MaterialDataGridTextColumn.CellStyle>
+                            </md:MaterialDataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -155,7 +166,13 @@
                             <md:MaterialDataGridTextColumn Header="Приложение"              Binding="{Binding AppID}"/>
                             <md:MaterialDataGridTextColumn Header="№ сеанса"                Binding="{Binding SessionID}"/>
                             <md:MaterialDataGridTextColumn Header="Пользователь"            Binding="{Binding UserName}"/>
-                            <md:MaterialDataGridTextColumn Header="Захвачено СУБД"          Binding="{Binding DbProcTook}"/>
+                            <md:MaterialDataGridTextColumn Header="Захвачено СУБД"          Binding="{Binding DbProcTook}">
+                                <md:MaterialDataGridTextColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                        <Setter Property="Background" Value="{Binding DbProcTook, Converter={StaticResource ExceededThresholdDbProcTook}}"/>
+                                    </Style>
+                                </md:MaterialDataGridTextColumn.CellStyle>
+                            </md:MaterialDataGridTextColumn>
                             <md:MaterialDataGridTextColumn Header="Дата начала сеанса"      Binding="{Binding StartedAt, StringFormat=\{0:dd.MM.yyyy HH:mm:ss\}}"/>
                             <md:MaterialDataGridTextColumn Header="Данных за 5 минут"       Binding="{Binding DbmsBytesLast5MinString}"/>
                             <md:MaterialDataGridTextColumn Header="Объем памяти за 5 минут" Binding="{Binding MemoryLast5MinString}"/>
@@ -247,7 +264,8 @@
                        MouseLeftButtonDown="RectangleSizeNWSE_MouseLeftButtonDown"
                        MouseLeftButtonUp="RectangleSizeNWSE_MouseLeftButtonUp"
                        MouseMove="RectangleSizeNWSE_MouseMove"/>
-    
+
         </Grid>
+
     </Border>
 </Window>
