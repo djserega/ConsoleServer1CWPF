@@ -39,9 +39,9 @@ namespace ConsoleServer1C.Models
         public string DbProcInfo { get; private set; }
         public DateTime StartedAt { get; private set; }
         public ulong DbmsBytesLast5Min { get; private set; }
-        public string DbmsBytesLast5MinString { get => DataConverters.BytesToString(DbmsBytesLast5Min); }
+        public string DbmsBytesLast5MinString { get => Converters.DataConverters.BytesToString(DbmsBytesLast5Min); }
         public long MemoryLast5Min { get; private set; }
-        public string MemoryLast5MinString { get => DataConverters.BytesToString(MemoryLast5Min); }
+        public string MemoryLast5MinString { get => Converters.DataConverters.BytesToString(MemoryLast5Min); }
         public int ConnID { get; private set; }
 
         internal void Fill(Session session)
