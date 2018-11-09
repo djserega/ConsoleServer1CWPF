@@ -9,6 +9,8 @@ namespace ConsoleServer1C.Models
 {
     public class Session : NotifyPropertyChangedClass
     {
+        private float _dbProcTook;
+
         public Session(IClusterInfo clusterInfo, ISessionInfo sessionInfo)
         {
             ClusterInfo = clusterInfo;
@@ -19,11 +21,11 @@ namespace ConsoleServer1C.Models
             UserName = sessionInfo.userName;
             Process = sessionInfo.process;
             Connection = sessionInfo.connection;
-            DbProcTook = ((float)sessionInfo.dbProcTook / 1000);
             StartedAt = sessionInfo.StartedAt;
             ConnID = Connection == null ? 0 : Connection.ConnID;
             DbmsBytesLast5Min = sessionInfo.dbmsBytesLast5Min;
             MemoryLast5Min = sessionInfo.MemoryLast5Min;
+            DbProcTook = ((float)sessionInfo.dbProcTook / 1000);
         }
 
         public IClusterInfo ClusterInfo { get; private set; }
@@ -34,7 +36,15 @@ namespace ConsoleServer1C.Models
         public string UserName { get; private set; }
         public IWorkingProcessInfo Process { get; private set; }
         public IConnectionShort Connection { get; private set; }
-        public float DbProcTook { get; private set; }
+        public float DbProcTook
+        {
+            get => _dbProcTook;
+            private set
+            {
+                _dbProcTook = value;
+                ShowNotifyDbProcTook();
+            }
+        }
         public DateTime StartedAt { get; private set; }
         public ulong DbmsBytesLast5Min { get; private set; }
         public string DbmsBytesLast5MinString { get => Converters.DataConverters.BytesToString(DbmsBytesLast5Min); }
@@ -57,6 +67,24 @@ namespace ConsoleServer1C.Models
             ConnID = session.ConnID;
             DbmsBytesLast5Min = session.DbmsBytesLast5Min;
             MemoryLast5Min = session.MemoryLast5Min;
+        }
+
+        private void ShowNotifyDbProcTook()
+        {
+            if (_dbProcTook > AppSettings.ExceededThresholdDbProcTookCritical)
+            {
+
+                ShowNotify(
+                    $"Превышен порог времени соединения с СУБД: {AppSettings.ExceededThresholdDbProcTookHigh}",
+                    $"Пользователь: {UserName}.\n" +
+                    $"Время блокировки: {DbProcTook}.\n" +
+                    $"Начало сеанса: {StartedAt}.");
+            }
+        }
+
+        private void ShowNotify(string title, string message)
+        {
+            Events.TaskbarIconEvents.ShowTaskbarIcon(title, message);
         }
 
     }

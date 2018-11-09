@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -61,6 +62,14 @@ namespace ConsoleServer1C
             _timer.Elapsed += (object sender, timers.ElapsedEventArgs e) =>
             {
                 Dispatcher.Invoke(new ThreadStart(delegate { UpdateListBases(true); }));
+            };
+
+            Events.TaskbarIconEvents.TaskbarIconEvent += (string title, string message) =>
+            {
+                Dispatcher.Invoke(new ThreadStart(delegate
+                {
+                    new TaskbarIcon().ShowBalloonTip(title, message, BalloonIcon.Info);
+                }));
             };
         }
 
