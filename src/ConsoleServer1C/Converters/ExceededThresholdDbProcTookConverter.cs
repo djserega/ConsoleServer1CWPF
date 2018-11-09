@@ -15,12 +15,15 @@ namespace ConsoleServer1C.Converters
         {
             float floatValue = ToFloat(value);
 
-            if (floatValue >= 30)
+            if (floatValue >= AppSettings.ExceededThresholdDbProcTookCritical)
                 return new SolidColorBrush(Colors.Red);
-            else if (floatValue >= 20)
+
+            else if (floatValue >= AppSettings.ExceededThresholdDbProcTookHigh)
                 return new SolidColorBrush(Colors.LimeGreen);
-            else if (floatValue >= 10)
+
+            else if (floatValue >= AppSettings.ExceededThresholdDbProcTookElevated)
                 return new SolidColorBrush(Colors.Yellow);
+
             else
                 return new SolidColorBrush(Colors.Transparent);
         }

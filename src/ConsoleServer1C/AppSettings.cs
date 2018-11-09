@@ -37,6 +37,11 @@ namespace ConsoleServer1C
         public string FilterInfoBaseName { get; set; }
         public bool SortDbProcTook { get; set; }
 
+
+        internal static readonly int ExceededThresholdDbProcTookCritical = 30;
+        internal static readonly int ExceededThresholdDbProcTookHigh = 20;
+        internal static readonly int ExceededThresholdDbProcTookElevated = 10;
+
         internal void GetAllSettings()
         {
             try

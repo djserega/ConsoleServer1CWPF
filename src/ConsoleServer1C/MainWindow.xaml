@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ConsoleServer1C"
         xmlns:localConverters="clr-namespace:ConsoleServer1C.Converters"
         mc:Ignorable="d"
-        Title="Консоль сервера 1С" Height="600" Width="1300"
+        Title="Консоль сервера 1С" Height="600" Width="1400"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
