@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using V83;
 
 namespace ConsoleServer1C
@@ -52,17 +53,40 @@ namespace ConsoleServer1C
 
         private async void GetListBaseFromComAsync()
         {
-            InitializeComConnector();
-
             Models.ListNoAccessBase.List.Clear();
 
             Events.ConnectionStatusEvents.ClearState();
 
-            if (UpdateSessions)
-                for (int i = 0; i < InfoBases.Count; i++)
-                    InfoBases[i].ClearSessionInfo();
+            try
+            {
+                InitializeComConnector();
 
-            await FillInfoBasesAllClusters();
+                if (UpdateSessions)
+                    for (int i = 0; i < InfoBases.Count; i++)
+                        InfoBases[i].ClearSessionInfo();
+
+                await FillInfoBasesAllClusters();
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (CreateV83ComConnector ex)
+            {
+                MessageBox.Show($"Не удалось создать COMConnector.\n{ex.Message}");
+            }
+            catch (ConnectAgentException ex)
+            {
+                MessageBox.Show($"Ошибка соединения с сервером.\n{ex.Message}");
+            }
+            catch (WorkingProcessException ex)
+            {
+                MessageBox.Show($"Ошибка соединения с рабочим процессом.\n{ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             Events.UpdateInfoMainWindowEvents.InfoBases = InfoBases;
             Events.UpdateInfoMainWindowEvents.EvokeUpdateListBasesMainWindow();
