@@ -350,5 +350,10 @@ namespace ConsoleServer1C
                 }
             }
         }
+
+        private void ButtonMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
     }
 }

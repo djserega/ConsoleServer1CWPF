@@ -65,6 +65,8 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="2"/>
                     </Grid.ColumnDefinitions>
 
@@ -105,7 +107,11 @@
                               IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.SortDbProcTook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <Button Grid.Column="14"
-                            Content="Закрыть"
+                            Content="{md:PackIcon ArrowDownBoldBoxOutline}"
+                            Click="ButtonMinimize_Click"/>
+
+                    <Button Grid.Column="16"
+                            Content="{md:PackIcon CloseBoxOutline}"
                             Click="ButtonClose_Click"/>
                 </Grid>
 
