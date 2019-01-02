@@ -198,6 +198,8 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
@@ -222,14 +224,20 @@
                     <Label Grid.Column="3"
                            Content="с."
                            VerticalAlignment="Bottom"/>
-                    <ProgressBar Grid.Column="4"
+                    <StackPanel Grid.Column="4"
+                                Margin="5 0 0 0"
+                                VerticalAlignment="Bottom"
+                                Orientation="Horizontal">
+                        <Label Content="Включить уведомления о превышения блокировки:"/>
+                        <CheckBox IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.NotifyWhenBlockingTimeDBIsExceeded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <ProgressBar Grid.Column="6"
                                  x:Name="ProgressBarStatusConnection"
                                  Width="200"
                                  Value="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
-                    <StackPanel Grid.Column="5"
-                                Orientation="Horizontal">
-                        <Separator Width="5"
-                                   Background="{x:Null}"/>
+                    <StackPanel Grid.Column="7"
+                                Orientation="Horizontal"
+                                Margin="5 0 0 0">
                         <TextBlock x:Name="TextBlockStatusConnection"
                                    Width="25"
                                    VerticalAlignment="Center"

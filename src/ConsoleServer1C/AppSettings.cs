@@ -32,10 +32,12 @@ namespace ConsoleServer1C
             SetDefaultSettings(saveCurrent: true);
         }
 
-        public string ServerName { get; set; }
-        public int UpdateSessionMinute { get; set; }
-        public string FilterInfoBaseName { get; set; }
-        public bool SortDbProcTook { get; set; }
+        public string ServerName { get; set; } = string.Empty;
+        public int UpdateSessionMinute { get; set; } = 60;
+        public string FilterInfoBaseName { get; set; } = string.Empty;
+        public bool SortDbProcTook { get; set; } = true;
+        public bool NotifyWhenBlockingTimeDBIsExceeded { get; set; } = false;
+
 
 
         internal static readonly int ExceededThresholdDbProcTookCritical = 30;
@@ -52,13 +54,16 @@ namespace ConsoleServer1C
                     {
                         ServerName = GetValue(registryKeyApplication, "ServerName");
 
-                        int.TryParse(GetValue(registryKeyApplication, "UpdateSessionMinute"), out int updateSessionMinute);
-                        UpdateSessionMinute = updateSessionMinute;
+                        int.TryParse(GetValue(registryKeyApplication, "UpdateSessionMinute"), out int UpdateSessionMinuteValue);
+                        UpdateSessionMinute = UpdateSessionMinuteValue;
 
                         FilterInfoBaseName = GetValue(registryKeyApplication, "FilterInfoBaseName");
 
-                        bool.TryParse(GetValue(registryKeyApplication, "SortDbProcTook"), out bool sortDbProcTook);
-                        SortDbProcTook = sortDbProcTook;
+                        bool.TryParse(GetValue(registryKeyApplication, "SortDbProcTook"), out bool SortDbProcTookValue);
+                        SortDbProcTook = SortDbProcTookValue;
+
+                        bool.TryParse(GetValue(registryKeyApplication, "NotifyWhenBlockingTimeDBIsExceeded"), out bool NotifyWhenBlockingTimeDBIsExceededValue);
+                        NotifyWhenBlockingTimeDBIsExceeded = NotifyWhenBlockingTimeDBIsExceededValue;
                     }
                 }
             }
@@ -94,6 +99,8 @@ namespace ConsoleServer1C
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "FilterInfoBaseName", FilterInfoBaseName, keyEmpty || saveCurrent);
                         if (keyEmpty || key == "SortDbProcTook")
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "SortDbProcTook", SortDbProcTook, keyEmpty || saveCurrent);
+                        if (keyEmpty || key == "NotifyWhenBlockingTimeDBIsExceeded")
+                            SetValueIfNotFinded(tempRegistryKeyApplicationValues, names, "NotifyWhenBlockingTimeDBIsExceeded", NotifyWhenBlockingTimeDBIsExceeded, keyEmpty || saveCurrent);
                     }
                 }
             }

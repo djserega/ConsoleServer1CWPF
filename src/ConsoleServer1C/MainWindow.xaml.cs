@@ -68,7 +68,8 @@ namespace ConsoleServer1C
             {
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
-                    new TaskbarIcon().ShowBalloonTip(title, message, BalloonIcon.Info);
+                    if (AppSettings.NotifyWhenBlockingTimeDBIsExceeded)
+                        new TaskbarIcon().ShowBalloonTip(title, message, BalloonIcon.Info);
                 }));
             };
         }

@@ -73,7 +73,6 @@ namespace ConsoleServer1C.Models
         {
             if (_dbProcTook > AppSettings.ExceededThresholdDbProcTookCritical)
             {
-
                 ShowNotify(
                     $"Превышен порог времени соединения с СУБД: {AppSettings.ExceededThresholdDbProcTookHigh}",
                     $"Пользователь: {UserName}.\n" +
