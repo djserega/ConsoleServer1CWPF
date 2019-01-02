@@ -132,7 +132,7 @@ namespace ConsoleServer1C
             {
                 workingProcesses = serverAgent.GetWorkingProcesses(clusterInfo);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return infoBasesCluster;
             }

@@ -67,7 +67,7 @@ namespace ConsoleServer1C
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new RegistrykeyNotFoundException("Не удалось получить настройки.");
             }

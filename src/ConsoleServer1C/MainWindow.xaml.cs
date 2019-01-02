@@ -331,9 +331,8 @@ namespace ConsoleServer1C
             {
                 BindingOperations.GetBindingExpression(target, dp).UpdateTarget();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //MessageBox.Show(ex.Message);
             }
         }
 
