@@ -52,66 +52,65 @@
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="2"/>
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0"
+                           Margin="2 0"
                            Content="Адрес сервера"
                            VerticalAlignment="Bottom"/>
 
-                    <TextBox Grid.Column="2"
+                    <TextBox Grid.Column="1"
+                             Margin="2 0"
                              x:Name="TextBoxServerName"
                              Width="150"
                              ToolTip="IP или имя сервера на котором установлен сервер 1С."
                              Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              KeyDown="TextBoxServerName_KeyDown"/>
 
-                    <Button Grid.Column="4"
+                    <Button Grid.Column="2"
+                            Margin="3 0"
                             x:Name="ButtonConnect"
                             Content="Подключиться"
                             Click="ButtonConnect_Click"/>
-                    <!--IsEnabled="{Binding ElementName=WindowMain, Path=DataContext.NotUpdating}"-->
-
-                    <Label Grid.Column="6"
+                    
+                    <Label Grid.Column="3"
+                           Margin="2 0"
                            Content="Фильтр по имени базы"
                            VerticalAlignment="Bottom"/>
 
-                    <TextBox Grid.Column="8"
+                    <TextBox Grid.Column="4"
+                             Margin="2 0"
                              Width="150"
                              ToolTip="Текст поиска в названии базы. Без учета регистра. Можно указать несколько баз через ';'."
                              Text="{Binding ElementName=WindowMain, Path=AppSettings.FilterInfoBaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              KeyDown="TextBoxFilterInfoBaseName_KeyDown"/>
 
-                    <Label Grid.Column="10"
+                    <Label Grid.Column="5"
+                           Margin="2 0"
                            Content="Сортировать 'Захвачено СУБД'"
                            VerticalAlignment="Bottom"/>
 
-                    <CheckBox Grid.Column="12"
+                    <CheckBox Grid.Column="6"
+                              Margin="2 3"
                               VerticalAlignment="Bottom"
-                              Margin="0 3"
                               IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.SortDbProcTook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <Button Grid.Column="14"
+                    <Button Grid.Column="8"
+                            Margin="2 0"
                             Content="{md:PackIcon ArrowDownBoldBoxOutline}"
                             Click="ButtonMinimize_Click"/>
 
-                    <Button Grid.Column="16"
+                    <Button Grid.Column="9"
+                            Margin="2 0"
                             Content="{md:PackIcon CloseBoxOutline}"
                             Click="ButtonClose_Click"/>
                 </Grid>
