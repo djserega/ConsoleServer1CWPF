@@ -188,11 +188,8 @@ namespace ConsoleServer1C
                     ListBases = new ObservableCollection<Models.InfoBase>(ListBases.OrderBy(f => -f.DbProcTook));
                     UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
                     for (int i = 0; i < ListBases.Count; i++)
-                    {
                         ListBases[i].ListSessions = new List<Models.Session>(ListBases[i].ListSessions.OrderBy(f => -f.DbProcTook));
-                    }
                     SetItemSourceListSession();
-                    UpdateBindingTarget(DataGridListSessions, DataGrid.ItemsSourceProperty);
                 }
                 else
                 {
