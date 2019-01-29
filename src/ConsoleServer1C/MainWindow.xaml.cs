@@ -355,5 +355,12 @@ namespace ConsoleServer1C
         {
             Application.Current.MainWindow.WindowState = WindowState.Minimized;
         }
+
+        private void WindowMain_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(AppSettings.ServerName)
+                && !string.IsNullOrWhiteSpace(AppSettings.FilterInfoBaseName))
+                UpdateListBases();
+        }
     }
 }

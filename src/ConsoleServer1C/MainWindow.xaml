@@ -18,6 +18,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         WindowStyle="None"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        Loaded="WindowMain_Loaded"
         x:Name="WindowMain">
     <Window.Resources>
         <localConverters:ExceededThresholdDbProcTookConverter x:Key="ExceededThresholdDbProcTook"/>
