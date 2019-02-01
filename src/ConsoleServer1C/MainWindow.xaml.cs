@@ -353,7 +353,13 @@ namespace ConsoleServer1C
             if (string.IsNullOrWhiteSpace(AppSettings.FindUser))
                 DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions;
             else
-                DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions.Where(f => f.UserName.ToUpper().Contains(AppSettings.FindUser.ToUpper()));
+            {
+                string textFilter = AppSettings.FindUser.ToUpper();
+
+                DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions.Where(
+                    f => f.UserName.ToUpper().Contains(textFilter)
+                    || f.AppID.ToUpper().Contains(textFilter));
+            }
         }
 
         private static void UpdateBindingTarget(DependencyObject target, DependencyProperty dp)
