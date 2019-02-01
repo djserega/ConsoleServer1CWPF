@@ -15,6 +15,9 @@ namespace ConsoleServer1C
         private const string _prefixKeyApplication = "ConsoleServer1C";
         private const string _prefixRegistryKey = _prefixRegistrySoftware + "\\" + _prefixKeyApplication;
 
+        private string _findBase = string.Empty;
+        private string _findUser = string.Empty;
+
         public AppSettings()
         {
             try
@@ -38,7 +41,8 @@ namespace ConsoleServer1C
         public bool SortDbProcTook { get; set; } = true;
         public bool NotifyWhenBlockingTimeDBIsExceeded { get; set; } = false;
 
-
+        public string FindBase { get => _findBase; set { _findBase = value; NotifyPropertyChanged(); } }
+        public string FindUser { get => _findUser; set { _findUser = value; NotifyPropertyChanged(); } }
 
         internal static readonly int ExceededThresholdDbProcTookCritical = 30;
         internal static readonly int ExceededThresholdDbProcTookHigh = 20;

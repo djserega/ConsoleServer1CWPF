@@ -36,13 +36,15 @@ namespace ConsoleServer1C
 
             DataContext = this;
 
-            Events.UpdateInfoMainWindowEvents.UpdateListBasesMainWindowEvent += () =>
+            #region Events
+
+            Events.UpdateInfoMainWindowEvents.UpdateListBasesMainWindowEvent += (bool updateSessions) =>
             {
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
                     RefreshDataContextListBase(Events.UpdateInfoMainWindowEvents.InfoBases);
-                    DataGridListBases.Items.Refresh();
-                    DataGridListSessions.Items.Refresh();
+                    if (!updateSessions)
+                        ListBasesNotFiltered = ListBases.ToList();
                     NotUpdating = true;
                     ButtonConnect.IsEnabled = NotUpdating;
                     StartStopAutoUpdating();
@@ -72,9 +74,15 @@ namespace ConsoleServer1C
                         new TaskbarIcon().ShowBalloonTip(title, message, BalloonIcon.Info);
                 }));
             };
+
+            Events.ChangeFilterEvents.ChangeFilterFindBaseEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListBase(); })); };
+            Events.ChangeFilterEvents.ChangeFilterFindUserEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListUser(); })); };
+
+            #endregion
         }
 
         public ObservableCollection<Models.InfoBase> ListBases { get; private set; } = new ObservableCollection<Models.InfoBase>();
+        public List<Models.InfoBase> ListBasesNotFiltered { get; private set; } = new List<Models.InfoBase>();
         public Models.InfoBase SelectedItemListBases
         {
             get => _selectedItemListBases;
@@ -116,7 +124,10 @@ namespace ConsoleServer1C
             StartStopAutoUpdating();
 
             if (!updateSessionInfo)
+            {
                 ListBases.Clear();
+                ListBasesNotFiltered.Clear();
+            }
 
             try
             {
@@ -154,6 +165,9 @@ namespace ConsoleServer1C
             {
                 MessageBox.Show(ex.Message);
             }
+
+            ApplyFilterListBase();
+            ApplyFilterListUser();
         }
 
         private void RefreshDataContextListBase(List<Models.InfoBase> newListBases)
@@ -177,6 +191,13 @@ namespace ConsoleServer1C
                 ListBases.Add(item);
 
             SortListBasesToDbProcTook();
+
+            RefreshDataGridInUI();
+        }
+
+        private void RefreshDataGridInUI()
+        {
+            UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
         }
 
         private void SortListBasesToDbProcTook()
@@ -186,16 +207,11 @@ namespace ConsoleServer1C
                 if (AppSettings.SortDbProcTook)
                 {
                     ListBases = new ObservableCollection<Models.InfoBase>(ListBases.OrderBy(f => -f.DbProcTook));
-                    UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
                     for (int i = 0; i < ListBases.Count; i++)
                         ListBases[i].ListSessions = new List<Models.Session>(ListBases[i].ListSessions.OrderBy(f => -f.DbProcTook));
-                    SetItemSourceListSession();
                 }
-                else
-                {
-                    SetItemSourceListSession();
-                    UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
-                }
+                SetItemSourceListSession();
+                RefreshDataGridInUI();
             }));
         }
 
@@ -321,6 +337,24 @@ namespace ConsoleServer1C
         }
 
         #endregion
+
+        private void ApplyFilterListBase()
+        {
+            if (string.IsNullOrWhiteSpace(AppSettings.FindBase))
+                ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered);
+            else
+                ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered.Where(f => f.Name.ToUpper().Contains(AppSettings.FindBase.ToUpper())).ToList());
+
+            RefreshDataGridInUI();
+        }
+
+        private void ApplyFilterListUser()
+        {
+            if (string.IsNullOrWhiteSpace(AppSettings.FindUser))
+                DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions;
+            else
+                DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions.Where(f => f.UserName.ToUpper().Contains(AppSettings.FindUser.ToUpper()));
+        }
 
         private static void UpdateBindingTarget(DependencyObject target, DependencyProperty dp)
         {

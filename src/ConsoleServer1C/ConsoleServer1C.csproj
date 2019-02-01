@@ -83,6 +83,7 @@
     <Compile Include="ConnectToAgent.cs" />
     <Compile Include="Converters\DataConverters.cs" />
     <Compile Include="Converters\ExceededThresholdDbProcTookConverter.cs" />
+    <Compile Include="Events\ChangeFilterEvents.cs" />
     <Compile Include="Events\ConnectionStatusEvents.cs" />
     <Compile Include="Events\TaskbarIconEvents.cs" />
     <Compile Include="Events\UpdateInfoMainWindowEvents.cs" />

@@ -11,7 +11,14 @@ namespace ConsoleServer1C.Models
     public class NotifyPropertyChangedClass : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+            if (propertyName == "FindBase")
+                Events.ChangeFilterEvents.InvokeFindBaseEvent();
+            else if (propertyName == "FindUser")
+                Events.ChangeFilterEvents.InvokeFindUserEvent();
+        }
     }
 }

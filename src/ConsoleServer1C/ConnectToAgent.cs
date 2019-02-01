@@ -89,7 +89,7 @@ namespace ConsoleServer1C
             }
 
             Events.UpdateInfoMainWindowEvents.InfoBases = InfoBases;
-            Events.UpdateInfoMainWindowEvents.EvokeUpdateListBasesMainWindow();
+            Events.UpdateInfoMainWindowEvents.EvokeUpdateListBasesMainWindow(UpdateSessions);
         }
 
         private async Task FillInfoBasesAllClusters()
