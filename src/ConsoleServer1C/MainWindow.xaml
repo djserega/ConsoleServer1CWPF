@@ -204,6 +204,7 @@
                             <md:MaterialDataGridTextColumn Header="Приложение"              Binding="{Binding AppID}"/>
                             <md:MaterialDataGridTextColumn Header="№ сеанса"                Binding="{Binding SessionID}"/>
                             <md:MaterialDataGridTextColumn Header="Пользователь"            Binding="{Binding UserName}"/>
+                            <md:MaterialDataGridTextColumn Header="Компьютер"               Binding="{Binding Host}"/>
                             <md:MaterialDataGridTextColumn Header="Захвачено СУБД"          Binding="{Binding DbProcTook}">
                                 <md:MaterialDataGridTextColumn.CellStyle>
                                     <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">

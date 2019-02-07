@@ -358,7 +358,8 @@ namespace ConsoleServer1C
 
                 DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions.Where(
                     f => f.UserName.ToUpper().Contains(textFilter)
-                    || f.AppID.ToUpper().Contains(textFilter));
+                    || f.AppID.ToUpper().Contains(textFilter)
+                    || f.Host.ToUpper().Contains(textFilter));
             }
         }
 

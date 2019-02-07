@@ -26,6 +26,7 @@ namespace ConsoleServer1C.Models
             DbmsBytesLast5Min = sessionInfo.dbmsBytesLast5Min;
             MemoryLast5Min = sessionInfo.MemoryLast5Min;
             DbProcTook = ((float)sessionInfo.dbProcTook / 1000);
+            Host = sessionInfo.Host;
         }
 
         public IClusterInfo ClusterInfo { get; private set; }
@@ -51,6 +52,7 @@ namespace ConsoleServer1C.Models
         public long MemoryLast5Min { get; private set; }
         public string MemoryLast5MinString { get => Converters.DataConverters.BytesToString(MemoryLast5Min); }
         public int ConnID { get; private set; }
+        public string Host { get; private set; }
 
         internal void Fill(Session session)
         {
@@ -67,6 +69,7 @@ namespace ConsoleServer1C.Models
             ConnID = session.ConnID;
             DbmsBytesLast5Min = session.DbmsBytesLast5Min;
             MemoryLast5Min = session.MemoryLast5Min;
+            Host = session.Host;
         }
 
         private void ShowNotifyDbProcTook()
@@ -76,6 +79,7 @@ namespace ConsoleServer1C.Models
                 ShowNotify(
                     $"Превышен порог времени соединения с СУБД: {AppSettings.ExceededThresholdDbProcTookHigh}",
                     $"Пользователь: {UserName}.\n" +
+                    $"Компьютер: {Host}.\n" +
                     $"Время блокировки: {DbProcTook}.\n" +
                     $"Начало сеанса: {StartedAt}.");
             }
