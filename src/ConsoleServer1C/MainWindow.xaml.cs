@@ -30,6 +30,13 @@ namespace ConsoleServer1C
         private bool _formIsWidenSizeWE = false;
         private bool _formIsWidenSizeNS = false;
 
+        private bool _maximized;
+        private double _lastLeft;
+        private double _lastTop;
+        private double _lastWidth;
+        private double _lastHeight;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -394,11 +401,41 @@ namespace ConsoleServer1C
             Application.Current.MainWindow.WindowState = WindowState.Minimized;
         }
 
+        private void ButtonMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (_maximized)
+            {
+                Width = _lastWidth;
+                Height = _lastHeight;
+                Left = _lastLeft;
+                Top = _lastTop;
+
+                _maximized = false;
+            }
+            else
+            {
+                _lastWidth = Width;
+                _lastHeight = Height;
+                _lastLeft = Left;
+                _lastTop = Top;
+
+                Rect workArea = SystemParameters.WorkArea;
+
+                Width = workArea.Width;
+                Height = workArea.Height;
+                Left = workArea.Left;
+                Top = workArea.Top;
+
+                _maximized = true;
+            }
+        }
+
         private void WindowMain_Loaded(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(AppSettings.ServerName)
                 && !string.IsNullOrWhiteSpace(AppSettings.FilterInfoBaseName))
                 UpdateListBases();
         }
+
     }
 }

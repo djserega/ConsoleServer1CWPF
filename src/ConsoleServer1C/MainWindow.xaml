@@ -59,6 +59,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0"
@@ -105,12 +106,18 @@
 
                     <Button Grid.Column="6"
                             Margin="2 0"
-                            Content="{md:PackIcon ArrowDownBoldBoxOutline}"
+                            VerticalContentAlignment="Bottom"
+                            Content="{md:PackIcon WindowMinimize}"
                             Click="ButtonMinimize_Click"/>
 
                     <Button Grid.Column="7"
                             Margin="2 0"
-                            Content="{md:PackIcon CloseBoxOutline}"
+                            Content="{md:PackIcon WindowMaximize}"
+                            Click="ButtonMaximize_Click"/>
+
+                    <Button Grid.Column="8"
+                            Margin="2 0"
+                            Content="{md:PackIcon WindowClose}"
                             Click="ButtonClose_Click"/>
                 </Grid>
 
