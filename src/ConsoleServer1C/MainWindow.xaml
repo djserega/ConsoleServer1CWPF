@@ -124,42 +124,100 @@
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="5"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="3"/>
+                        <ColumnDefinition x:Name="ColumnListUsers" Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
+                        <RowDefinition Height="2"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Column="0"
-                          Grid.Row="0">
+                    <Border Grid.Column="1" Grid.RowSpan="3"
+                            Margin="1">
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                <GradientStop Color="#FF673AB7" Offset="0.8"/>
+                                <GradientStop Color="White" Offset="1"/>
+                                <GradientStop Color="White"/>
+                                <GradientStop Color="#FF673AB7" Offset="0.2"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+
+                    <Grid Grid.Column="0" Grid.Row="0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0"
-                               VerticalAlignment="Bottom"
-                               Content="Поиск"/>
-                        <TextBox Grid.Column="1"
+                               x:Name="LabelListBaseCollapsed"
+                               Content="{md:PackIcon ArrowCollapseLeft}"
+                               VerticalAlignment="Center"
+                               MouseDoubleClick="LabelListBaseCollapsed_MouseDoubleClick"/>
+                        <Label Grid.Column="1"
+                               x:Name="LabelListBaseVisible"
+                               Content="{md:PackIcon ArrowCollapseRight}"
+                               Visibility="Collapsed"
+                               VerticalAlignment="Center"
+                               MouseDoubleClick="LabelListBaseVisible_MouseDoubleClick"/>
+                        <Label Grid.Column="2"
+                               Content="Поиск"
+                               Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=350}"
+                               VerticalAlignment="Bottom"/>
+                        <TextBox Grid.Column="3"
+                                 Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=75}"
                                  Text="{Binding ElementName=WindowMain, Path=AppSettings.FindBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
 
-                    <Grid Grid.Column="2"
-                          Grid.Row="0">
+                    <Grid Grid.Column="2" Grid.Row="0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0"
+                        <Label Grid.Column="2"
+                               Content="Поиск"
                                VerticalAlignment="Bottom"
-                               Content="Поиск"/>
-                        <TextBox Grid.Column="1"
+                               Width="{Binding ElementName=BorderListUsers, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=930}"/>
+                        <TextBox Grid.Column="3"
+                                 x:Name="TextBoxFindUser"
+                                 Width="{Binding ElementName=BorderListUsers, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=75}"
                                  Text="{Binding ElementName=WindowMain, Path=AppSettings.FindUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
 
-                    <DataGrid Grid.Column="0"
-                              Grid.Row="1"
+                    <Border Grid.Column="0" Grid.Row="1"
+                            x:Name="BorderListBases"
+                            Margin="0 1 0 0"
+                            Width="400">
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="0,1" MappingMode="RelativeToBoundingBox" StartPoint="1,0">
+                                <GradientStop Color="#FF673AB7" Offset="0.9"/>
+                                <GradientStop Color="White" Offset="1"/>
+                                <GradientStop Color="White"/>
+                                <GradientStop Color="#FF673AB7" Offset="0.1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+
+                    <Border Grid.Column="2" Grid.Row="1"
+                            x:Name="BorderListUsers"
+                            Margin="0 1 0 0"
+                            Width="{Binding ElementName=ColumnListUsers, Path=Width}">
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="0,1" MappingMode="RelativeToBoundingBox" StartPoint="1,0">
+                                <GradientStop Color="#FF673AB7" Offset="0.9"/>
+                                <GradientStop Color="White" Offset="1"/>
+                                <GradientStop Color="White"/>
+                                <GradientStop Color="#FF673AB7" Offset="0.1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+
+                    <DataGrid Grid.Column="0" Grid.Row="2"
                               x:Name="DataGridListBases"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
@@ -168,6 +226,7 @@
                               CanUserReorderColumns="False"
                               CanUserResizeColumns="False"
                               CanUserResizeRows="False"
+                              Width="{Binding ElementName=BorderListBases, Path=ActualWidth}"
                               SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}">
                         <DataGrid.Columns>
@@ -184,20 +243,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <Border Grid.Column="1"
-                            Grid.RowSpan="2">
-                        <Border.Background>
-                            <RadialGradientBrush>
-                                <GradientStop Color="#FFAA5CE8" Offset="0.75"/>
-                                <GradientStop Color="White" Offset="1"/>
-                                <GradientStop Color="White"/>
-                                <GradientStop Color="#FFAA5CE8" Offset="0.25"/>
-                            </RadialGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <DataGrid Grid.Column="2"
-                              Grid.Row="1"
+                    <DataGrid Grid.Column="2" Grid.Row="2"
                               x:Name="DataGridListSessions"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
@@ -206,6 +252,7 @@
                               CanUserReorderColumns="False"
                               CanUserResizeColumns="False"
                               CanUserResizeRows="False"
+                              Width="{Binding ElementName=BorderListUsers, Path=ActualWidth}"
                               SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Columns>
                             <md:MaterialDataGridTextColumn Header="Приложение"              Binding="{Binding AppID}"/>

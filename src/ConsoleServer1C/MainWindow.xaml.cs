@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -437,5 +438,49 @@ namespace ConsoleServer1C
                 UpdateListBases();
         }
 
+        private void LabelListBaseCollapsed_MouseDoubleClick(object sender, MouseButtonEventArgs e) 
+            => ChangeVisibilityPanelListBases(Visibility.Collapsed);
+
+        private void LabelListBaseVisible_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+            => ChangeVisibilityPanelListBases(Visibility.Visible);
+
+        private void ChangeVisibilityPanelListBases(Visibility newVisibility)
+        {
+            DoubleAnimation timeAnimation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(200));
+            timeAnimation.Completed += (object sender, EventArgs e) =>
+            {
+                LabelListBaseVisible.Visibility = newVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+                LabelListBaseCollapsed.Visibility = newVisibility;
+            };
+
+            if (newVisibility == Visibility.Visible)
+            {
+                timeAnimation.To = 400;
+                ChangeVisibilityBeginAnimation(null, null, BorderListBases, timeAnimation);
+            }
+            else
+            {
+                ChangeVisibilityBeginAnimation(BorderListBases, timeAnimation, null, null);
+            }
+        }
+
+        private void ChangeVisibilityBeginAnimation(
+            FrameworkElement visibleElement,
+            DoubleAnimation visibleAnimation,
+            FrameworkElement collapsedElement,
+            DoubleAnimation сollapsedAnimation)
+        {
+            if (collapsedElement != null)
+            {
+                сollapsedAnimation.Completed += (object sender, EventArgs e) => { collapsedElement.Visibility = Visibility.Visible; };
+                collapsedElement.BeginAnimation(WidthProperty, сollapsedAnimation);
+            }
+
+            if (visibleElement != null)
+            {
+                visibleElement.Visibility = Visibility.Visible;
+                visibleElement.BeginAnimation(WidthProperty, visibleAnimation);
+            }
+        }
     }
 }
