@@ -96,6 +96,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\HistoryConnection.cs" />
     <Compile Include="Models\InfoBase.cs" />
     <Compile Include="Models\ListNoAccessBase.cs" />
     <Compile Include="Models\NotifyPropertyChangedClass.cs" />
