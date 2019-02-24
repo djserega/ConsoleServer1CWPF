@@ -97,8 +97,6 @@ namespace ConsoleServer1C
             set { _selectedItemListBases = value; SetItemSourceListSession(); }
         }
         public Models.Session SelectedItemSession { get; set; }
-        public List<Models.HistoryConnection> ListHistoryConnection { get; private set; } = new List<Models.HistoryConnection>();
-
 
         private void SetItemSourceListSession()
         {
@@ -130,12 +128,12 @@ namespace ConsoleServer1C
 
         private void AddCurrentConnectionToHistory()
         {
-            Models.HistoryConnection elementHistory = ListHistoryConnection.FirstOrDefault(
+            Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(
                 f => f.Server == AppSettings.ServerName && f.FilterBase == AppSettings.FilterInfoBaseName);
             if (elementHistory != null)
-                ListHistoryConnection.Remove(elementHistory);
+                AppSettings.ListHistoryConnection.Remove(elementHistory);
 
-            ListHistoryConnection.Insert(0, new Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName));
+            AppSettings.ListHistoryConnection.Insert(0, new Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName));
         }
 
         private void ButtonHistory_Click(object sender, RoutedEventArgs e)
@@ -143,14 +141,14 @@ namespace ConsoleServer1C
             ContextMenu contextMenu = ((Button)sender).ContextMenu;
             contextMenu.DataContext = null;
             contextMenu.ItemsSource = null;
-            contextMenu.DataContext = ListHistoryConnection;
-            contextMenu.ItemsSource = ListHistoryConnection;
+            contextMenu.DataContext = AppSettings.ListHistoryConnection;
+            contextMenu.ItemsSource = AppSettings.ListHistoryConnection;
             contextMenu.IsOpen = true;
         }
 
         private void MenuItemSelectedHistory(object sender, RoutedEventArgs e)
         {
-            Models.HistoryConnection elementHistory = ListHistoryConnection.FirstOrDefault(f => f.Date == (DateTime)((MenuItem)sender).Tag);
+            Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(f => f.Date == (DateTime)((MenuItem)sender).Tag);
 
             if (elementHistory != null)
             {
