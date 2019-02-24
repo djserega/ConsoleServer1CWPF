@@ -54,7 +54,7 @@ namespace ConsoleServer1C
                     if (!updateSessions)
                         ListBasesNotFiltered = ListBases.ToList();
                     NotUpdating = true;
-                    ButtonConnect.IsEnabled = NotUpdating;
+                    GridConnection.IsEnabled = NotUpdating;
                     StartStopAutoUpdating();
                 }));
             };
@@ -97,6 +97,8 @@ namespace ConsoleServer1C
             set { _selectedItemListBases = value; SetItemSourceListSession(); }
         }
         public Models.Session SelectedItemSession { get; set; }
+        public List<Models.HistoryConnection> ListHistoryConnection { get; private set; } = new List<Models.HistoryConnection>();
+
 
         private void SetItemSourceListSession()
         {
@@ -123,12 +125,47 @@ namespace ConsoleServer1C
         private void ButtonConnect_Click(object sender, RoutedEventArgs e)
         {
             UpdateListBases();
+            AddCurrentConnectionToHistory();
+        }
+
+        private void AddCurrentConnectionToHistory()
+        {
+            Models.HistoryConnection elementHistory = ListHistoryConnection.FirstOrDefault(
+                f => f.Server == AppSettings.ServerName && f.FilterBase == AppSettings.FilterInfoBaseName);
+            if (elementHistory != null)
+                ListHistoryConnection.Remove(elementHistory);
+
+            ListHistoryConnection.Insert(0, new Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName));
+        }
+
+        private void ButtonHistory_Click(object sender, RoutedEventArgs e)
+        {
+            ContextMenu contextMenu = ((Button)sender).ContextMenu;
+            contextMenu.DataContext = null;
+            contextMenu.ItemsSource = null;
+            contextMenu.DataContext = ListHistoryConnection;
+            contextMenu.ItemsSource = ListHistoryConnection;
+            contextMenu.IsOpen = true;
+        }
+
+        private void MenuItemSelectedHistory(object sender, RoutedEventArgs e)
+        {
+            Models.HistoryConnection elementHistory = ListHistoryConnection.FirstOrDefault(f => f.Date == (DateTime)((MenuItem)sender).Tag);
+
+            if (elementHistory != null)
+            {
+                AppSettings.ServerName = elementHistory.Server;
+                AppSettings.FilterInfoBaseName = elementHistory.FilterBase;
+
+                BindingOperations.GetBindingExpression(TextBoxServerName, TextBox.TextProperty).UpdateTarget();
+                BindingOperations.GetBindingExpression(TextBoxFilterInfoBaseName, TextBox.TextProperty).UpdateTarget();
+            };
         }
 
         private async void UpdateListBases(bool updateSessionInfo = false)
         {
             NotUpdating = false;
-            ButtonConnect.IsEnabled = NotUpdating;
+            GridConnection.IsEnabled = NotUpdating;
             StartStopAutoUpdating();
 
             if (!updateSessionInfo)
@@ -438,7 +475,7 @@ namespace ConsoleServer1C
                 UpdateListBases();
         }
 
-        private void LabelListBaseCollapsed_MouseDoubleClick(object sender, MouseButtonEventArgs e) 
+        private void LabelListBaseCollapsed_MouseDoubleClick(object sender, MouseButtonEventArgs e)
             => ChangeVisibilityPanelListBases(Visibility.Collapsed);
 
         private void LabelListBaseVisible_MouseDoubleClick(object sender, MouseButtonEventArgs e)
