@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleServer1C.Events
 {
@@ -19,20 +16,18 @@ namespace ConsoleServer1C.Events
 
         private static int _previousProgress = 0;
 
-        public static int CountClusters { get => _countClusters; set { _countClusters = value; EvokeUpdateState(); } }
-        public static int CountWorkProcesses { get => _countWorkProcesses; set { _countWorkProcesses = value; EvokeUpdateState(); } }
-        public static int CountInfoBases { get => _countInfoBases; set { _countInfoBases = value; EvokeUpdateState(); } }
+        public static int CountClusters         { get => _countClusters;        set { _countClusters        = value; EvokeUpdateState(); } }
+        public static int CountWorkProcesses    { get => _countWorkProcesses;   set { _countWorkProcesses   = value; EvokeUpdateState(); } }
+        public static int CountInfoBases        { get => _countInfoBases;       set { _countInfoBases       = value; EvokeUpdateState(); } }
 
-        public static int CurrentCluster { get => _currentCluster; set { _currentCluster = value; EvokeUpdateState(); } }
-        public static int CurrentWorkProcesses { get => _currentWorkProcesses; set { _currentWorkProcesses = value; EvokeUpdateState(); } }
-        public static int CurrentInfoBases { get => _currentInfoBases; set { _currentInfoBases = value; EvokeUpdateState(); } }
+        public static int CurrentCluster        { get => _currentCluster;       set { _currentCluster       = value; EvokeUpdateState(); } }
+        public static int CurrentWorkProcesses  { get => _currentWorkProcesses; set { _currentWorkProcesses = value; EvokeUpdateState(); } }
+        public static int CurrentInfoBases      { get => _currentInfoBases;     set { _currentInfoBases     = value; EvokeUpdateState(); } }
 
         public static int CurrentStateProgress
         {
             get
             {
-                StringBuilder stringBuilder = new StringBuilder();
-
                 double currentState = _currentCluster + _currentWorkProcesses + _currentInfoBases;
                 double allState = _countClusters + _countWorkProcesses + _countInfoBases;
 

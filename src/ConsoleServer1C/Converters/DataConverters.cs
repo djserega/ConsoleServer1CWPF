@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleServer1C.Converters
+﻿namespace ConsoleServer1C.Converters
 {
-    internal class DataConverters
+    internal class DateConverters
     {
         internal static string BytesToString(ulong bytes)
         {

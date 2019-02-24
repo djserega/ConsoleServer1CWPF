@@ -17,7 +17,7 @@
         AllowsTransparency="True"
         FontFamily="{DynamicResource MaterialDesignFont}"
         WindowStyle="None"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseLeftButtonDown="WindowMain_MouseLeftButtonDown"
         Loaded="WindowMain_Loaded"
         x:Name="WindowMain">
     <Window.Resources>
@@ -128,18 +128,18 @@
                     </StackPanel>
 
                     <Button Grid.Column="6"
-                            Margin="2 0"
+                            Margin="1 0"
                             VerticalContentAlignment="Bottom"
                             Content="{md:PackIcon WindowMinimize}"
                             Click="ButtonMinimize_Click"/>
 
                     <Button Grid.Column="7"
-                            Margin="2 0"
+                            Margin="1 0"
                             Content="{md:PackIcon WindowMaximize}"
                             Click="ButtonMaximize_Click"/>
 
                     <Button Grid.Column="8"
-                            Margin="2 0"
+                            Margin="1 0"
                             Content="{md:PackIcon WindowClose}"
                             Click="ButtonClose_Click"/>
                 </Grid>
@@ -199,14 +199,12 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="2"
+                        <Label Grid.Column="0"
                                Content="Поиск"
-                               VerticalAlignment="Bottom"
-                               Width="{Binding ElementName=BorderListUsers, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=930}"/>
-                        <TextBox Grid.Column="3"
+                               VerticalAlignment="Bottom"/>
+                        <TextBox Grid.Column="1"
                                  x:Name="TextBoxFindUser"
                                  Width="{Binding ElementName=BorderListUsers, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=75}"
                                  Text="{Binding ElementName=WindowMain, Path=AppSettings.FindUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

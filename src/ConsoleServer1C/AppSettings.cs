@@ -2,16 +2,15 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleServer1C
 {
     public class AppSettings : Models.NotifyPropertyChangedClass
     {
+        #region Private fields
+
         private readonly string _compName = Environment.MachineName + "Software";
         private const string _prefixRegistrySoftware = "Software";
         private const string _prefixKeyApplication = "ConsoleServer1C";
@@ -19,6 +18,8 @@ namespace ConsoleServer1C
 
         private string _findBase = string.Empty;
         private string _findUser = string.Empty;
+
+        #endregion
 
         public AppSettings()
         {
@@ -37,6 +38,8 @@ namespace ConsoleServer1C
             SetDefaultSettings(saveCurrent: true);
         }
 
+        #region Public properties
+
         public string ServerName { get; set; } = string.Empty;
         public int UpdateSessionMinute { get; set; } = 60;
         public string FilterInfoBaseName { get; set; } = string.Empty;
@@ -47,9 +50,15 @@ namespace ConsoleServer1C
         public string FindBase { get => _findBase; set { _findBase = value; NotifyPropertyChanged(); } }
         public string FindUser { get => _findUser; set { _findUser = value; NotifyPropertyChanged(); } }
 
+        #endregion
+
+        #region Internal property ExceededThreshold
+
         internal static readonly int ExceededThresholdDbProcTookCritical = 30;
         internal static readonly int ExceededThresholdDbProcTookHigh = 20;
         internal static readonly int ExceededThresholdDbProcTookElevated = 10;
+
+        #endregion
 
         internal void GetAllSettings()
         {
@@ -137,6 +146,7 @@ namespace ConsoleServer1C
             }
         }
 
+        #region Private methods
 
         private string GetValue(RegistryKey regKey, string keyName, bool converting = false)
         {
@@ -186,7 +196,7 @@ namespace ConsoleServer1C
             {
                 string currentValue = GetValue(regKey, key, true);
                 if (string.IsNullOrEmpty(currentValue) || initialize)
-                        SetValue(regKey, key, value, true); 
+                    SetValue(regKey, key, value, true);
             }
         }
         private void SetValueIfNotFinded(RegistryKey regKey, string[] names, string key, int value = 0, bool initialize = false)
@@ -207,5 +217,7 @@ namespace ConsoleServer1C
                     SetValue(regKey, key, value.ToString());
             }
         }
+
+        #endregion
     }
 }

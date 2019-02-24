@@ -3,18 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using timers = System.Timers;
@@ -26,6 +21,8 @@ namespace ConsoleServer1C
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Private fields
+
         private Models.InfoBase _selectedItemListBases = new Models.InfoBase();
         private timers.Timer _timer = new timers.Timer();
         private bool _formIsWidenSizeWE = false;
@@ -37,6 +34,7 @@ namespace ConsoleServer1C
         private double _lastWidth;
         private double _lastHeight;
 
+        #endregion
 
         public MainWindow()
         {
@@ -89,6 +87,8 @@ namespace ConsoleServer1C
             #endregion
         }
 
+        #region Public properties
+
         public ObservableCollection<Models.InfoBase> ListBases { get; private set; } = new ObservableCollection<Models.InfoBase>();
         public List<Models.InfoBase> ListBasesNotFiltered { get; private set; } = new List<Models.InfoBase>();
         public Models.InfoBase SelectedItemListBases
@@ -107,33 +107,162 @@ namespace ConsoleServer1C
         public int ProgressBarValue { get; set; } = 0;
         public bool NotUpdating { get; private set; } = true;
 
+        #endregion
 
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        #region WindowMain event
+
+        private void WindowMain_Loaded(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            if (!string.IsNullOrWhiteSpace(AppSettings.ServerName)
+                && !string.IsNullOrWhiteSpace(AppSettings.FilterInfoBaseName))
+                UpdateListBases();
         }
 
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void WindowMain_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
                 if (!_formIsWidenSizeWE && !_formIsWidenSizeNS)
                     DragMove();
         }
 
+        #endregion
+
+        #region Change size main window
+
+        private void RectangleSizeWE_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeWE = true;
+        }
+
+        private void RectangleSizeWE_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeWE = false;
+            ((Rectangle)sender).ReleaseMouseCapture();
+        }
+
+        private void RectangleSizeWE_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed)
+                _formIsWidenSizeWE = false;
+
+            if (_formIsWidenSizeWE)
+            {
+                ((Rectangle)sender).CaptureMouse();
+
+                double newWidth = e.GetPosition(this).X + 1;
+                if (newWidth > 0)
+                    Width = newWidth;
+            }
+        }
+
+        private void RectangleSizeNS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeNS = true;
+        }
+
+        private void RectangleSizeNS_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeNS = false;
+            ((Rectangle)sender).ReleaseMouseCapture();
+        }
+
+        private void RectangleSizeNS_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed)
+                _formIsWidenSizeNS = false;
+
+            if (_formIsWidenSizeNS)
+            {
+                ((Rectangle)sender).CaptureMouse();
+
+                double newHeight = e.GetPosition(this).Y + 1;
+                if (newHeight > 0)
+                    Height = newHeight;
+            }
+        }
+
+        private void RectangleSizeNWSE_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeNS = true;
+            _formIsWidenSizeWE = true;
+        }
+
+        private void RectangleSizeNWSE_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _formIsWidenSizeNS = false;
+            _formIsWidenSizeWE = false;
+            ((Rectangle)sender).ReleaseMouseCapture();
+        }
+
+        private void RectangleSizeNWSE_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                _formIsWidenSizeNS = false;
+                _formIsWidenSizeWE = false;
+            }
+
+            if (_formIsWidenSizeNS && _formIsWidenSizeWE)
+            {
+                ((Rectangle)sender).CaptureMouse();
+
+                double newHeight = e.GetPosition(this).Y + 1;
+                if (newHeight > 0)
+                    Height = newHeight;
+
+                double newWidth = e.GetPosition(this).X + 1;
+                if (newWidth > 0)
+                    Width = newWidth;
+            }
+        }
+
+        #endregion
+
+        #region Button event
+
+        private void ButtonMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+
+        private void ButtonMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (_maximized)
+            {
+                Width = _lastWidth;
+                Height = _lastHeight;
+                Left = _lastLeft;
+                Top = _lastTop;
+
+                _maximized = false;
+            }
+            else
+            {
+                _lastWidth = Width;
+                _lastHeight = Height;
+                _lastLeft = Left;
+                _lastTop = Top;
+
+                Rect workArea = SystemParameters.WorkArea;
+
+                Width = workArea.Width;
+                Height = workArea.Height;
+                Left = workArea.Left;
+                Top = workArea.Top;
+
+                _maximized = true;
+            }
+        }
+
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
         private void ButtonConnect_Click(object sender, RoutedEventArgs e)
         {
             UpdateListBases();
             AddCurrentConnectionToHistory();
-        }
-
-        private void AddCurrentConnectionToHistory()
-        {
-            Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(
-                f => f.Server == AppSettings.ServerName && f.FilterBase == AppSettings.FilterInfoBaseName);
-            if (elementHistory != null)
-                AppSettings.ListHistoryConnection.Remove(elementHistory);
-
-            AppSettings.ListHistoryConnection.Insert(0, new Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName));
         }
 
         private void ButtonHistory_Click(object sender, RoutedEventArgs e)
@@ -145,6 +274,26 @@ namespace ConsoleServer1C
             contextMenu.ItemsSource = AppSettings.ListHistoryConnection;
             contextMenu.IsOpen = true;
         }
+
+        #endregion
+
+        #region TextBox connected server1C
+
+        private void TextBoxServerName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                UpdateListBases();
+        }
+
+        private void TextBoxFilterInfoBaseName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                UpdateListBases();
+        }
+
+        #endregion
+
+        #region History
 
         private void MenuItemSelectedHistory(object sender, RoutedEventArgs e)
         {
@@ -159,6 +308,18 @@ namespace ConsoleServer1C
                 BindingOperations.GetBindingExpression(TextBoxFilterInfoBaseName, TextBox.TextProperty).UpdateTarget();
             };
         }
+
+        private void AddCurrentConnectionToHistory()
+        {
+            Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(
+                f => f.Server == AppSettings.ServerName && f.FilterBase == AppSettings.FilterInfoBaseName);
+            if (elementHistory != null)
+                AppSettings.ListHistoryConnection.Remove(elementHistory);
+
+            AppSettings.ListHistoryConnection.Insert(0, new Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName));
+        }
+
+        #endregion
 
         private async void UpdateListBases(bool updateSessionInfo = false)
         {
@@ -258,21 +419,24 @@ namespace ConsoleServer1C
             }));
         }
 
-        private void TextBoxServerName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                UpdateListBases();
-        }
-
-        private void TextBoxFilterInfoBaseName_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                UpdateListBases();
-        }
-
         private void TextBoxUpdateSessionMinute_TextChanged(object sender, TextChangedEventArgs e)
         {
             StartStopAutoUpdating();
+        }
+
+        private void MenuItemSessionTerminateSession_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItemSession != null)
+            {
+                try
+                {
+                    new ConnectToAgent(AppSettings.ServerName).TerminateSession(SelectedItemSession);
+                }
+                catch (TerminateSessionException ex)
+                {
+                    MessageBox.Show("Не удалось отключить сессию.\n" + ex.Message);
+                }
+            }
         }
 
         private void StartStopAutoUpdating()
@@ -290,96 +454,18 @@ namespace ConsoleServer1C
             }
         }
 
-        #region Change size main window
-
-        private void RectangleSizeWE_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private static void UpdateBindingTarget(DependencyObject target, DependencyProperty dp)
         {
-            _formIsWidenSizeWE = true;
-        }
-
-        private void RectangleSizeWE_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            _formIsWidenSizeWE = false;
-            ((Rectangle)sender).ReleaseMouseCapture();
-        }
-
-        private void RectangleSizeWE_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton != MouseButtonState.Pressed)
-                _formIsWidenSizeWE = false;
-
-            if (_formIsWidenSizeWE)
+            try
             {
-                ((Rectangle)sender).CaptureMouse();
-
-                double newWidth = e.GetPosition(this).X + 1;
-                if (newWidth > 0)
-                    Width = newWidth;
+                BindingOperations.GetBindingExpression(target, dp).UpdateTarget();
+            }
+            catch (Exception)
+            {
             }
         }
 
-        private void RectangleSizeNS_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _formIsWidenSizeNS = true;
-        }
-
-        private void RectangleSizeNS_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            _formIsWidenSizeNS = false;
-            ((Rectangle)sender).ReleaseMouseCapture();
-        }
-
-        private void RectangleSizeNS_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton != MouseButtonState.Pressed)
-                _formIsWidenSizeNS = false;
-
-            if (_formIsWidenSizeNS)
-            {
-                ((Rectangle)sender).CaptureMouse();
-
-                double newHeight = e.GetPosition(this).Y + 1;
-                if (newHeight > 0)
-                    Height = newHeight;
-            }
-        }
-
-        private void RectangleSizeNWSE_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _formIsWidenSizeNS = true;
-            _formIsWidenSizeWE = true;
-        }
-
-        private void RectangleSizeNWSE_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            _formIsWidenSizeNS = false;
-            _formIsWidenSizeWE = false;
-            ((Rectangle)sender).ReleaseMouseCapture();
-        }
-
-        private void RectangleSizeNWSE_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton != MouseButtonState.Pressed)
-            {
-                _formIsWidenSizeNS = false;
-                _formIsWidenSizeWE = false;
-            }
-
-            if (_formIsWidenSizeNS && _formIsWidenSizeWE)
-            {
-                ((Rectangle)sender).CaptureMouse();
-
-                double newHeight = e.GetPosition(this).Y + 1;
-                if (newHeight > 0)
-                    Height = newHeight;
-
-                double newWidth = e.GetPosition(this).X + 1;
-                if (newWidth > 0)
-                    Width = newWidth;
-            }
-        }
-
-        #endregion
+        #region Filter data
 
         private void ApplyFilterListBase()
         {
@@ -406,72 +492,10 @@ namespace ConsoleServer1C
             }
         }
 
-        private static void UpdateBindingTarget(DependencyObject target, DependencyProperty dp)
-        {
-            try
-            {
-                BindingOperations.GetBindingExpression(target, dp).UpdateTarget();
-            }
-            catch (Exception)
-            {
-            }
-        }
+        #endregion
 
-        private void MenuItemSessionTerminateSession_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedItemSession != null)
-            {
-                try
-                {
-                    new ConnectToAgent(AppSettings.ServerName).TerminateSession(SelectedItemSession);
-                }
-                catch (TerminateSessionException ex)
-                {
-                    MessageBox.Show("Не удалось отключить сессию.\n" + ex.Message);
-                }
-            }
-        }
 
-        private void ButtonMinimize_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.MainWindow.WindowState = WindowState.Minimized;
-        }
-
-        private void ButtonMaximize_Click(object sender, RoutedEventArgs e)
-        {
-            if (_maximized)
-            {
-                Width = _lastWidth;
-                Height = _lastHeight;
-                Left = _lastLeft;
-                Top = _lastTop;
-
-                _maximized = false;
-            }
-            else
-            {
-                _lastWidth = Width;
-                _lastHeight = Height;
-                _lastLeft = Left;
-                _lastTop = Top;
-
-                Rect workArea = SystemParameters.WorkArea;
-
-                Width = workArea.Width;
-                Height = workArea.Height;
-                Left = workArea.Left;
-                Top = workArea.Top;
-
-                _maximized = true;
-            }
-        }
-
-        private void WindowMain_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(AppSettings.ServerName)
-                && !string.IsNullOrWhiteSpace(AppSettings.FilterInfoBaseName))
-                UpdateListBases();
-        }
+        #region Visibility datagrid
 
         private void LabelListBaseCollapsed_MouseDoubleClick(object sender, MouseButtonEventArgs e)
             => ChangeVisibilityPanelListBases(Visibility.Collapsed);
@@ -517,5 +541,8 @@ namespace ConsoleServer1C
                 visibleElement.BeginAnimation(WidthProperty, visibleAnimation);
             }
         }
+
+        #endregion
+
     }
 }

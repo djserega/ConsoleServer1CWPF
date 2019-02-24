@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using V83;
 
 namespace ConsoleServer1C.Models
@@ -48,9 +44,9 @@ namespace ConsoleServer1C.Models
         }
         public DateTime StartedAt { get; private set; }
         public ulong DbmsBytesLast5Min { get; private set; }
-        public string DbmsBytesLast5MinString { get => Converters.DataConverters.BytesToString(DbmsBytesLast5Min); }
+        public string DbmsBytesLast5MinString { get => Converters.DateConverters.BytesToString(DbmsBytesLast5Min); }
         public long MemoryLast5Min { get; private set; }
-        public string MemoryLast5MinString { get => Converters.DataConverters.BytesToString(MemoryLast5Min); }
+        public string MemoryLast5MinString { get => Converters.DateConverters.BytesToString(MemoryLast5Min); }
         public int ConnID { get; private set; }
         public string Host { get; private set; }
 
