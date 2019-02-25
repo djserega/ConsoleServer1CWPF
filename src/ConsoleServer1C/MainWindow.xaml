@@ -84,10 +84,12 @@
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0"
                                 Content="Подключиться"
+                                IsTabStop="False"
                                 Click="ButtonConnect_Click">
                            </Button>
                         <Button Grid.Column="1"
                                 Content="{md:PackIcon MenuDown}"
+                                IsTabStop="False"
                                 Click="ButtonHistory_Click">
                             <Button.ContextMenu>
                                 <ContextMenu>
@@ -213,7 +215,8 @@
                     <Border Grid.Column="0" Grid.Row="1"
                             x:Name="BorderListBases"
                             Margin="0 1 0 0"
-                            Width="400">
+                            Width="450"
+                            MaxWidth="500">
                         <Border.Background>
                             <LinearGradientBrush EndPoint="0,1" MappingMode="RelativeToBoundingBox" StartPoint="1,0">
                                 <GradientStop Color="#FF673AB7" Offset="0.9"/>
@@ -247,7 +250,7 @@
                               CanUserReorderColumns="False"
                               CanUserResizeColumns="False"
                               CanUserResizeRows="False"
-                              Width="{Binding ElementName=BorderListBases, Path=ActualWidth}"
+                              Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=-45}"
                               SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}">
                         <DataGrid.Columns>

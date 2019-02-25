@@ -230,7 +230,13 @@ namespace ConsoleServer1C
                 {
                     IInfoBaseConnectionInfo infoBaseConnectionComConsole = FillInfoBase(workingProcessConnection, infoBaseInfo, listInfoBasesTask);
                     if (infoBaseConnectionComConsole != null)
-                        workingProcessConnection.Disconnect(infoBaseConnectionComConsole);
+                    {
+                        try
+                        {
+                            workingProcessConnection.Disconnect(infoBaseConnectionComConsole);
+                        }
+                        catch (Exception) { }
+                    }
                 }
                 Events.ConnectionStatusEvents.CurrentInfoBases++;
             }

@@ -6,7 +6,6 @@ namespace ConsoleServer1C.Models
     {
         private HistoryConnection()
         {
-            Date = DateTime.Now;
         }
 
         public HistoryConnection(string server, string filterBase) : this()
@@ -15,7 +14,13 @@ namespace ConsoleServer1C.Models
             FilterBase = filterBase;
         }
 
-        public DateTime Date { get; }
+        public HistoryConnection(string server, string filterBase, bool setDate) : this(server, filterBase)
+        {
+            if (setDate)
+                Date = DateTime.Now;
+        }
+
+        public DateTime Date { get; set; }
         public string Header { get => $"{Server} \\ {FilterBase}"; }
         public string ToolTip { get => Date.ToString("dd.MM.yyyy HH:mm:ss"); }
         public string Server { get; set; } = string.Empty;

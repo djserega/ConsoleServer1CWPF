@@ -183,7 +183,15 @@ namespace ConsoleServer1C
 
         private string ConverterInValue(string text)
         {
-            byte[] decoded = Convert.FromBase64String(text);
+            byte[] decoded;
+            try
+            {
+                decoded = Convert.FromBase64String(text);
+            }
+            catch (FormatException)
+            {
+                return string.Empty;
+            }
             byte[] result = new byte[decoded.Length];
             for (int c = 0; c < decoded.Length; c++)
                 result[c] = (byte)((uint)decoded[c] ^ (uint)_compName[c % _compName.Length]);

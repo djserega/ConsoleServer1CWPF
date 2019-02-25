@@ -316,7 +316,7 @@ namespace ConsoleServer1C
             if (elementHistory != null)
                 AppSettings.ListHistoryConnection.Remove(elementHistory);
 
-            AppSettings.ListHistoryConnection.Insert(0, new Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName));
+            AppSettings.ListHistoryConnection.Insert(0, new Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName, true));
         }
 
         #endregion
@@ -508,13 +508,14 @@ namespace ConsoleServer1C
             DoubleAnimation timeAnimation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(200));
             timeAnimation.Completed += (object sender, EventArgs e) =>
             {
+                DataGridListBases.Visibility = newVisibility;
                 LabelListBaseVisible.Visibility = newVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
                 LabelListBaseCollapsed.Visibility = newVisibility;
             };
 
             if (newVisibility == Visibility.Visible)
             {
-                timeAnimation.To = 400;
+                timeAnimation.To = 450;
                 ChangeVisibilityBeginAnimation(null, null, BorderListBases, timeAnimation);
             }
             else
