@@ -24,7 +24,7 @@ namespace ConsoleServer1C
         #region Private fields
 
         private Models.InfoBase _selectedItemListBases = new Models.InfoBase();
-        private timers.Timer _timer = new timers.Timer();
+        private readonly timers.Timer _timer = new timers.Timer();
         private bool _formIsWidenSizeWE = false;
         private bool _formIsWidenSizeNS = false;
 
@@ -33,6 +33,8 @@ namespace ConsoleServer1C
         private double _lastTop;
         private double _lastWidth;
         private double _lastHeight;
+
+        private readonly TaskbarIcon _taskbarIcon = new TaskbarIcon();
 
         #endregion
 
@@ -77,7 +79,7 @@ namespace ConsoleServer1C
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
                     if (AppSettings.NotifyWhenBlockingTimeDBIsExceeded)
-                        new TaskbarIcon().ShowBalloonTip(title, message, BalloonIcon.Info);
+                        _taskbarIcon.ShowBalloonTip(title, message, BalloonIcon.Info);
                 }));
             };
 
