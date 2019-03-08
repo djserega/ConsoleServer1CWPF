@@ -9,6 +9,9 @@ namespace ConsoleServer1C.Models
 
         public Session(IClusterInfo clusterInfo, ISessionInfo sessionInfo)
         {
+            if (clusterInfo == null || sessionInfo == null)
+                return;
+
             ClusterInfo = clusterInfo;
             InfoBaseShort = sessionInfo.infoBase;
             SessionInfo = sessionInfo;
