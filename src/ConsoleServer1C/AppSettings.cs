@@ -46,6 +46,7 @@ namespace ConsoleServer1C
         public bool SortDbProcTook { get; set; } = true;
         public bool NotifyWhenBlockingTimeDBIsExceeded { get; set; } = false;
         public List<Models.HistoryConnection> ListHistoryConnection { get; private set; } = new List<Models.HistoryConnection>();
+        public Dictionary<object, bool> VisibilityDataGridSessionColumn { get; private set; } = new Dictionary<object, bool>();
 
         public string FindBase { get => _findBase; set { _findBase = value; NotifyPropertyChanged(); } }
         public string FindUser { get => _findUser; set { _findUser = value; NotifyPropertyChanged(); } }
@@ -81,9 +82,13 @@ namespace ConsoleServer1C
                         bool.TryParse(GetValue(registryKeyApplication, "NotifyWhenBlockingTimeDBIsExceeded"), out bool NotifyWhenBlockingTimeDBIsExceededValue);
                         NotifyWhenBlockingTimeDBIsExceeded = NotifyWhenBlockingTimeDBIsExceededValue;
 
-                        var ListHistoryConnectionValue = GetValue(registryKeyApplication, "HistoryConnection", true);
+                        string ListHistoryConnectionValue = GetValue(registryKeyApplication, "HistoryConnection", true);
                         ListHistoryConnection = JsonConverter<List<Models.HistoryConnection>>.Load(ListHistoryConnectionValue)
                             ?? new List<Models.HistoryConnection>();
+
+                        string VisibilityDataGridSessionColumnValue = GetValue(registryKeyApplication, "VisibilityDataGridSessionColumn", true);
+                        VisibilityDataGridSessionColumn = JsonConverter<Dictionary<object, bool>>.Load(VisibilityDataGridSessionColumnValue)
+                            ?? new Dictionary<object, bool>();
                     }
                 }
             }
@@ -140,6 +145,11 @@ namespace ConsoleServer1C
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names,
                                                 "HistoryConnection",
                                                 JsonConverter<List<Models.HistoryConnection>>.Save(ListHistoryConnection),
+                                                keyEmpty || saveCurrent);
+                        if (keyEmpty || key == "VisibilityDataGridSessionColumn")
+                            SetValueIfNotFinded(tempRegistryKeyApplicationValues, names,
+                                                "VisibilityDataGridSessionColumn",
+                                                JsonConverter<Dictionary<object, bool>>.Save(VisibilityDataGridSessionColumn),
                                                 keyEmpty || saveCurrent);
                     }
                 }
