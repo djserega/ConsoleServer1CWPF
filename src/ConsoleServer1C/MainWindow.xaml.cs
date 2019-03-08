@@ -1,5 +1,6 @@
 ﻿using Hardcodet.Wpf.TaskbarNotification;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -115,9 +116,31 @@ namespace ConsoleServer1C
 
         private void WindowMain_Loaded(object sender, RoutedEventArgs e)
         {
+            foreach (KeyValuePair<object, bool> keyVisible in AppSettings.VisibilityDataGridSessionColumn)
+                ChangeVisibleColumnDataGridSession(keyVisible.Key, keyVisible.Value);
+
+            foreach (DictionaryEntry itemResource in DataGridListSessions.Resources)
+            {
+                if (itemResource.Value is ContextMenu contextMenu)
+                {
+                    if (contextMenu.Name.Equals("DataGridSessionContextMenuHeader"))
+                    {
+                        contextMenu.ItemsSource = GetMenuItemContextMenuDataGridSessionColumnHeader();
+                        break;
+                    }
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(AppSettings.ServerName)
                 && !string.IsNullOrWhiteSpace(AppSettings.FilterInfoBaseName))
                 UpdateListBases();
+        }
+
+        private void WindowMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            AppSettings.VisibilityDataGridSessionColumn.Clear();
+            foreach (DataGridColumn column in DataGridListSessions.Columns)
+                AppSettings.VisibilityDataGridSessionColumn.Add(column.Header, column.Visibility == Visibility.Visible);
         }
 
         private void WindowMain_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -543,6 +566,48 @@ namespace ConsoleServer1C
                 visibleElement.Visibility = Visibility.Visible;
                 visibleElement.BeginAnimation(WidthProperty, visibleAnimation);
             }
+        }
+
+        #endregion
+
+        #region Visibility column datagrid session
+
+        private List<MenuItem> GetMenuItemContextMenuDataGridSessionColumnHeader()
+        {
+            List<MenuItem> list = new List<MenuItem>();
+
+            foreach (DataGridColumn itemColumn in DataGridListSessions.Columns)
+                list.Add(GetMenuItemByDataGridColumn(itemColumn));
+
+            return list;
+        }
+
+        private MenuItem GetMenuItemByDataGridColumn(DataGridColumn dataGridColumn)
+        {
+            MenuItem menuItem = new MenuItem()
+            {
+                Header = dataGridColumn.Header,
+                IsCheckable = true,
+                IsChecked = dataGridColumn.Visibility == Visibility.Visible,
+                StaysOpenOnClick = true
+            };
+            menuItem.Checked += (object sender, RoutedEventArgs e) =>
+            {
+                ChangeVisibleColumnDataGridSession(((MenuItem)sender).Header, ((MenuItem)sender).IsChecked);
+            };
+            menuItem.Unchecked += (object sender, RoutedEventArgs e) =>
+            {
+                ChangeVisibleColumnDataGridSession(((MenuItem)sender).Header, ((MenuItem)sender).IsChecked);
+            };
+
+            return menuItem;
+        }
+
+        private void ChangeVisibleColumnDataGridSession(object header, bool isChecked)
+        {
+            DataGridColumn findedColumn = DataGridListSessions.Columns.FirstOrDefault(f => (string)f.Header == (string)header);
+            if (findedColumn != null)
+                findedColumn.Visibility = isChecked ? Visibility.Visible : Visibility.Collapsed;
         }
 
         #endregion

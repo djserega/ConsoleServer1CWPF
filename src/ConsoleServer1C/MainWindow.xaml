@@ -19,6 +19,7 @@
         WindowStyle="None"
         MouseLeftButtonDown="WindowMain_MouseLeftButtonDown"
         Loaded="WindowMain_Loaded"
+        Closing="WindowMain_Closing"
         x:Name="WindowMain">
     <Window.Resources>
         <localConverters:ExceededThresholdDbProcTookConverter x:Key="ExceededThresholdDbProcTook"/>
@@ -277,7 +278,7 @@
                               CanUserResizeColumns="False"
                               CanUserResizeRows="False"
                               Width="{Binding ElementName=BorderListUsers, Path=ActualWidth}"
-                              SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                              SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,-2">
                         <DataGrid.Columns>
                             <md:MaterialDataGridTextColumn Header="Приложение"              Binding="{Binding AppID}"/>
                             <md:MaterialDataGridTextColumn Header="№ сеанса"                Binding="{Binding SessionID}"/>
@@ -295,11 +296,25 @@
                             <md:MaterialDataGridTextColumn Header="Объем памяти за 5 минут" Binding="{Binding MemoryLast5MinString}"/>
                         </DataGrid.Columns>
 
-                        <DataGrid.ContextMenu>
-                            <ContextMenu>
+                        <DataGrid.Resources>
+
+                            <ContextMenu x:Key="DataGridSessionContextMenuItem">
                                 <MenuItem Header="Отключить сеанс" Click="MenuItemSessionTerminateSession_Click"/>
                             </ContextMenu>
-                        </DataGrid.ContextMenu>
+
+                            <ContextMenu x:Key="DataGridSessionContextMenuHeader"
+                                         x:Name="DataGridSessionContextMenuHeader"/>
+
+                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuHeader}"/>
+                            </Style>
+
+                            <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                                <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuItem}"/>
+                            </Style>
+                            
+                        </DataGrid.Resources>
+                        
                     </DataGrid>
 
                 </Grid>
