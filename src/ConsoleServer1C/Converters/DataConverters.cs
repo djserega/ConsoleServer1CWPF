@@ -1,7 +1,15 @@
 ﻿namespace ConsoleServer1C.Converters
 {
+    /// <summary>
+    /// Конвертеры байт в строку (B, KB, MB, GB, TB, PB, EB)
+    /// </summary>
     internal class DateConverters
     {
+        /// <summary>
+        /// Конвертер с ulong в string
+        /// </summary>
+        /// <param name="bytes">Количество байт</param>
+        /// <returns></returns>
         internal static string BytesToString(ulong bytes)
         {
             if (bytes == 0)
@@ -29,6 +37,11 @@
                 return ((bytes >> 50) / (float)1024).ToString("F0") + " EB";
         }
 
+        /// <summary>
+        /// Конвертер с long в string
+        /// </summary>
+        /// <param name="bytes">Количество байт</param>
+        /// <returns></returns>
         internal static string BytesToString(long bytes)
         {
             if (bytes == 0)
