@@ -3,10 +3,18 @@ using V83;
 
 namespace ConsoleServer1C.Models
 {
+    /// <summary>
+    /// Базовый класс данных сессии базы данных
+    /// </summary>
     public class Session : NotifyPropertyChangedClass
     {
         private float _dbProcTook;
 
+        /// <summary>
+        /// Конструктор создания сессии
+        /// </summary>
+        /// <param name="clusterInfo">Данные кластера</param>
+        /// <param name="sessionInfo">Данные интерфейса сессии</param>
         public Session(IClusterInfo clusterInfo, ISessionInfo sessionInfo)
         {
             if (clusterInfo == null || sessionInfo == null)
@@ -28,14 +36,49 @@ namespace ConsoleServer1C.Models
             Host = sessionInfo.Host;
         }
 
+        /// <summary>
+        /// Кластер сессии
+        /// </summary>
         public IClusterInfo ClusterInfo { get; private set; }
+
+        /// <summary>
+        /// Краткая информация о базе данных сессии
+        /// </summary>
         public IInfoBaseShort InfoBaseShort { get; private set; }
+
+        /// <summary>
+        /// Источник данных сессии
+        /// </summary>
         public ISessionInfo SessionInfo { get; private set; }
+
+        /// <summary>
+        /// Идентификатор приложения
+        /// </summary>
         public string AppID { get; private set; }
+
+        /// <summary>
+        /// Идентификатор сессии
+        /// </summary>
         public int SessionID { get; private set; }
+
+        /// <summary>
+        /// Имя пользователя
+        /// </summary>
         public string UserName { get; private set; }
+
+        /// <summary>
+        /// Данные рабочего процесса
+        /// </summary>
         public IWorkingProcessInfo Process { get; private set; }
+
+        /// <summary>
+        /// Краткая информация соединения 
+        /// </summary>
         public IConnectionShort Connection { get; private set; }
+
+        /// <summary>
+        /// Время захвата СУБД
+        /// </summary>
         public float DbProcTook
         {
             get => _dbProcTook;
@@ -45,14 +88,46 @@ namespace ConsoleServer1C.Models
                 ShowNotifyDbProcTook();
             }
         }
+
+        /// <summary>
+        /// Дата, время старта сессии
+        /// </summary>
         public DateTime StartedAt { get; private set; }
+
+        /// <summary>
+        /// Обработано байт за последние 5 минут
+        /// </summary>
         public ulong DbmsBytesLast5Min { get; private set; }
+
+        /// <summary>
+        /// Обработано байт за последние 5 минут (конвертировано)
+        /// </summary>
         public string DbmsBytesLast5MinString { get => Converters.DateConverters.BytesToString(DbmsBytesLast5Min); }
+
+        /// <summary>
+        /// Использовано памяти за последние 5 минут
+        /// </summary>
         public long MemoryLast5Min { get; private set; }
+
+        /// <summary>
+        /// Использовано памяти за последние 5 минут (конвертировано)
+        /// </summary>
         public string MemoryLast5MinString { get => Converters.DateConverters.BytesToString(MemoryLast5Min); }
+
+        /// <summary>
+        /// Идентификатор соединения
+        /// </summary>
         public int ConnID { get; private set; }
+
+        /// <summary>
+        /// Имя хоста
+        /// </summary>
         public string Host { get; private set; }
 
+        /// <summary>
+        /// Заполнение по данным с другой сессии
+        /// </summary>
+        /// <param name="session"></param>
         internal void Fill(Session session)
         {
             ClusterInfo = session.ClusterInfo;
@@ -71,6 +146,9 @@ namespace ConsoleServer1C.Models
             Host = session.Host;
         }
 
+        /// <summary>
+        /// Отображение уведомления для пользователя о превышении времени захвата СУБД
+        /// </summary>
         private void ShowNotifyDbProcTook()
         {
             if (_dbProcTook > AppSettings.ExceededThresholdDbProcTookCritical)
@@ -84,6 +162,11 @@ namespace ConsoleServer1C.Models
             }
         }
 
+        /// <summary>
+        /// Вывод уведомления пользователю
+        /// </summary>
+        /// <param name="title">Заголовок</param>
+        /// <param name="message">Текст сообщения</param>
         private void ShowNotify(string title, string message)
         {
             Events.TaskbarIconEvents.ShowTaskbarIcon(title, message);
