@@ -92,13 +92,25 @@ namespace ConsoleServer1C
 
         #region Public properties
 
+        /// <summary>
+        /// Список полученного списка баз данных (с учетом пользовательского фильтра)
+        /// </summary>
         public ObservableCollection<Models.InfoBase> ListBases { get; private set; } = new ObservableCollection<Models.InfoBase>();
+        /// <summary>
+        /// Список полученного списка баз данных 
+        /// </summary>
         public List<Models.InfoBase> ListBasesNotFiltered { get; private set; } = new List<Models.InfoBase>();
+        /// <summary>
+        /// Выделенный объект базы данных
+        /// </summary>
         public Models.InfoBase SelectedItemListBases
         {
             get => _selectedItemListBases;
             set { _selectedItemListBases = value; SetItemSourceListSession(); }
         }
+        /// <summary>
+        /// Выделенный объект сессии
+        /// </summary>
         public Models.Session SelectedItemSession { get; set; }
 
         private void SetItemSourceListSession()
@@ -334,6 +346,9 @@ namespace ConsoleServer1C
             };
         }
 
+        /// <summary>
+        /// Добавление текущего подключения в список истории
+        /// </summary>
         private void AddCurrentConnectionToHistory()
         {
             Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(
@@ -348,6 +363,10 @@ namespace ConsoleServer1C
 
         #region Updating list bases
 
+        /// <summary>
+        /// Обновление списка базы данных
+        /// </summary>
+        /// <param name="updateSessionInfo"></param>
         private async void UpdateListBases(bool updateSessionInfo = false)
         {
             NotUpdating = false;
@@ -401,6 +420,10 @@ namespace ConsoleServer1C
             ApplyFilterListUser();
         }
 
+        /// <summary>
+        /// Обновление текущего списка баз данных по новым данным обновления
+        /// </summary>
+        /// <param name="newListBases"></param>
         private void RefreshDataContextListBase(List<Models.InfoBase> newListBases)
         {
             List<Models.InfoBase> deletingRow = new List<Models.InfoBase>();
@@ -426,6 +449,9 @@ namespace ConsoleServer1C
             RefreshDataGridInUI();
         }
 
+        /// <summary>
+        /// Обновление UI 
+        /// </summary>
         private void RefreshDataGridInUI()
         {
             UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
@@ -436,6 +462,9 @@ namespace ConsoleServer1C
             StartStopAutoUpdating();
         }
 
+        /// <summary>
+        /// Управление авто-обновлением данных сессии
+        /// </summary>
         private void StartStopAutoUpdating()
         {
             if (!NotUpdating || (AppSettings.UpdateSessionMinute == 0 || ListBases.Count == 0))
@@ -453,6 +482,9 @@ namespace ConsoleServer1C
 
         #endregion
 
+        /// <summary>
+        /// Сортировка списка сессий по убыванию значения времени блокировки СУБД
+        /// </summary>
         private void SortListBasesToDbProcTook()
         {
             Dispatcher.Invoke(new ThreadStart(delegate
