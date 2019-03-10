@@ -8,25 +8,56 @@ using V83;
 
 namespace ConsoleServer1C
 {
+    /// <summary>
+    /// Класс подключения к серверу 1С
+    /// </summary>
     internal sealed class ConnectToAgent : IDisposable
     {
         #region Private fields
 
+        /// <summary>
+        /// Имя сервера
+        /// </summary>
         private readonly string _serverName;
+        /// <summary>
+        /// Объект подключения
+        /// </summary>
         private COMConnector _comConnector;
+        /// <summary>
+        /// Данные подключения к агенту сервера 1С
+        /// </summary>
         private IServerAgentConnection _serverAgent;
+        /// <summary>
+        /// Список отбора баз
+        /// </summary>
         private string _filterInfoBaseName = string.Empty;
+        /// <summary>
+        /// Список имен баз данных разделенных по разделителю (_filterInfoBaseName)
+        /// </summary>
         private readonly List<string> _listFilterInfoBaseName = new List<string>();
 
         #endregion
 
+        /// <summary>
+        /// Базовый конструктор класса
+        /// </summary>
+        /// <param name="serverName"></param>
         internal ConnectToAgent(string serverName)
         {
             _serverName = serverName;
         }
 
+        /// <summary>
+        /// Список баз данных
+        /// </summary>
         internal List<Models.InfoBase> InfoBases { get; set; } = new List<Models.InfoBase>();
+        /// <summary>
+        /// Признак обновления только данных сессий
+        /// </summary>
         internal bool UpdateSessions { get; set; }
+        /// <summary>
+        /// Список баз данных полученных в результате разбиения строки по разделителю
+        /// </summary>
         internal string FilterInfoBaseName
         {
             get => _filterInfoBaseName;
@@ -43,17 +74,28 @@ namespace ConsoleServer1C
             }
         }
 
+        /// <summary>
+        /// Деструктор
+        /// </summary>
         public void Dispose()
         {
             _serverAgent = null;
             _comConnector = null;
         }
 
+        /// <summary>
+        /// Получение списка баз данных (асинхронно)
+        /// </summary>
+        /// <returns></returns>
         internal async Task GetListBaseAsync()
         {
             await Task.Run(() => GetListBaseFromComAsync());
         }
 
+        /// <summary>
+        /// Отключение сессии
+        /// </summary>
+        /// <param name="session"></param>
         internal void TerminateSession(Models.Session session)
         {
             if (session == null)
@@ -87,6 +129,9 @@ namespace ConsoleServer1C
 
         #region Private methods
 
+        /// <summary>
+        /// Получение списка баз данных с COMОбъекта (асинхронно)
+        /// </summary>
         private async void GetListBaseFromComAsync()
         {
             Models.ListNoAccessBase.List.Clear();
@@ -133,6 +178,10 @@ namespace ConsoleServer1C
             Events.UpdateInfoMainWindowEvents.EvokeUpdateListBasesMainWindow(UpdateSessions);
         }
 
+        /// <summary>
+        /// Заполнение списка информационных баз по данным кластеров сервера 1С
+        /// </summary>
+        /// <returns></returns>
         private async Task FillInfoBasesAllClusters()
         {
             Array arrayClusters = _serverAgent.GetClusters();
@@ -163,6 +212,13 @@ namespace ConsoleServer1C
             }
         }
 
+        /// <summary>
+        /// Получение списка баз данных по кластеру
+        /// </summary>
+        /// <param name="comConnector">COM объект подключения к серверу 1С</param>
+        /// <param name="serverAgent">Подключение к агенту сервера 1С</param>
+        /// <param name="clusterInfo">Кластер со списком баз данных</param>
+        /// <returns>Задача с результатом: список баз данных</returns>
         private async Task<List<Models.InfoBase>> GetListInfoBaseFromClusterInfo(COMConnector comConnector, IServerAgentConnection serverAgent, IClusterInfo clusterInfo)
         {
             List<Models.InfoBase> infoBasesCluster = new List<Models.InfoBase>();
@@ -211,11 +267,22 @@ namespace ConsoleServer1C
             return infoBasesCluster;
         }
 
+        /// <summary>
+        /// Получение списка информационных баз рабочего процесса (асинхронно)
+        /// </summary>
+        /// <param name="comConnector">COM объект подключения к серверу 1С</param>
+        /// <param name="workProcess">Рабочий процесс</param>
+        /// <returns>Задача с результатом: Список баз данных</returns>
         private async Task<List<Models.InfoBase>> FillInfoBaseFromWorkProcessAsync(COMConnector comConnector, IWorkingProcessInfo workProcess)
         {
             return await Task.Run(() => FillInfoBaseFromWorkProcess(GetWorkingProcessConnection(comConnector, workProcess)));
         }
 
+        /// <summary>
+        /// Получение списка информационных баз рабочего процесса
+        /// </summary>
+        /// <param name="workingProcessConnection"></param>
+        /// <returns>Список баз данных</returns>
         private List<Models.InfoBase> FillInfoBaseFromWorkProcess(IWorkingProcessConnection workingProcessConnection)
         {
             List<Models.InfoBase> listInfoBasesTask = new List<Models.InfoBase>();
@@ -246,6 +313,13 @@ namespace ConsoleServer1C
             return listInfoBasesTask;
         }
 
+        /// <summary>
+        /// Обновление данных информационной базы данных
+        /// </summary>
+        /// <param name="workingProcessConnection">Подключение к рабочему процессу</param>
+        /// <param name="infoBaseInfo">Информация о базе данных</param>
+        /// <param name="listInfoBasesTask">Список баз данных</param>
+        /// <returns>Информация о подключении COMConsole</returns>
         private IInfoBaseConnectionInfo FillInfoBase(IWorkingProcessConnection workingProcessConnection, IInfoBaseInfo infoBaseInfo, List<Models.InfoBase> listInfoBasesTask)
         {
             if (workingProcessConnection == null)
@@ -294,6 +368,11 @@ namespace ConsoleServer1C
             return infoBaseConnectionComConsole;
         }
 
+        /// <summary>
+        /// Получение информации о сессии
+        /// </summary>
+        /// <param name="serverAgent">Подключение к агенту сервера 1С</param>
+        /// <param name="clusterInfo">Данные кластера 1С</param>
         private void GetInfoSessions(IServerAgentConnection serverAgent, IClusterInfo clusterInfo)
         {
             Array sessions = serverAgent.GetSessions(clusterInfo);
@@ -317,6 +396,12 @@ namespace ConsoleServer1C
             }
         }
 
+        /// <summary>
+        /// Получение списка рабочих процессов
+        /// </summary>
+        /// <param name="comConnector">COM объект подключения к серверу 1С</param>
+        /// <param name="workProcess">Рабочий процесс</param>
+        /// <returns></returns>
         private IWorkingProcessConnection GetWorkingProcessConnection(COMConnector comConnector, IWorkingProcessInfo workProcess)
         {
             IWorkingProcessConnection workingProcessConnection;
@@ -334,11 +419,18 @@ namespace ConsoleServer1C
             return workingProcessConnection;
         }
 
+        /// <summary>
+        /// Аутентификация к рабочему процессу
+        /// </summary>
+        /// <param name="workingProcessConnection">Рабочий процесс</param>
         private static void AddAuthentificationWorkingProcess(IWorkingProcessConnection workingProcessConnection)
         {
             workingProcessConnection.AddAuthentication("", "");
         }
 
+        /// <summary>
+        /// Инициализация объекта подключения
+        /// </summary>
         private void InitializeComConnector()
         {
             if (string.IsNullOrWhiteSpace(_serverName))
@@ -365,6 +457,11 @@ namespace ConsoleServer1C
             }
         }
 
+        /// <summary>
+        /// Проверка наличия базы данных в списке отборов
+        /// </summary>
+        /// <param name="infoBaseName">Имя базы данных</param>
+        /// <returns>true: имя базы данных подходит под отбор (или отбор пустой)</returns>
         private bool CurrentInfoBaseNameContainedInListFilter(string infoBaseName)
         {
             if (_listFilterInfoBaseName.Count > 0)
@@ -380,6 +477,10 @@ namespace ConsoleServer1C
                 return true;
         }
 
+        /// <summary>
+        /// Проверка наличия соединения к серверу 1С
+        /// </summary>
+        /// <returns>true: доступ есть</returns>
         private bool CheckConnectionToServer()
         {
             bool result = false;
