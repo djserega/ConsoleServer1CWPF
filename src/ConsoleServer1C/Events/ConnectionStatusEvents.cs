@@ -41,7 +41,7 @@ namespace ConsoleServer1C.Events
                 else
                     progress = _previousProgress;
 
-                return progress;
+                return Math.Min(100, progress);
             }
         }
 
