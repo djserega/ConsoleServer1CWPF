@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ConsoleServer1C
 {
-    public class AppSettings : Models.NotifyPropertyChangedClass
+    public sealed class AppSettings : Models.NotifyPropertyChangedClass
     {
         #region Private fields
 

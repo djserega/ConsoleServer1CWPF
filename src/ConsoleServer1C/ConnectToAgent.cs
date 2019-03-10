@@ -8,7 +8,7 @@ using V83;
 
 namespace ConsoleServer1C
 {
-    internal class ConnectToAgent : IDisposable
+    internal sealed class ConnectToAgent : IDisposable
     {
         #region Private fields
 
