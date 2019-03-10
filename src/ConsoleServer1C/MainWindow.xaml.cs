@@ -346,6 +346,8 @@ namespace ConsoleServer1C
 
         #endregion
 
+        #region Updating list bases
+
         private async void UpdateListBases(bool updateSessionInfo = false)
         {
             NotUpdating = false;
@@ -429,6 +431,28 @@ namespace ConsoleServer1C
             UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
         }
 
+        private void TextBoxUpdateSessionMinute_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            StartStopAutoUpdating();
+        }
+
+        private void StartStopAutoUpdating()
+        {
+            if (!NotUpdating || (AppSettings.UpdateSessionMinute == 0 || ListBases.Count == 0))
+            {
+                _timer.Stop();
+                BorderUpdateSessionMinute.Background = new SolidColorBrush();
+            }
+            else
+            {
+                _timer.Interval = AppSettings.UpdateSessionMinute * 1000;
+                _timer.Start();
+                BorderUpdateSessionMinute.Background = (Brush)new BrushConverter().ConvertFrom("#C7DFFC");
+            }
+        }
+
+        #endregion
+
         private void SortListBasesToDbProcTook()
         {
             Dispatcher.Invoke(new ThreadStart(delegate
@@ -444,11 +468,6 @@ namespace ConsoleServer1C
             }));
         }
 
-        private void TextBoxUpdateSessionMinute_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            StartStopAutoUpdating();
-        }
-
         private void MenuItemSessionTerminateSession_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedItemSession != null)
@@ -461,21 +480,6 @@ namespace ConsoleServer1C
                 {
                     MessageBox.Show("Не удалось отключить сессию.\n" + ex.Message);
                 }
-            }
-        }
-
-        private void StartStopAutoUpdating()
-        {
-            if (!NotUpdating || (AppSettings.UpdateSessionMinute == 0 || ListBases.Count == 0))
-            {
-                _timer.Stop();
-                BorderUpdateSessionMinute.Background = new SolidColorBrush();
-            }
-            else
-            {
-                _timer.Interval = AppSettings.UpdateSessionMinute * 1000;
-                _timer.Start();
-                BorderUpdateSessionMinute.Background = (Brush)new BrushConverter().ConvertFrom("#C7DFFC");
             }
         }
 
@@ -518,7 +522,6 @@ namespace ConsoleServer1C
         }
 
         #endregion
-
 
         #region Visibility datagrid
 
