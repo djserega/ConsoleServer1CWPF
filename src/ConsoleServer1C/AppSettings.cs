@@ -7,20 +7,43 @@ using System.Text;
 
 namespace ConsoleServer1C
 {
+    /// <summary>
+    /// Работа с настройками приложения
+    /// </summary>
     public sealed class AppSettings : Models.NotifyPropertyChangedClass
     {
         #region Private fields
 
+        /// <summary>
+        /// Ключ компьютера
+        /// </summary>
         private readonly string _compName = Environment.MachineName + "Software";
+        /// <summary>
+        /// Ключ сохранения данных регистра
+        /// </summary>
         private const string _prefixRegistrySoftware = "Software";
+        /// <summary>
+        /// Ключ приложения регистра
+        /// </summary>
         private const string _prefixKeyApplication = "ConsoleServer1C";
+        /// <summary>
+        /// Ключ сохранения данных в регистре сведений
+        /// </summary>
         private const string _prefixRegistryKey = _prefixRegistrySoftware + "\\" + _prefixKeyApplication;
-
+        /// <summary>
+        /// Строка фильтра списка баз данных
+        /// </summary>
         private string _findBase = string.Empty;
+        /// <summary>
+        /// Строка фильтра списка сессий
+        /// </summary>
         private string _findUser = string.Empty;
 
         #endregion
 
+        /// <summary>
+        /// Базовый конструктор настроек
+        /// </summary>
         public AppSettings()
         {
             try
@@ -33,6 +56,9 @@ namespace ConsoleServer1C
             }
         }
 
+        /// <summary>
+        /// Деструктор настроек. Сохранение текущих значений
+        /// </summary>
         ~AppSettings()
         {
             SetDefaultSettings(saveCurrent: true);
@@ -40,27 +66,65 @@ namespace ConsoleServer1C
 
         #region Public properties
 
+        /// <summary>
+        /// Имя или IP адрес сервера 1С
+        /// </summary>
         public string ServerName { get; set; } = string.Empty;
+        /// <summary>
+        /// Количество секунд авто-обновления данных
+        /// </summary>
         public int UpdateSessionMinute { get; set; } = 60;
+        /// <summary>
+        /// Строка отбора списка баз данных при подключении к серверу 1С
+        /// </summary>
         public string FilterInfoBaseName { get; set; } = string.Empty;
+        /// <summary>
+        /// Нужна ли сортировка по времени захвата СУБД
+        /// </summary>
         public bool SortDbProcTook { get; set; } = true;
+        /// <summary>
+        /// Управление уведомлениями о превышении лимита времени захвата СУБД
+        /// </summary>
         public bool NotifyWhenBlockingTimeDBIsExceeded { get; set; } = false;
+        /// <summary>
+        /// Список истории подключения
+        /// </summary>
         public List<Models.HistoryConnection> ListHistoryConnection { get; private set; } = new List<Models.HistoryConnection>();
+        /// <summary>
+        /// Список настроек видимости колонок таблицы сессий
+        /// </summary>
         public Dictionary<object, bool> VisibilityDataGridSessionColumn { get; private set; } = new Dictionary<object, bool>();
-
+        /// <summary>
+        /// Строка фильтра списка баз данных
+        /// </summary>
         public string FindBase { get => _findBase; set { _findBase = value; NotifyPropertyChanged(); } }
+        /// <summary>
+        /// Строка фильтра списка сессий
+        /// </summary>
         public string FindUser { get => _findUser; set { _findUser = value; NotifyPropertyChanged(); } }
 
         #endregion
 
         #region Internal property ExceededThreshold
 
+        /// <summary>
+        /// Критическое значение времени захвата СУБД
+        /// </summary>
         internal static readonly int ExceededThresholdDbProcTookCritical = 30;
+        /// <summary>
+        /// Высокое значение времени захвата СУБД
+        /// </summary>
         internal static readonly int ExceededThresholdDbProcTookHigh = 20;
+        /// <summary>
+        /// Повышенное значение времени захвата СУБД
+        /// </summary>
         internal static readonly int ExceededThresholdDbProcTookElevated = 10;
 
         #endregion
 
+        /// <summary>
+        /// Получение всех сохраненных настроек
+        /// </summary>
         internal void GetAllSettings()
         {
             try
@@ -98,6 +162,11 @@ namespace ConsoleServer1C
             }
         }
 
+        /// <summary>
+        /// Установка значений по умолчанию
+        /// </summary>
+        /// <param name="key">Ключ настройки</param>
+        /// <param name="saveCurrent">Сохранение текущего значения</param>
         internal void SetDefaultSettings(string key = "", bool saveCurrent = false)
         {
             bool keyEmpty = string.IsNullOrWhiteSpace(key);
@@ -158,6 +227,13 @@ namespace ConsoleServer1C
 
         #region Private methods
 
+        /// <summary>
+        /// Загрузка сохраненного значения
+        /// </summary>
+        /// <param name="regKey">Ключ регистра</param>
+        /// <param name="keyName">Ключ значения</param>
+        /// <param name="converting">Необходимость конвертации значения</param>
+        /// <returns></returns>
         private string GetValue(RegistryKey regKey, string keyName, bool converting = false)
         {
             string regResult = regKey.GetValue(keyName)?.ToString() ?? string.Empty;
@@ -171,6 +247,13 @@ namespace ConsoleServer1C
             return result;
         }
 
+        /// <summary>
+        /// Сохранение значения
+        /// </summary>
+        /// <param name="regKey">Ключ регистра</param>
+        /// <param name="key">Ключ значения</param>
+        /// <param name="value">Значение</param>
+        /// <param name="converting">Необходимость конвертации</param>
         private void SetValue(RegistryKey regKey, string key, string value, bool converting = false)
         {
             string regValue;
@@ -182,6 +265,11 @@ namespace ConsoleServer1C
             regKey?.SetValue(key, regValue);
         }
 
+        /// <summary>
+        /// Сериализация значения
+        /// </summary>
+        /// <param name="text">Значение</param>
+        /// <returns>Результат конвертации</returns>
         private string ConverterToValue(string text)
         {
             byte[] decrypted = Encoding.UTF8.GetBytes(text);
@@ -191,6 +279,11 @@ namespace ConsoleServer1C
             return Convert.ToBase64String(encrypted);
         }
 
+        /// <summary>
+        /// Десериализация значения
+        /// </summary>
+        /// <param name="text">Сериализированное значение</param>
+        /// <returns>Значение</returns>
         private string ConverterInValue(string text)
         {
             byte[] decoded;
@@ -208,6 +301,14 @@ namespace ConsoleServer1C
             return Encoding.UTF8.GetString(result);
         }
 
+        /// <summary>
+        /// Установка значения в регистр
+        /// </summary>
+        /// <param name="regKey">Ключ регистра</param>
+        /// <param name="names">Имена параметров</param>
+        /// <param name="key">Ключ</param>
+        /// <param name="value">Значение</param>
+        /// <param name="initialize">Инициализация значения</param>
         private void SetValueIfNotFinded(RegistryKey regKey, string[] names, string key, string value = "", bool initialize = false)
         {
             if (!string.IsNullOrWhiteSpace(names.FirstOrDefault(f => f == key)) || initialize)
@@ -217,6 +318,14 @@ namespace ConsoleServer1C
                     SetValue(regKey, key, value, true);
             }
         }
+        /// <summary>
+        /// Установка значения в регистр
+        /// </summary>
+        /// <param name="regKey">Ключ регистра</param>
+        /// <param name="names">Имена параметров</param>
+        /// <param name="key">Ключ</param>
+        /// <param name="value">Значение</param>
+        /// <param name="initialize">Инициализация значения</param>
         private void SetValueIfNotFinded(RegistryKey regKey, string[] names, string key, int value = 0, bool initialize = false)
         {
             if (!string.IsNullOrWhiteSpace(names.FirstOrDefault(f => f == key)) || initialize)
@@ -226,6 +335,14 @@ namespace ConsoleServer1C
                     SetValue(regKey, key, value.ToString());
             }
         }
+        /// <summary>
+        /// Установка значения в регистр
+        /// </summary>
+        /// <param name="regKey">Ключ регистра</param>
+        /// <param name="names">Имена параметров</param>
+        /// <param name="key">Ключ</param>
+        /// <param name="value">Значение</param>
+        /// <param name="initialize">Инициализация значения</param>
         private void SetValueIfNotFinded(RegistryKey regKey, string[] names, string key, bool value = false, bool initialize = false)
         {
             if (!string.IsNullOrWhiteSpace(names.FirstOrDefault(f => f == key)) || initialize)
