@@ -287,6 +287,9 @@ namespace ConsoleServer1C
         {
             List<Models.InfoBase> listInfoBasesTask = new List<Models.InfoBase>();
 
+            if (workingProcessConnection == null)
+                return listInfoBasesTask;
+
             Array infoBases = workingProcessConnection.GetInfoBases();
 
             Events.ConnectionStatusEvents.CountInfoBases += infoBases.Length;
