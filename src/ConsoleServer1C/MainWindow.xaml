@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ConsoleServer1C"
         xmlns:localConverters="clr-namespace:ConsoleServer1C.Converters"
         mc:Ignorable="d"
-        Title="Консоль сервера 1С" Height="600" Width="1400"
+        Title="Консоль сервера 1С" Height="600" Width="1150"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -44,7 +44,7 @@
                   Grid.Row="0"
                   Margin="5 5 0 0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="5"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="35"/>
@@ -52,99 +52,100 @@
 
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0"
-                                Margin="2 0"
+                    <WrapPanel Grid.Column="0">
+                        
+                        <StackPanel Grid.Column="0"
+                                    Margin="2 2"
+                                    Orientation="Horizontal">
+                            <Label Content="Адрес сервера"
+                                   VerticalAlignment="Bottom"/>
+
+                            <TextBox x:Name="TextBoxServerName"
+                                     Width="150"
+                                     ToolTip="IP или имя сервера на котором установлен сервер 1С."
+                                     Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     KeyDown="TextBoxServerName_KeyDown"/>
+                        </StackPanel>
+
+                        <Grid Grid.Column="1"
+                              x:Name="GridConnection"
+                              Margin="3,2,3,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0"
+                                    Content="Подключиться"
+                                    IsTabStop="False"
+                                    Click="ButtonConnect_Click">
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Content="{md:PackIcon MenuDown}"
+                                    IsTabStop="False"
+                                    Click="ButtonHistory_Click">
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <ContextMenu.ItemContainerStyle>
+                                            <Style TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}">
+                                                <Setter Property="Header"   Value="{Binding Header}"/>
+                                                <Setter Property="Tag"      Value="{Binding Date}"/>
+                                                <Setter Property="ToolTip"  Value="{Binding ToolTip}"/>
+                                                <EventSetter Event="Click" Handler="MenuItemSelectedHistory"/>
+                                            </Style>
+                                        </ContextMenu.ItemContainerStyle>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                        </Grid>
+
+                        <StackPanel Grid.Column="2"
+                                    Margin="2 2"
+                                    Orientation="Horizontal">
+                            <Label Content="Фильтр по имени базы"
+                                   VerticalAlignment="Bottom"/>
+
+                            <TextBox x:Name="TextBoxFilterInfoBaseName"
+                                     Width="150"
+                                     ToolTip="Текст поиска в названии базы. Без учета регистра. Можно указать несколько баз через ';'."
+                                     Text="{Binding ElementName=WindowMain, Path=AppSettings.FilterInfoBaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     KeyDown="TextBoxFilterInfoBaseName_KeyDown"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="3"
+                                    Margin="2 2"
+                                    Orientation="Horizontal">
+                            <Label Content="Сортировать 'Захвачено СУБД'"
+                                   VerticalAlignment="Bottom"/>
+
+                            <CheckBox VerticalAlignment="Bottom"
+                                      Margin="0 4"
+                                      IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.SortDbProcTook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        
+                    </WrapPanel>
+
+                    <StackPanel Grid.Column="1"
+                                Margin="1 2"
+                                VerticalAlignment="Top"
                                 Orientation="Horizontal">
-                        <Label Content="Адрес сервера"
-                               VerticalAlignment="Bottom"/>
+                        <Button Margin="1 0"
+                                VerticalContentAlignment="Bottom"
+                                Content="{md:PackIcon WindowMinimize}"
+                                Click="ButtonMinimize_Click"/>
 
-                        <TextBox x:Name="TextBoxServerName"
-                                 Width="150"
-                                 ToolTip="IP или имя сервера на котором установлен сервер 1С."
-                                 Text="{Binding ElementName=WindowMain, Path=AppSettings.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 KeyDown="TextBoxServerName_KeyDown"/>
+                        <Button Margin="1 0"
+                                Content="{md:PackIcon WindowMaximize}"
+                                Click="ButtonMaximize_Click"/>
+
+                        <Button Margin="1 0"
+                                Content="{md:PackIcon WindowClose}"
+                                Click="ButtonClose_Click"/>
                     </StackPanel>
-
-                    <Grid Grid.Column="1"
-                          x:Name="GridConnection"
-                          Margin="3,0,3,3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0"
-                                Content="Подключиться"
-                                IsTabStop="False"
-                                Click="ButtonConnect_Click">
-                           </Button>
-                        <Button Grid.Column="1"
-                                Content="{md:PackIcon MenuDown}"
-                                IsTabStop="False"
-                                Click="ButtonHistory_Click">
-                            <Button.ContextMenu>
-                                <ContextMenu>
-                                    <ContextMenu.ItemContainerStyle>
-                                        <Style TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}">
-                                            <Setter Property="Header"   Value="{Binding Header}"/>
-                                            <Setter Property="Tag"      Value="{Binding Date}"/>
-                                            <Setter Property="ToolTip"  Value="{Binding ToolTip}"/>
-                                            <EventSetter Event="Click" Handler="MenuItemSelectedHistory"/>
-                                        </Style>
-                                    </ContextMenu.ItemContainerStyle>
-                                </ContextMenu>
-                            </Button.ContextMenu>
-                        </Button>
-                    </Grid>
-                    <StackPanel Grid.Column="2"
-                                Margin="2 0"
-                                Orientation="Horizontal">
-                        <Label Content="Фильтр по имени базы"
-                               VerticalAlignment="Bottom"/>
-
-                        <TextBox x:Name="TextBoxFilterInfoBaseName"
-                                 Width="150"
-                                 ToolTip="Текст поиска в названии базы. Без учета регистра. Можно указать несколько баз через ';'."
-                                 Text="{Binding ElementName=WindowMain, Path=AppSettings.FilterInfoBaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 KeyDown="TextBoxFilterInfoBaseName_KeyDown"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="3"
-                                Margin="2 0"
-                                Orientation="Horizontal">
-                        <Label Content="Сортировать 'Захвачено СУБД'"
-                               VerticalAlignment="Bottom"/>
-
-                        <CheckBox VerticalAlignment="Bottom"
-                                  Margin="0 4"
-                                  IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.SortDbProcTook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </StackPanel>
-
-                    <Button Grid.Column="6"
-                            Margin="1 0"
-                            VerticalContentAlignment="Bottom"
-                            Content="{md:PackIcon WindowMinimize}"
-                            Click="ButtonMinimize_Click"/>
-
-                    <Button Grid.Column="7"
-                            Margin="1 0"
-                            Content="{md:PackIcon WindowMaximize}"
-                            Click="ButtonMaximize_Click"/>
-
-                    <Button Grid.Column="8"
-                            Margin="1 0"
-                            Content="{md:PackIcon WindowClose}"
-                            Click="ButtonClose_Click"/>
+                    
                 </Grid>
 
                 <Grid Grid.Row="2">
