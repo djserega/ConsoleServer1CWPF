@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -530,27 +531,33 @@ namespace ConsoleServer1C
 
         private void ApplyFilterListBase()
         {
-            if (string.IsNullOrWhiteSpace(AppSettings.FindBase))
-                ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered);
-            else
-                ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered.Where(f => f.Name.ToUpper().Contains(AppSettings.FindBase.ToUpper())).ToList());
+            SafeAction(() =>
+            {
+                if (string.IsNullOrWhiteSpace(AppSettings.FindBase))
+                    ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered);
+                else
+                    ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered.Where(f => f.Name.ToUpper().Contains(AppSettings.FindBase.ToUpper())).ToList());
 
-            RefreshDataGridInUI();
+                RefreshDataGridInUI();
+            });
         }
 
         private void ApplyFilterListUser()
         {
-            if (string.IsNullOrWhiteSpace(AppSettings.FindUser))
-                DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions;
-            else
+            SafeAction(() =>
             {
-                string textFilter = AppSettings.FindUser.ToUpper();
+                if (string.IsNullOrWhiteSpace(AppSettings.FindUser))
+                    DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions;
+                else
+                {
+                    string textFilter = AppSettings.FindUser.ToUpper();
 
-                DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions.Where(
-                    f => f.UserName.ToUpper().Contains(textFilter)
-                    || f.AppID.ToUpper().Contains(textFilter)
-                    || f.Host.ToUpper().Contains(textFilter));
-            }
+                    DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions.Where(
+                        f => f.UserName.ToUpper().Contains(textFilter)
+                        || f.AppID.ToUpper().Contains(textFilter)
+                        || f.Host.ToUpper().Contains(textFilter));
+                }
+            });
         }
 
         #endregion
@@ -646,6 +653,31 @@ namespace ConsoleServer1C
         }
 
         #endregion
+
+        private void SafeAction(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                using (EventLog eventLog = new EventLog("Application"))
+                {
+                    eventLog.Source = "Application";
+                    eventLog.WriteEntry(
+                        ex.Message
+                        + "\n" + "\n" +
+                        ex.InnerException?.Message
+                        + "\n" + "\n" +
+                        ex.InnerException?.InnerException?.Message
+                        + "\n" + "\n" +
+                        ex.InnerException?.InnerException?.InnerException?.Message,
+                        EventLogEntryType.Warning);
+                }
+                MessageBox.Show("Перехвачена ошибка выполнения.\nДетальную информацию можно найти в событиях Windows.");
+            }
+        }
 
     }
 }
