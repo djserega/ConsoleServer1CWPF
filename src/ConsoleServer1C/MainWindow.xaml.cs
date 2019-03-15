@@ -303,6 +303,11 @@ namespace ConsoleServer1C
             AddCurrentConnectionToHistory();
         }
 
+        private void ButtonRefreshData_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateListBases(true);
+        }
+
         private void ButtonHistory_Click(object sender, RoutedEventArgs e)
         {
             ContextMenu contextMenu = ((Button)sender).ContextMenu;
@@ -678,6 +683,5 @@ namespace ConsoleServer1C
                 MessageBox.Show("Перехвачена ошибка выполнения.\nДетальную информацию можно найти в событиях Windows.");
             }
         }
-
     }
 }

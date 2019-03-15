@@ -71,20 +71,15 @@
                                      KeyDown="TextBoxServerName_KeyDown"/>
                         </StackPanel>
 
-                        <Grid Grid.Column="1"
-                              x:Name="GridConnection"
-                              Margin="3,2,3,3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0"
-                                    Content="Подключиться"
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    x:Name="GridConnection"
+                                    Margin="3,2,3,3">
+                            <Button Content="Подключиться"
                                     IsTabStop="False"
                                     Click="ButtonConnect_Click">
                             </Button>
-                            <Button Grid.Column="1"
-                                    Content="{md:PackIcon MenuDown}"
+                            <Button Content="{md:PackIcon MenuDown}"
                                     IsTabStop="False"
                                     Click="ButtonHistory_Click">
                                 <Button.ContextMenu>
@@ -100,7 +95,9 @@
                                     </ContextMenu>
                                 </Button.ContextMenu>
                             </Button>
-                        </Grid>
+                            <Button Content="{md:PackIcon Update}"
+                                    Click="ButtonRefreshData_Click"/>
+                        </StackPanel>
 
                         <StackPanel Grid.Column="2"
                                     Margin="2 2"
