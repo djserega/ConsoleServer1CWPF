@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ConsoleServer1C"
         xmlns:localConverters="clr-namespace:ConsoleServer1C.Converters"
         mc:Ignorable="d"
-        Title="Консоль сервера 1С" Height="600" Width="1150"
+        Title="Консоль сервера 1С" Height="600" Width="1200"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -76,11 +76,15 @@
                                     x:Name="GridConnection"
                                     Margin="3,2,3,3">
                             <Button Content="Подключиться"
+                                    Margin="1 0"
                                     IsTabStop="False"
+                                    ToolTip="Подключение к указанному серверу 1С. Список баз данных будет очищен."
                                     Click="ButtonConnect_Click">
                             </Button>
                             <Button Content="{md:PackIcon MenuDown}"
+                                    Margin="1 0"
                                     IsTabStop="False"
+                                    ToolTip="Список истории подключений."
                                     Click="ButtonHistory_Click">
                                 <Button.ContextMenu>
                                     <ContextMenu>
@@ -96,6 +100,9 @@
                                 </Button.ContextMenu>
                             </Button>
                             <Button Content="{md:PackIcon Update}"
+                                    Margin="1 0"
+                                    IsTabStop="True"
+                                    ToolTip="Обновление данных сессий."
                                     Click="ButtonRefreshData_Click"/>
                         </StackPanel>
 
@@ -132,14 +139,15 @@
                         <Button Margin="1 0"
                                 VerticalContentAlignment="Bottom"
                                 Content="{md:PackIcon WindowMinimize}"
+                                ToolTip="Свернуть на панель задач"
                                 Click="ButtonMinimize_Click"/>
-
                         <Button Margin="1 0"
                                 Content="{md:PackIcon WindowMaximize}"
+                                ToolTip="Развернуть на основной экран"
                                 Click="ButtonMaximize_Click"/>
-
                         <Button Margin="1 0"
                                 Content="{md:PackIcon WindowClose}"
+                                ToolTip="Закрыть приложение"
                                 Click="ButtonClose_Click"/>
                     </StackPanel>
                     
