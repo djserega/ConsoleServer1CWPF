@@ -683,5 +683,15 @@ namespace ConsoleServer1C
                 MessageBox.Show("Перехвачена ошибка выполнения.\nДетальную информацию можно найти в событиях Windows.");
             }
         }
+
+        private void ButtonClearAppSettingsFindUser(object sender, RoutedEventArgs e)
+        {
+            AppSettings.FindUser = string.Empty;
+        }
+
+        private void ButtonClearAppSettingsFindBase(object sender, RoutedEventArgs e)
+        {
+            AppSettings.FindBase = string.Empty;
+        }
     }
 }

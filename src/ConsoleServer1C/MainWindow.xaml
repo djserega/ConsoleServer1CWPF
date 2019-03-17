@@ -57,7 +57,7 @@
                     </Grid.ColumnDefinitions>
 
                     <WrapPanel Grid.Column="0">
-                        
+
                         <StackPanel Grid.Column="0"
                                     Margin="2 2"
                                     Orientation="Horizontal">
@@ -129,7 +129,7 @@
                                       Margin="0 4"
                                       IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.SortDbProcTook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
-                        
+
                     </WrapPanel>
 
                     <StackPanel Grid.Column="1"
@@ -150,7 +150,7 @@
                                 ToolTip="Закрыть приложение"
                                 Click="ButtonClose_Click"/>
                     </StackPanel>
-                    
+
                 </Grid>
 
                 <Grid Grid.Row="2">
@@ -181,27 +181,33 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0"
-                               x:Name="LabelListBaseCollapsed"
-                               Content="{md:PackIcon ArrowCollapseLeft}"
-                               VerticalAlignment="Center"
-                               MouseDoubleClick="LabelListBaseCollapsed_MouseDoubleClick"/>
+                        <StackPanel Grid.Column="0">
+                            <Label x:Name="LabelListBaseCollapsed"
+                                   Content="{md:PackIcon ArrowCollapseLeft}"
+                                   VerticalAlignment="Center"
+                                   MouseDoubleClick="LabelListBaseCollapsed_MouseDoubleClick"/>
+                            <Label x:Name="LabelListBaseVisible"
+                                   Content="{md:PackIcon ArrowCollapseRight}"
+                                   Visibility="Collapsed"
+                                   VerticalAlignment="Center"
+                                   MouseDoubleClick="LabelListBaseVisible_MouseDoubleClick"/>
+                        </StackPanel>
                         <Label Grid.Column="1"
-                               x:Name="LabelListBaseVisible"
-                               Content="{md:PackIcon ArrowCollapseRight}"
-                               Visibility="Collapsed"
-                               VerticalAlignment="Center"
-                               MouseDoubleClick="LabelListBaseVisible_MouseDoubleClick"/>
-                        <Label Grid.Column="2"
                                Content="Поиск"
-                               Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=350}"
+                               Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=400}"
                                VerticalAlignment="Bottom"/>
-                        <TextBox Grid.Column="3"
-                                 Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=75}"
-                                 Text="{Binding ElementName=WindowMain, Path=AppSettings.FindBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Grid Grid.Column="2"
+                              Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=35}">
+                            <TextBox Text="{Binding ElementName=WindowMain, Path=AppSettings.FindBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Content="{md:PackIcon Kind=Close}"
+                                    HorizontalAlignment="Right"
+                                    Background="{x:Null}"
+                                    Foreground="{DynamicResource MaterialDesignToolTipBackground}"
+                                    BorderThickness="0"
+                                    Click="ButtonClearAppSettingsFindBase"/>
+                        </Grid>
                     </Grid>
 
                     <Grid Grid.Column="2" Grid.Row="0">
@@ -213,10 +219,17 @@
                         <Label Grid.Column="0"
                                Content="Поиск"
                                VerticalAlignment="Bottom"/>
-                        <TextBox Grid.Column="1"
-                                 x:Name="TextBoxFindUser"
-                                 Width="{Binding ElementName=BorderListUsers, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=75}"
-                                 Text="{Binding ElementName=WindowMain, Path=AppSettings.FindUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Grid Grid.Column="1"
+                              Width="{Binding ElementName=BorderListUsers, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=50}">
+                            <TextBox x:Name="TextBoxFindUser"
+                                     Text="{Binding ElementName=WindowMain, Path=AppSettings.FindUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Button Content="{md:PackIcon Kind=Close}"
+                                    HorizontalAlignment="Right"
+                                    Background="{x:Null}"
+                                    Foreground="{DynamicResource MaterialDesignToolTipBackground}"
+                                    BorderThickness="0"
+                                    Click="ButtonClearAppSettingsFindUser"/>
+                        </Grid>
                     </Grid>
 
                     <Border Grid.Column="0" Grid.Row="1"
@@ -318,9 +331,9 @@
                             <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
                                 <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuItem}"/>
                             </Style>
-                            
+
                         </DataGrid.Resources>
-                        
+
                     </DataGrid>
 
                 </Grid>
