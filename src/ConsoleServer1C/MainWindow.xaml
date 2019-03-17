@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ConsoleServer1C"
         xmlns:localConverters="clr-namespace:ConsoleServer1C.Converters"
         mc:Ignorable="d"
-        Title="Консоль сервера 1С" Height="600" Width="1200"
+        Title="Консоль сервера 1С" Height="600" Width="1150"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -47,7 +47,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="5"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
@@ -61,7 +61,7 @@
                         <StackPanel Grid.Column="0"
                                     Margin="2 2"
                                     Orientation="Horizontal">
-                            <Label Content="Адрес сервера"
+                            <Label Content="Cервер"
                                    VerticalAlignment="Bottom"/>
 
                             <TextBox x:Name="TextBoxServerName"
@@ -74,12 +74,18 @@
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     x:Name="GridConnection"
-                                    Margin="3,2,3,3">
+                                    Margin="3,2">
                             <Button Content="Подключиться"
                                     Margin="1 0"
                                     IsTabStop="False"
-                                    ToolTip="Подключение к указанному серверу 1С. Список баз данных будет очищен."
                                     Click="ButtonConnect_Click">
+                                <Button.ToolTip>
+                                    <TextBlock>
+                                        Подключение к указанному серверу 1С
+                                        <LineBreak/>
+                                        Список баз данных будет очищен.
+                                    </TextBlock>
+                                </Button.ToolTip>
                             </Button>
                             <Button Content="{md:PackIcon MenuDown}"
                                     Margin="1 0"
@@ -101,7 +107,7 @@
                             </Button>
                             <Button Content="{md:PackIcon Update}"
                                     Margin="1 0"
-                                    IsTabStop="True"
+                                    IsTabStop="False"
                                     ToolTip="Обновление данных сессий."
                                     Click="ButtonRefreshData_Click"/>
                         </StackPanel>
@@ -340,57 +346,63 @@
 
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Column="0"
-                           Content="Автообновление"
-                           VerticalAlignment="Bottom"/>
-                    <Border Grid.Column="1"
-                            x:Name="BorderUpdateSessionMinute"
-                            VerticalAlignment="Bottom"
-                            Height="25"
-                            BorderThickness="1"
-                            CornerRadius="10 10 5 5"
-                            BorderBrush="#6600b6">
-                        <TextBox Width="30"
-                                 HorizontalContentAlignment="Center"
-                                 ToolTip="Автообновление списка баз и сеансов. Указывается в секундах."
-                                 Text="{Binding ElementName=WindowMain, Path=AppSettings.UpdateSessionMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 TextChanged="TextBoxUpdateSessionMinute_TextChanged"/>
-                    </Border>
-                    <Label Grid.Column="3"
-                           Content="с."
-                           VerticalAlignment="Bottom"/>
-                    <StackPanel Grid.Column="4"
-                                Margin="5 0 0 0"
-                                VerticalAlignment="Bottom"
+                    <WrapPanel Grid.Column="0">
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Автообновление"
+                                   VerticalAlignment="Bottom"/>
+                            <Border x:Name="BorderUpdateSessionMinute"
+                                    VerticalAlignment="Bottom"
+                                    Height="30"
+                                    BorderThickness="1"
+                                    CornerRadius="10 10 5 5"
+                                    BorderBrush="#6600b6">
+                                <TextBox Width="30"
+                                         HorizontalContentAlignment="Center"
+                                         ToolTip="Автообновление списка баз и сеансов. Указывается в секундах."
+                                         Text="{Binding ElementName=WindowMain, Path=AppSettings.UpdateSessionMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         TextChanged="TextBoxUpdateSessionMinute_TextChanged"/>
+                            </Border>
+                            <Label Content="с."
+                                   VerticalAlignment="Bottom"/>
+                        </StackPanel>
+
+                        <StackPanel VerticalAlignment="Bottom"
+                                    Orientation="Horizontal">
+                            <Label Content="Включить уведомления:"/>
+                            <CheckBox IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.NotifyWhenBlockingTimeDBIsExceeded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <CheckBox.ToolTip>
+                                    <TextBlock>
+                                        Включить/выключить уведомления по превышении времени захвата СУБД
+                                        <LineBreak/>
+                                        (более 30 секунд)
+                                    </TextBlock>
+                                </CheckBox.ToolTip>
+                            </CheckBox>
+                        </StackPanel>
+                        
+                    </WrapPanel>
+
+                    <StackPanel Grid.Column="1"
                                 Orientation="Horizontal">
-                        <Label Content="Включить уведомления о превышения блокировки:"/>
-                        <CheckBox IsChecked="{Binding ElementName=WindowMain, Path=AppSettings.NotifyWhenBlockingTimeDBIsExceeded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </StackPanel>
-                    <ProgressBar Grid.Column="6"
-                                 x:Name="ProgressBarStatusConnection"
-                                 Width="200"
-                                 Value="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
-                    <StackPanel Grid.Column="7"
-                                Orientation="Horizontal"
-                                Margin="5 0 0 0">
-                        <TextBlock x:Name="TextBlockStatusConnection"
-                                   Width="25"
+                        <ProgressBar x:Name="ProgressBarStatusConnection"
+                                     Width="200"
+                                     Value="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="5 0 0 0">
+                            <TextBlock x:Name="TextBlockStatusConnection"
+                                       Width="25"
+                                       VerticalAlignment="Center"
+                                       Foreground="#FFAA5CE8"
+                                       Text="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
+                            <Label Content="%"
                                    VerticalAlignment="Center"
-                                   Foreground="#FFAA5CE8"
-                                   Text="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
-                        <Label Content="%"
-                               VerticalAlignment="Center"
-                               Foreground="#FFAA5CE8"/>
+                                   Foreground="#FFAA5CE8"/>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
 

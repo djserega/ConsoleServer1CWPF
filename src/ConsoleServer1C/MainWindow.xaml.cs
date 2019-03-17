@@ -318,6 +318,16 @@ namespace ConsoleServer1C
             contextMenu.IsOpen = true;
         }
 
+        private void ButtonClearAppSettingsFindUser(object sender, RoutedEventArgs e)
+        {
+            AppSettings.FindUser = string.Empty;
+        }
+
+        private void ButtonClearAppSettingsFindBase(object sender, RoutedEventArgs e)
+        {
+            AppSettings.FindBase = string.Empty;
+        }
+
         #endregion
 
         #region TextBox connected server1C
@@ -682,16 +692,6 @@ namespace ConsoleServer1C
                 }
                 MessageBox.Show("Перехвачена ошибка выполнения.\nДетальную информацию можно найти в событиях Windows.");
             }
-        }
-
-        private void ButtonClearAppSettingsFindUser(object sender, RoutedEventArgs e)
-        {
-            AppSettings.FindUser = string.Empty;
-        }
-
-        private void ButtonClearAppSettingsFindBase(object sender, RoutedEventArgs e)
-        {
-            AppSettings.FindBase = string.Empty;
         }
     }
 }

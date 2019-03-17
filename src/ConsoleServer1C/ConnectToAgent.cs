@@ -51,10 +51,12 @@ namespace ConsoleServer1C
         /// Список баз данных
         /// </summary>
         internal List<Models.InfoBase> InfoBases { get; set; } = new List<Models.InfoBase>();
+     
         /// <summary>
         /// Признак обновления только данных сессий
         /// </summary>
         internal bool UpdateSessions { get; set; }
+        
         /// <summary>
         /// Список баз данных полученных в результате разбиения строки по разделителю
         /// </summary>
