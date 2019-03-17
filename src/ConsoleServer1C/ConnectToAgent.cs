@@ -157,23 +157,23 @@ namespace ConsoleServer1C
             }
             catch (ArgumentException ex)
             {
-                MessageBox.Show(ex.Message);
+                Dialogs.Show(ex.Message);
             }
             catch (CreateV83ComConnector ex)
             {
-                MessageBox.Show($"Не удалось создать COMConnector.\n{ex.Message}");
+                Dialogs.Show($"Не удалось создать COMConnector.\n{ex.Message}");
             }
             catch (ConnectAgentException ex)
             {
-                MessageBox.Show($"Ошибка соединения с сервером.\n{ex.Message}");
+                Dialogs.Show($"Ошибка соединения с сервером.\n{ex.Message}");
             }
             catch (WorkingProcessException ex)
             {
-                MessageBox.Show($"Ошибка соединения с рабочим процессом.\n{ex.Message}");
+                Dialogs.Show($"Ошибка соединения с рабочим процессом.\n{ex.Message}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Dialogs.Show(ex.Message);
             }
 
             Events.UpdateInfoMainWindowEvents.InfoBases = InfoBases;

@@ -88,6 +88,7 @@
     <Compile Include="Converters\ElementsFormConverter.cs" />
     <Compile Include="Converters\ExceededThresholdDbProcTookConverter.cs" />
     <Compile Include="Converters\JsonConverter.cs" />
+    <Compile Include="Dialogs.cs" />
     <Compile Include="Events\ChangeFilterEvents.cs" />
     <Compile Include="Events\ConnectionStatusEvents.cs" />
     <Compile Include="Events\TaskbarIconEvents.cs" />
