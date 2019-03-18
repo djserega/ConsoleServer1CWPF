@@ -29,6 +29,7 @@ namespace ConsoleServer1C
         private readonly timers.Timer _timer = new timers.Timer();
         private bool _formIsWidenSizeWE = false;
         private bool _formIsWidenSizeNS = false;
+        private bool _refreshData = false;
 
         private bool _maximized;
         private double _lastLeft;
@@ -80,8 +81,10 @@ namespace ConsoleServer1C
             {
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
-                    if (AppSettings.NotifyWhenBlockingTimeDBIsExceeded)
+                    if (AppSettings.NotifyWhenBlockingTimeDBIsExceeded && !_refreshData)
                         _taskbarIcon.ShowBalloonTip(title, message, BalloonIcon.Info);
+
+                    _refreshData = false;
                 }));
             };
 
@@ -305,6 +308,7 @@ namespace ConsoleServer1C
 
         private void ButtonRefreshData_Click(object sender, RoutedEventArgs e)
         {
+            _refreshData = true;
             UpdateListBases(true);
         }
 
