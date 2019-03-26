@@ -128,11 +128,14 @@ namespace ConsoleServer1C
         private void SetItemSourceListSession()
         {
             DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions;
+            RefreshUI();
         }
 
         public AppSettings AppSettings { get; set; } = new AppSettings();
         public int ProgressBarValue { get; set; } = 0;
         public bool NotUpdating { get; private set; } = true;
+        public int CountElementsListBases { get => ListBases.Count; }
+        public int CountElementsListSession { get => SelectedItemListBases?.SessionCount ?? 0; }
 
         #endregion
 
@@ -474,15 +477,17 @@ namespace ConsoleServer1C
 
             SortListBasesToDbProcTook();
 
-            RefreshDataGridInUI();
+            RefreshUI();
         }
 
         /// <summary>
         /// Обновление UI 
         /// </summary>
-        private void RefreshDataGridInUI()
+        private void RefreshUI()
         {
             UpdateBindingTarget(DataGridListBases, DataGrid.ItemsSourceProperty);
+            UpdateBindingTarget(LabelCountElementsListBases, Label.ContentProperty);
+            UpdateBindingTarget(LabelCountElementsListSession, Label.ContentProperty);
         }
 
         private void TextBoxUpdateSessionMinute_TextChanged(object sender, TextChangedEventArgs e)
@@ -524,7 +529,7 @@ namespace ConsoleServer1C
                         ListBases[i].ListSessions = new List<Models.Session>(ListBases[i].ListSessions.OrderBy(f => -f.DbProcTook));
                 }
                 SetItemSourceListSession();
-                RefreshDataGridInUI();
+                RefreshUI();
             }));
         }
 
@@ -632,7 +637,7 @@ namespace ConsoleServer1C
                 else
                     ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered.Where(f => f.Name.ToUpper().Contains(AppSettings.FindBase.ToUpper())).ToList());
 
-                RefreshDataGridInUI();
+                RefreshUI();
             });
         }
 
@@ -669,7 +674,7 @@ namespace ConsoleServer1C
             DoubleAnimation timeAnimation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(200));
             timeAnimation.Completed += (object sender, EventArgs e) =>
             {
-                DataGridListBases.Visibility = newVisibility;
+                GridListBases.Visibility = newVisibility;
                 LabelListBaseVisible.Visibility = newVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
                 LabelListBaseCollapsed.Visibility = newVisibility;
             };
