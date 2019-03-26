@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using timers = System.Timers;
@@ -92,6 +93,9 @@ namespace ConsoleServer1C
             Events.ChangeFilterEvents.ChangeFilterFindUserEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListUser(); })); };
 
             #endregion
+            InitializeTaskbarIcon();
+
+            Topmost = AppSettings.IsTopmost;
         }
 
         #region Public properties
@@ -544,6 +548,73 @@ namespace ConsoleServer1C
             catch (Exception)
             {
             }
+        }
+
+        private void InitializeTaskbarIcon()
+        {
+            #region menuItemTopmostInWindow
+
+            MenuItem menuItemTopmostInWindow = new MenuItem()
+            {
+                HeaderTemplate = new DataTemplate()
+                {
+                    DataType = typeof(MenuItem),
+                    VisualTree = CreateHeaderTemplate_VisualTree("Поверх всех окон")
+                },
+                IsChecked = AppSettings.IsTopmost,
+                IsCheckable = true
+            };
+            menuItemTopmostInWindow.Click += (object sender, RoutedEventArgs e) =>
+            {
+                bool newValueIsTopmost = !AppSettings.IsTopmost;
+                AppSettings.IsTopmost = newValueIsTopmost;
+                Topmost = newValueIsTopmost;
+            };
+
+            #endregion
+
+            #region menuItemExit
+
+            MenuItem menuItemExit = new MenuItem()
+            {
+                Header = "Выход"
+            };
+            menuItemExit.Click += (object sender, RoutedEventArgs e) => { Application.Current.Shutdown(); };
+
+            #endregion
+
+            _taskbarIcon.ContextMenu = new ContextMenu()
+            {
+                Items =
+                {
+                    menuItemTopmostInWindow,
+                    new Separator(),
+                    menuItemExit
+                }
+            };
+        }
+
+        private static FrameworkElementFactory CreateHeaderTemplate_VisualTree(string header, ImageSource image = null)
+        {
+            FrameworkElementFactory elementFactoryAutostartTextBlock = new FrameworkElementFactory(typeof(TextBlock));
+            elementFactoryAutostartTextBlock.SetValue(TextBlock.TextProperty, header);
+            elementFactoryAutostartTextBlock.SetValue(MarginProperty, new Thickness(0, 0, 5, 0));
+
+            FrameworkElementFactory elementFactoryAutostart = new FrameworkElementFactory(typeof(StackPanel));
+            elementFactoryAutostart.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
+            elementFactoryAutostart.AppendChild(elementFactoryAutostartTextBlock);
+
+            if (image != null)
+            {
+                FrameworkElementFactory elementFactoryAutostartIcon = new FrameworkElementFactory(typeof(Image));
+                elementFactoryAutostartIcon.SetValue(Image.SourceProperty, image);
+                elementFactoryAutostartIcon.SetValue(WidthProperty, 14.0);
+                elementFactoryAutostartIcon.SetValue(HeightProperty, 14.0);
+
+                elementFactoryAutostart.AppendChild(elementFactoryAutostartIcon);
+            }
+
+            return elementFactoryAutostart;
         }
 
         #region Filter data

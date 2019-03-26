@@ -38,6 +38,10 @@ namespace ConsoleServer1C
         /// Строка фильтра списка сессий
         /// </summary>
         private string _findUser = string.Empty;
+        /// <summary>
+        /// Управление значением "поверх всех окон"
+        /// </summary>
+        private bool _isTopmost = false;
 
         #endregion
 
@@ -102,6 +106,10 @@ namespace ConsoleServer1C
         /// Строка фильтра списка сессий
         /// </summary>
         public string FindUser { get => _findUser; set { _findUser = value; NotifyPropertyChanged(); } }
+        /// <summary>
+        /// Управление значением "поверх всех окон"
+        /// </summary>
+        public bool IsTopmost { get => _isTopmost; set { _isTopmost = value; NotifyPropertyChanged(); } }
 
         #endregion
 
@@ -135,16 +143,16 @@ namespace ConsoleServer1C
                     {
                         ServerName = GetValue(registryKeyApplication, "ServerName", true);
 
-                        int.TryParse(GetValue(registryKeyApplication, "UpdateSessionMinute"), out int UpdateSessionMinuteValue);
-                        UpdateSessionMinute = UpdateSessionMinuteValue;
+                        int.TryParse(GetValue(registryKeyApplication, "UpdateSessionMinute"), out int updateSessionMinuteValue);
+                        UpdateSessionMinute = updateSessionMinuteValue;
 
                         FilterInfoBaseName = GetValue(registryKeyApplication, "FilterInfoBaseName", true);
 
-                        bool.TryParse(GetValue(registryKeyApplication, "SortDbProcTook"), out bool SortDbProcTookValue);
-                        SortDbProcTook = SortDbProcTookValue;
+                        bool.TryParse(GetValue(registryKeyApplication, "SortDbProcTook"), out bool sortDbProcTookValue);
+                        SortDbProcTook = sortDbProcTookValue;
 
-                        bool.TryParse(GetValue(registryKeyApplication, "NotifyWhenBlockingTimeDBIsExceeded"), out bool NotifyWhenBlockingTimeDBIsExceededValue);
-                        NotifyWhenBlockingTimeDBIsExceeded = NotifyWhenBlockingTimeDBIsExceededValue;
+                        bool.TryParse(GetValue(registryKeyApplication, "NotifyWhenBlockingTimeDBIsExceeded"), out bool notifyWhenBlockingTimeDBIsExceededValue);
+                        NotifyWhenBlockingTimeDBIsExceeded = notifyWhenBlockingTimeDBIsExceededValue;
 
                         string ListHistoryConnectionValue = GetValue(registryKeyApplication, "HistoryConnection", true);
                         ListHistoryConnection = JsonConverter<List<Models.HistoryConnection>>.Load(ListHistoryConnectionValue)
@@ -153,6 +161,9 @@ namespace ConsoleServer1C
                         string VisibilityDataGridSessionColumnValue = GetValue(registryKeyApplication, "VisibilityDataGridSessionColumn", true);
                         VisibilityDataGridSessionColumn = JsonConverter<Dictionary<object, bool>>.Load(VisibilityDataGridSessionColumnValue)
                             ?? new Dictionary<object, bool>();
+
+                        bool.TryParse(GetValue(registryKeyApplication, "IsTopmost"), out bool isTopmostValue);
+                        IsTopmost = isTopmostValue;
                     }
                 }
             }
@@ -219,6 +230,11 @@ namespace ConsoleServer1C
                             SetValueIfNotFinded(tempRegistryKeyApplicationValues, names,
                                                 "VisibilityDataGridSessionColumn",
                                                 JsonConverter<Dictionary<object, bool>>.Save(VisibilityDataGridSessionColumn),
+                                                keyEmpty || saveCurrent);
+
+                        if (keyEmpty || key == "IsTopmost")
+                            SetValueIfNotFinded(tempRegistryKeyApplicationValues, names,
+                                                "IsTopmost",
                                                 keyEmpty || saveCurrent);
                     }
                 }
