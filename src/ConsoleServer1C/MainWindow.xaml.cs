@@ -93,6 +93,10 @@ namespace ConsoleServer1C
             Events.ChangeFilterEvents.ChangeFilterFindUserEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListUser(); })); };
 
             #endregion
+
+            _taskbarIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Консоль сервера 1С;component/" + "icon.ico"));
+            _taskbarIcon.ToolTipText = "Консоль сервера 1С";
+
             InitializeTaskbarIcon();
 
             Topmost = AppSettings.IsTopmost;
