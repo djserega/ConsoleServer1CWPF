@@ -32,6 +32,8 @@ namespace ConsoleServer1C
         private bool _formIsWidenSizeNS = false;
         private bool _refreshData = false;
 
+        private string[] _connectSettings;
+
         private bool _maximized;
         private double _lastLeft;
         private double _lastTop;
@@ -776,6 +778,13 @@ namespace ConsoleServer1C
                 }
                 Dialogs.Show("Перехвачена ошибка выполнения.\nДетальную информацию можно найти в событиях Windows.");
             }
+        }
+
+        private void ButtonConnectTo1CServerSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var windowSettings = new ConnectTo1CServerSettingsWindow() { Owner = this };
+            windowSettings.ShowDialog();
+            _connectSettings = windowSettings.Data;
         }
     }
 }

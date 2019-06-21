@@ -110,12 +110,17 @@
                                     IsTabStop="False"
                                     ToolTip="Обновление данных сессий."
                                     Click="ButtonRefreshData_Click"/>
+                            <Button Content="{md:PackIcon Settings}"
+                                    Margin="1 0"
+                                    IsTabStop="False"
+                                    ToolTip="Параметры подключения к серверу 1С"
+                                    Click="ButtonConnectTo1CServerSettings_Click"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2"
                                     Margin="2 2"
                                     Orientation="Horizontal">
-                            <Label Content="Фильтр по имени базы"
+                            <Label Content="Фильтр"
                                    VerticalAlignment="Bottom"/>
 
                             <TextBox x:Name="TextBoxFilterInfoBaseName"

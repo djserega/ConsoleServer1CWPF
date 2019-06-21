@@ -74,6 +74,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ConnectTo1CServerSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -83,6 +87,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="ConnectTo1CServerSettingsWindow.xaml.cs">
+      <DependentUpon>ConnectTo1CServerSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConnectToAgent.cs" />
     <Compile Include="Converters\DataConverters.cs" />
     <Compile Include="Converters\ElementsFormConverter.cs" />

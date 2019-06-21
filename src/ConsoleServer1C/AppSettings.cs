@@ -17,7 +17,7 @@ namespace ConsoleServer1C
         /// <summary>
         /// Ключ компьютера
         /// </summary>
-        private readonly string _compName = Environment.MachineName + "Software";
+        private static readonly string _compName = Environment.MachineName + "Software";
         /// <summary>
         /// Ключ сохранения данных регистра
         /// </summary>
@@ -286,7 +286,7 @@ namespace ConsoleServer1C
         /// </summary>
         /// <param name="text">Значение</param>
         /// <returns>Результат конвертации</returns>
-        private string ConverterToValue(string text)
+        public static string ConverterToValue(string text)
         {
             byte[] decrypted = Encoding.UTF8.GetBytes(text);
             byte[] encrypted = new byte[decrypted.Length];
@@ -300,7 +300,7 @@ namespace ConsoleServer1C
         /// </summary>
         /// <param name="text">Сериализированное значение</param>
         /// <returns>Значение</returns>
-        private string ConverterInValue(string text)
+        public static string ConverterInValue(string text)
         {
             byte[] decoded;
             try

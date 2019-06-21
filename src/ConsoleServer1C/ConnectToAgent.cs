@@ -35,6 +35,10 @@ namespace ConsoleServer1C
         /// Список имен баз данных разделенных по разделителю (_filterInfoBaseName)
         /// </summary>
         private readonly List<string> _listFilterInfoBaseName = new List<string>();
+        /// <summary>
+        /// Параметры подключения к рабочему процессу
+        /// </summary>
+        private static string[] _connectSettings;
 
         #endregion
 
@@ -45,6 +49,15 @@ namespace ConsoleServer1C
         internal ConnectToAgent(string serverName)
         {
             _serverName = serverName;
+        }
+
+        /// <summary>
+        /// Конструктор класса с параметрами подключения
+        /// </summary>
+        /// <param name="serverName"></param>
+        internal ConnectToAgent(string serverName, string[] connectSettings) : this(serverName)
+        {
+            _connectSettings = connectSettings;
         }
 
         /// <summary>
@@ -430,7 +443,12 @@ namespace ConsoleServer1C
         /// <param name="workingProcessConnection">Рабочий процесс</param>
         private static void AddAuthentificationWorkingProcess(IWorkingProcessConnection workingProcessConnection)
         {
-            workingProcessConnection.AddAuthentication("", "");
+            if (_connectSettings == null)
+                workingProcessConnection.AddAuthentication("", "");
+            else
+                workingProcessConnection.AddAuthentication(
+                    AppSettings.ConverterInValue(_connectSettings[0]),
+                    AppSettings.ConverterInValue(_connectSettings[1]));
         }
 
         /// <summary>
