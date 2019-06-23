@@ -19,7 +19,7 @@ namespace ConsoleServer1C
                 {
                     ProcessStartInfo startInfo = new ProcessStartInfo(
                         "cmd",
-                        GetArgumentsStartInfo(serverName, connectionSettings))
+                        "/c tasklist " + GetArgumentsStartInfo(serverName, connectionSettings))
                     {
                         StandardOutputEncoding = Encoding.GetEncoding("cp866"),
                         RedirectStandardOutput = true,
@@ -67,12 +67,48 @@ namespace ConsoleServer1C
             return result;
         }
 
+        internal bool KillProcess(string serverName, string[] connectionSettings, int pid)
+        {
+            bool result = false;
+
+            try
+            {
+                if (CheckConnectionServer.CheckConnectionToServer(serverName))
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo(
+                        "cmd",
+                        $"/c taskkill {GetArgumentsStartInfo(serverName, connectionSettings)} /pid {pid}");
+                    Process processTaskList = new Process()
+                    {
+                        StartInfo = startInfo
+                    };
+                    processTaskList.WaitForExit(10 * 1000);
+
+                    if (!processTaskList.HasExited)
+                        processTaskList.Kill();
+
+                    result = true;
+                }
+            }
+            catch (ConnectAgentException ex)
+            {
+                Dialogs.Show($"Ошибка соединения с сервером.\n{ex.Message}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Dialogs.Show($"Не удалось получить доступ к процессам сервера.\n{ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Dialogs.Show($"Не предвиденная ошибка.\n{ex.Message}");
+            }
+
+            return result;
+        }
+
         private string GetArgumentsStartInfo(string serverName, string[] connectionSettings)
         {
-            // @"/c tasklist /s 192.168.1.140 /fi ""imagename eq rphost.exe"" /u parfums\s.galyuk /p 4phm91"
-
             StringBuilder builderArguments = new StringBuilder();
-            builderArguments.Append("/c tasklist ");
             builderArguments.Append("/s ");
             builderArguments.Append(serverName);
             builderArguments.Append(" ");

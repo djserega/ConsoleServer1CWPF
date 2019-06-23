@@ -30,7 +30,7 @@
                     .Substring(1)
                     .TrimStart();
                 Safe.SafeAction(
-                    () => { Size = int.Parse(SizeText.Substring(0, SizeText.Length - 2).Replace(" ", " ").Trim()); },
+                    () => { Size = int.Parse(SizeText.Substring(0, SizeText.Length - 2).Replace(" ", "").Trim()); },
                     "Не удалось преобразовать размер в число.");
 
                 result = true;

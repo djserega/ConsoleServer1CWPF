@@ -50,6 +50,21 @@ namespace ConsoleServer1C
                 typeof(Rphosts1CServer));
 
 
+
+        public Models.RphostObject ListProcessesSelectedItem
+        {
+            get { return (Models.RphostObject)GetValue(ListProcessesSelectedItemProperty); }
+            set { SetValue(ListProcessesSelectedItemProperty, value); }
+        }
+
+        public static readonly DependencyProperty ListProcessesSelectedItemProperty =
+            DependencyProperty.Register(
+                "ListProcessesSelectedItem",
+                typeof(Models.RphostObject),
+                typeof(Rphosts1CServer));
+
+
+
         private void ButtonUpdateListProcesses_Click(object sender, RoutedEventArgs e)
         {
             LoadProcesses();
@@ -67,6 +82,13 @@ namespace ConsoleServer1C
             bool result = new Rphosts().Get(_serverName, _connectSettings);
             
             return result;
+        }
+
+        private void MenuItemKillProcessRphost_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListProcessesSelectedItem != null)
+                if (new Rphosts().KillProcess(_serverName, _connectSettings, ListProcessesSelectedItem.PID))
+                    LoadProcesses();
         }
     }
 }

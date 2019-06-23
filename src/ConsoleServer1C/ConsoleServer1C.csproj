@@ -75,7 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Events\RphostEvents.cs" />
-    <Compile Include="GetRphost.cs" />
+    <Compile Include="Rphosts.cs" />
     <Compile Include="Models\RphostObject.cs" />
     <Compile Include="Rphosts1CServer.xaml.cs">
       <DependentUpon>Rphosts1CServer.xaml</DependentUpon>

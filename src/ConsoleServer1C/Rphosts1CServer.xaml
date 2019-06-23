@@ -52,11 +52,17 @@
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       CanUserResizeRows="False"
+                      SelectedItem="{Binding ElementName=Window, Path=DataContext.ListProcessesSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       ItemsSource="{Binding ElementName=Window, Path=DataContext.ListProcesses, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridTextColumn         Header="PID"            Binding="{Binding PID}"/>
                     <DataGridTextColumn         Header="Размер (KB)"    Binding="{Binding SizeText}" Width="*" SortMemberPath="Size"/>
                 </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Завершить процесс" Click="MenuItemKillProcessRphost_Click"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
             </DataGrid>
 
         </Grid>
