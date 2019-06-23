@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleServer1C
 {
-    internal sealed class GetRphost
+    internal sealed class Rphosts
     {
         internal bool Get(string serverName, string[] connectionSettings)
         {

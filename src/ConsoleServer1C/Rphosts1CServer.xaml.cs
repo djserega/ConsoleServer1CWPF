@@ -64,7 +64,7 @@ namespace ConsoleServer1C
         {
             ListProcesses.Clear();
 
-            bool result = new GetRphost().Get(_serverName, _connectSettings);
+            bool result = new Rphosts().Get(_serverName, _connectSettings);
             
             return result;
         }
