@@ -110,11 +110,6 @@
                                     IsTabStop="False"
                                     ToolTip="Обновление данных сессий."
                                     Click="ButtonRefreshData_Click"/>
-                            <Button Content="{md:PackIcon Settings}"
-                                    Margin="1 0"
-                                    IsTabStop="False"
-                                    ToolTip="Параметры подключения к серверу 1С"
-                                    Click="ButtonConnectTo1CServerSettings_Click"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2"
@@ -382,6 +377,16 @@
 
                     <WrapPanel Grid.Column="0">
 
+                        <Button Content="{md:PackIcon Settings}"
+                                    Margin="1 0"
+                                    IsTabStop="False"
+                                    ToolTip="Параметры подключения к серверу 1С"
+                                    Click="ButtonConnectTo1CServerSettings_Click"/>
+                        <Button Content="{md:PackIcon LanConnect}"
+                                Margin="1 0"
+                                ToolTip="Открыть форму списка rphost'ов сервера."
+                                Click="ButtonListProcessRphost1C_Click"/>
+
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Автообновление"
                                    VerticalAlignment="Bottom"/>
@@ -414,7 +419,7 @@
                                 </CheckBox.ToolTip>
                             </CheckBox>
                         </StackPanel>
-                        
+
                     </WrapPanel>
 
                     <StackPanel Grid.Column="1"

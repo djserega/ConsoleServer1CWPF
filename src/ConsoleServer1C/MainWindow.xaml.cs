@@ -647,6 +647,7 @@ namespace ConsoleServer1C
 
         private void ApplyFilterListUser()
         {
+            Safe.SafeAction(() =>
             {
                 if (string.IsNullOrWhiteSpace(AppSettings.FindUser))
                     DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions;
@@ -756,36 +757,21 @@ namespace ConsoleServer1C
 
         #endregion
 
-        private void SafeAction(Action action)
-        {
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                using (EventLog eventLog = new EventLog("Application"))
-                {
-                    eventLog.Source = "Application";
-                    eventLog.WriteEntry(
-                        ex.Message
-                        + "\n" + "\n" +
-                        ex.InnerException?.Message
-                        + "\n" + "\n" +
-                        ex.InnerException?.InnerException?.Message
-                        + "\n" + "\n" +
-                        ex.InnerException?.InnerException?.InnerException?.Message,
-                        EventLogEntryType.Warning);
-                }
-                Dialogs.Show("Перехвачена ошибка выполнения.\nДетальную информацию можно найти в событиях Windows.");
-            }
-        }
-
         private void ButtonConnectTo1CServerSettings_Click(object sender, RoutedEventArgs e)
         {
             var windowSettings = new ConnectTo1CServerSettingsWindow() { Owner = this };
             windowSettings.ShowDialog();
             _connectSettings = windowSettings.Data;
+        }
+
+        private void ButtonListProcessRphost1C_Click(object sender, RoutedEventArgs e)
+        {
+            var windowProcesses = new Rphosts1CServer(AppSettings.ServerName, _connectSettings) { Owner = this };
+            if (windowProcesses.LoadProcesses())
+            {
+                windowProcesses.ShowDialog();
+                Focus();
+            }
         }
     }
 }
