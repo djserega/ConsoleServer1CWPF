@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -632,7 +634,7 @@ namespace ConsoleServer1C
 
         private void ApplyFilterListBase()
         {
-            SafeAction(() =>
+            Safe.SafeAction(() =>
             {
                 if (string.IsNullOrWhiteSpace(AppSettings.FindBase))
                     ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered);
@@ -645,7 +647,6 @@ namespace ConsoleServer1C
 
         private void ApplyFilterListUser()
         {
-            SafeAction(() =>
             {
                 if (string.IsNullOrWhiteSpace(AppSettings.FindUser))
                     DataGridListSessions.ItemsSource = _selectedItemListBases?.ListSessions;
