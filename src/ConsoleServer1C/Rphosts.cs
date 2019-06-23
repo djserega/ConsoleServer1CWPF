@@ -82,6 +82,7 @@ namespace ConsoleServer1C
                     {
                         StartInfo = startInfo
                     };
+                    processTaskList.Start();
                     processTaskList.WaitForExit(10 * 1000);
 
                     if (!processTaskList.HasExited)
