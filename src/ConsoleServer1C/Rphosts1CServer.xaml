@@ -1,0 +1,64 @@
+﻿<Window x:Class="ConsoleServer1C.Rphosts1CServer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:ConsoleServer1C"
+        mc:Ignorable="d" 
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Height="400" Width="400"
+        Title="Список процессов rphost сервера" x:Name="Window">
+    <Border Background="{DynamicResource MaterialDesignPaper}"
+            BorderThickness="2"
+            CornerRadius="10 10 5 5"
+            BorderBrush="#6600b6">
+        <Grid Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0"
+                   FontWeight="Bold"
+                   VerticalContentAlignment="Center"
+                   HorizontalContentAlignment="Center"
+                   Content="Список процессов rphost сервера"/>
+
+            <Button Grid.Row="0"
+                    HorizontalAlignment="Left"
+                    Margin="4"
+                    Content="{md:PackIcon Update}"
+                    Click="ButtonUpdateListProcesses_Click"/>
+
+            <Button Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    Margin="4 0"
+                    Content="{md:PackIcon Close}"
+                    Click="ButtonClose_Click"/>
+
+            <DataGrid Grid.Row="1"
+                      x:Name="DataGridListProcesses"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserResizeRows="False"
+                      ItemsSource="{Binding ElementName=Window, Path=DataContext.ListProcesses, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn         Header="PID"            Binding="{Binding PID}"/>
+                    <DataGridTextColumn         Header="Размер (KB)"    Binding="{Binding SizeText}" Width="*" SortMemberPath="Size"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+    </Border>
+</Window>
