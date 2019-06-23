@@ -29,7 +29,9 @@
                     .TrimStart()
                     .Substring(1)
                     .TrimStart();
-                Size = int.Parse(SizeText.Substring(0, SizeText.Length - 2).Replace(" ", "").Trim());
+                Safe.SafeAction(
+                    () => { Size = int.Parse(SizeText.Substring(0, SizeText.Length - 2).Replace(" ", " ").Trim()); },
+                    "Не удалось преобразовать размер в число.");
 
                 result = true;
             }
