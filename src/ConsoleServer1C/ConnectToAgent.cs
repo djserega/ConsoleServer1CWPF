@@ -155,7 +155,7 @@ namespace ConsoleServer1C
 
             try
             {
-                if (CheckConnectionToServer())
+                if (CheckConnectionServer.CheckConnectionToServer(_serverName))
                 {
                     InitializeComConnector();
 
@@ -165,8 +165,6 @@ namespace ConsoleServer1C
 
                     await FillInfoBasesAllClusters();
                 }
-                else
-                    throw new ConnectAgentException("Не удалось подключиться к серверу 1С.");
             }
             catch (ArgumentException ex)
             {
@@ -498,28 +496,6 @@ namespace ConsoleServer1C
             }
             else
                 return true;
-        }
-
-        /// <summary>
-        /// Проверка наличия соединения к серверу 1С
-        /// </summary>
-        /// <returns>true: доступ есть</returns>
-        private bool CheckConnectionToServer()
-        {
-            bool result = false;
-            using (Ping ping = new Ping())
-            {
-                try
-                {
-                    PingReply reply = ping.Send(_serverName, 5);
-                    result = reply.Status == IPStatus.Success;
-                }
-                catch (PingException)
-                {
-                }
-
-            }
-            return result;
         }
 
         #endregion
