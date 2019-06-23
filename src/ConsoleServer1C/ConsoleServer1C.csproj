@@ -74,6 +74,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Events\RphostEvents.cs" />
+    <Compile Include="GetRphost.cs" />
+    <Compile Include="Models\RphostObject.cs" />
+    <Compile Include="Rphosts1CServer.xaml.cs">
+      <DependentUpon>Rphosts1CServer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Safe.cs" />
     <Page Include="ConnectTo1CServerSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -87,6 +94,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="CheckConnectionServer.cs" />
     <Compile Include="ConnectTo1CServerSettingsWindow.xaml.cs">
       <DependentUpon>ConnectTo1CServerSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -106,6 +114,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Rphosts1CServer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\HistoryConnection.cs" />
