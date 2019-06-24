@@ -26,11 +26,21 @@
                 PID = int.Parse(pid);
                 SizeText = fillData
                     .Substring(pid.Length)
+                    .Replace("Services", "")
                     .TrimStart()
                     .Substring(1)
-                    .TrimStart();
+                    .TrimEnd();
+
                 Safe.SafeAction(
-                    () => { Size = int.Parse(SizeText.Substring(0, SizeText.Length - 2).Replace(" ", "").Trim()); },
+                    () =>
+                    {
+                        Size = int.Parse(
+                            SizeText
+                                .Substring(0, SizeText.Length - 2)
+                                .Replace(" ", "")
+                                .Replace(" ", "")
+                                .Trim());
+                    },
                     "Не удалось преобразовать размер в число.");
 
                 result = true;
