@@ -396,11 +396,23 @@
                                     BorderThickness="1"
                                     CornerRadius="10 10 5 5"
                                     BorderBrush="#6600b6">
-                                <TextBox Width="30"
+                                <TextBox x:Name="TextBoxUpdateSessionMinute"
+                                         Width="30"
                                          HorizontalContentAlignment="Center"
                                          ToolTip="Автообновление списка баз и сеансов. Указывается в секундах."
                                          Text="{Binding ElementName=WindowMain, Path=AppSettings.UpdateSessionMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         TextChanged="TextBoxUpdateSessionMinute_TextChanged"/>
+                                         TextChanged="TextBoxUpdateSessionMinute_TextChanged">
+                                    <TextBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="2 с."     Tag="2"     Click="MenuItemUpdateSessionMinute_Click"/>
+                                            <MenuItem Header="10 с."    Tag="10"    Click="MenuItemUpdateSessionMinute_Click"/>
+                                            <MenuItem Header="30 с."    Tag="30"    Click="MenuItemUpdateSessionMinute_Click"/>
+                                            <MenuItem Header="1 мин."   Tag="60"    Click="MenuItemUpdateSessionMinute_Click"/>
+                                            <MenuItem Header="2 мин."   Tag="120"   Click="MenuItemUpdateSessionMinute_Click"/>
+                                            <MenuItem Header="5 мин."   Tag="300"   Click="MenuItemUpdateSessionMinute_Click"/>
+                                        </ContextMenu>
+                                    </TextBox.ContextMenu>
+                                </TextBox>
                             </Border>
                             <Label Content="с."
                                    VerticalAlignment="Bottom"/>

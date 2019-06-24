@@ -773,5 +773,11 @@ namespace ConsoleServer1C
                 Focus();
             }
         }
+
+        private void MenuItemUpdateSessionMinute_Click(object sender, RoutedEventArgs e)
+        {
+            AppSettings.UpdateSessionMinute = int.Parse((string)((MenuItem)sender).Tag);
+            TextBoxUpdateSessionMinute.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+        }
     }
 }
