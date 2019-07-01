@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleServer1C.Events
+namespace ConsoleServer1C.Connector.Events
 {
     /// <summary>
     /// Делегат состояния подключения к серверу 1С

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using ConsoleServer1C.TaskbarIcon.Events;
+using System;
 using V83;
 
-namespace ConsoleServer1C.Models
+namespace ConsoleServer1C.Connector.Models
 {
     /// <summary>
     /// Базовый класс данных сессии базы данных
     /// </summary>
-    public class Session : NotifyPropertyChangedClass
+    public class Session
     {
         private float _dbProcTook;
 
@@ -85,7 +86,6 @@ namespace ConsoleServer1C.Models
             private set
             {
                 _dbProcTook = value;
-                ShowNotifyDbProcTook();
             }
         }
 
@@ -149,12 +149,12 @@ namespace ConsoleServer1C.Models
         /// <summary>
         /// Отображение уведомления для пользователя о превышении времени захвата СУБД
         /// </summary>
-        private void ShowNotifyDbProcTook()
+        public void ShowNotifyDbProcTook(float critical, float high)
         {
-            if (_dbProcTook > AppSettings.ExceededThresholdDbProcTookCritical)
+            if (_dbProcTook > critical)
             {
                 ShowNotify(
-                    $"Превышен порог времени соединения с СУБД: {AppSettings.ExceededThresholdDbProcTookHigh}",
+                    $"Превышен порог времени соединения с СУБД: {high}",
                     $"Пользователь: {UserName}.\n" +
                     $"Компьютер: {Host}.\n" +
                     $"Время блокировки: {DbProcTook}.\n" +
@@ -169,7 +169,7 @@ namespace ConsoleServer1C.Models
         /// <param name="message">Текст сообщения</param>
         private void ShowNotify(string title, string message)
         {
-            Events.TaskbarIconEvents.ShowTaskbarIcon(title, message);
+            TaskbarIconEvents.ShowTaskbarIcon(title, message);
         }
 
     }

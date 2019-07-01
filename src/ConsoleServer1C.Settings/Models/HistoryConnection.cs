@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleServer1C.Models
+namespace ConsoleServer1C.Settings.Models
 {
     /// <summary>
     /// История подключений к серверам 1С

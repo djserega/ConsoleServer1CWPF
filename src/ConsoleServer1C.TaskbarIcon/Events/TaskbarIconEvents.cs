@@ -1,4 +1,4 @@
-﻿namespace ConsoleServer1C.Events
+﻿namespace ConsoleServer1C.TaskbarIcon.Events
 {
     /// <summary>
     /// Делегат сообщений на панели уведомлений

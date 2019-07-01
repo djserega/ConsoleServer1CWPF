@@ -1,4 +1,4 @@
-﻿namespace ConsoleServer1C.Events
+﻿namespace ConsoleServer1C.Settings.Events
 {
     /// <summary>
     /// Делегат изменения строки фильтра списка баз

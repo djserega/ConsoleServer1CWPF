@@ -1,16 +1,16 @@
-﻿using ConsoleServer1C.Converters;
+﻿using ConsoleServer1C.Settings.Converters;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ConsoleServer1C
+namespace ConsoleServer1C.Settings
 {
     /// <summary>
     /// Работа с настройками приложения
     /// </summary>
-    public sealed class AppSettings : Models.NotifyPropertyChangedClass
+    public sealed class AppSettings
     {
         #region Private fields
 
@@ -101,15 +101,15 @@ namespace ConsoleServer1C
         /// <summary>
         /// Строка фильтра списка баз данных
         /// </summary>
-        public string FindBase { get => _findBase; set { _findBase = value; NotifyPropertyChanged(); } }
+        public string FindBase { get => _findBase; set { _findBase = value; Events.ChangeFilterEvents.InvokeFindBaseEvent(); } }
         /// <summary>
         /// Строка фильтра списка сессий
         /// </summary>
-        public string FindUser { get => _findUser; set { _findUser = value; NotifyPropertyChanged(); } }
+        public string FindUser { get => _findUser; set { _findUser = value; Events.ChangeFilterEvents.InvokeFindUserEvent(); } }
         /// <summary>
         /// Управление значением "поверх всех окон"
         /// </summary>
-        public bool IsTopmost { get => _isTopmost; set { _isTopmost = value; NotifyPropertyChanged(); } }
+        public bool IsTopmost { get => _isTopmost; set { _isTopmost = value; } }
 
         #endregion
 
@@ -118,22 +118,22 @@ namespace ConsoleServer1C
         /// <summary>
         /// Критическое значение времени захвата СУБД
         /// </summary>
-        internal static readonly int ExceededThresholdDbProcTookCritical = 30;
+        public static readonly int ExceededThresholdDbProcTookCritical = 30;
         /// <summary>
         /// Высокое значение времени захвата СУБД
         /// </summary>
-        internal static readonly int ExceededThresholdDbProcTookHigh = 20;
+        public static readonly int ExceededThresholdDbProcTookHigh = 20;
         /// <summary>
         /// Повышенное значение времени захвата СУБД
         /// </summary>
-        internal static readonly int ExceededThresholdDbProcTookElevated = 10;
+        public static readonly int ExceededThresholdDbProcTookElevated = 10;
 
         #endregion
 
         /// <summary>
         /// Получение всех сохраненных настроек
         /// </summary>
-        internal void GetAllSettings()
+        public void GetAllSettings()
         {
             try
             {
@@ -178,7 +178,7 @@ namespace ConsoleServer1C
         /// </summary>
         /// <param name="key">Ключ настройки</param>
         /// <param name="saveCurrent">Сохранение текущего значения</param>
-        internal void SetDefaultSettings(string key = "", bool saveCurrent = false)
+        public void SetDefaultSettings(string key = "", bool saveCurrent = false)
         {
             bool keyEmpty = string.IsNullOrWhiteSpace(key);
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleServer1C.Settings;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;

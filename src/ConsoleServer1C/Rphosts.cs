@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ConsoleServer1C.Connector;
+using ConsoleServer1C.Settings;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

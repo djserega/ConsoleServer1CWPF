@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleServer1C.Models
+namespace ConsoleServer1C.Connector.Models
 {
     /// <summary>
     /// Базовый класс описания элемента базы данных
     /// </summary>
-    public class InfoBase : NotifyPropertyChangedClass
+    public class InfoBase
     {
         /// <summary>
         /// Имя базы данных
@@ -56,7 +56,7 @@ namespace ConsoleServer1C.Models
         /// Заполнение объекта с копии
         /// </summary>
         /// <param name="infoBase"></param>
-        internal void Fill(InfoBase infoBase)
+        public void Fill(InfoBase infoBase)
         {
             Name = infoBase.Name;
             Descr = infoBase.Descr;

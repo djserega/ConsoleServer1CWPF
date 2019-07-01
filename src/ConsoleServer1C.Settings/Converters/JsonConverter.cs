@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ConsoleServer1C.Converters
+namespace ConsoleServer1C.Settings.Converters
 {
     /// <summary>
     /// Сериализация/Десериализация значения в/с JSON

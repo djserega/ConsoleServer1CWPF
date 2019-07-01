@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleServer1C
+namespace ConsoleServer1C.Connector.Models
 {
     /// <summary>
     /// Класс имен баз данных без доступа к информации

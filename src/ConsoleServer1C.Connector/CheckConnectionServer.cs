@@ -5,9 +5,9 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleServer1C
+namespace ConsoleServer1C.Connector
 {
-    internal static class CheckConnectionServer
+    public static class CheckConnectionServer
     {
         /// <summary>
         /// Проверка наличия соединения к серверу 1С
@@ -15,7 +15,7 @@ namespace ConsoleServer1C
         /// <param name="server">Сервер проверки подключения</param>
         /// <param name="throwException">Нужно ли выбросить исключение при не удачно проверке подключения</param>
         /// <returns>true: доступ есть</returns>
-        internal static bool CheckConnectionToServer(string server, bool throwException = true)
+        public static bool CheckConnectionToServer(string server, bool throwException = true)
         {
             bool result = false;
             using (Ping ping = new Ping())

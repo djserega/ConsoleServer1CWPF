@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleServer1C.Models
+namespace ConsoleServer1C.Connector.Models
 {
     /// <summary>
     /// Список баз данных без доступа

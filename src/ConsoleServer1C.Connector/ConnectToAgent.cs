@@ -1,17 +1,18 @@
-﻿using System;
+﻿using ConsoleServer1C.Connector.Models;
+using ConsoleServer1C.Settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using V83;
 
-namespace ConsoleServer1C
+namespace ConsoleServer1C.Connector
 {
     /// <summary>
     /// Класс подключения к серверу 1С
     /// </summary>
-    internal sealed class ConnectToAgent : IDisposable
+    public sealed class ConnectToAgent : IDisposable
     {
         #region Private fields
 
@@ -46,7 +47,7 @@ namespace ConsoleServer1C
         /// Базовый конструктор класса
         /// </summary>
         /// <param name="serverName"></param>
-        internal ConnectToAgent(string serverName)
+        public ConnectToAgent(string serverName)
         {
             _serverName = serverName;
         }
@@ -55,7 +56,7 @@ namespace ConsoleServer1C
         /// Конструктор класса с параметрами подключения
         /// </summary>
         /// <param name="serverName"></param>
-        internal ConnectToAgent(string serverName, string[] connectSettings) : this(serverName)
+        public ConnectToAgent(string serverName, string[] connectSettings) : this(serverName)
         {
             _connectSettings = connectSettings;
         }
@@ -63,17 +64,17 @@ namespace ConsoleServer1C
         /// <summary>
         /// Список баз данных
         /// </summary>
-        internal List<Models.InfoBase> InfoBases { get; set; } = new List<Models.InfoBase>();
-     
+        public List<InfoBase> InfoBases { get; set; } = new List<InfoBase>();
+
         /// <summary>
         /// Признак обновления только данных сессий
         /// </summary>
-        internal bool UpdateSessions { get; set; }
-        
+        public bool UpdateSessions { get; set; }
+
         /// <summary>
         /// Список баз данных полученных в результате разбиения строки по разделителю
         /// </summary>
-        internal string FilterInfoBaseName
+        public string FilterInfoBaseName
         {
             get => _filterInfoBaseName;
             set
@@ -102,7 +103,7 @@ namespace ConsoleServer1C
         /// Получение списка баз данных (асинхронно)
         /// </summary>
         /// <returns></returns>
-        internal async Task GetListBaseAsync()
+        public async Task GetListBaseAsync()
         {
             await Task.Run(() => GetListBaseFromComAsync());
         }
@@ -111,7 +112,7 @@ namespace ConsoleServer1C
         /// Отключение сессии
         /// </summary>
         /// <param name="session"></param>
-        internal void TerminateSession(Models.Session session)
+        public void TerminateSession(Models.Session session)
         {
             if (session == null)
                 return;

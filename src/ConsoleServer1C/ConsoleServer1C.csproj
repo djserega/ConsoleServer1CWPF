@@ -41,9 +41,6 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net451\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
-    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -93,23 +90,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AppSettings.cs" />
-    <Compile Include="CheckConnectionServer.cs" />
     <Compile Include="ConnectTo1CServerSettingsWindow.xaml.cs">
       <DependentUpon>ConnectTo1CServerSettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConnectToAgent.cs" />
-    <Compile Include="Converters\DataConverters.cs" />
     <Compile Include="Converters\ElementsFormConverter.cs" />
     <Compile Include="Converters\ExceededThresholdDbProcTookConverter.cs" />
-    <Compile Include="Converters\JsonConverter.cs" />
     <Compile Include="Dialogs.cs" />
-    <Compile Include="Events\ChangeFilterEvents.cs" />
-    <Compile Include="Events\ConnectionStatusEvents.cs" />
-    <Compile Include="Events\TaskbarIconEvents.cs" />
-    <Compile Include="Events\UpdateInfoMainWindowEvents.cs" />
-    <Compile Include="Exception.cs" />
-    <Compile Include="InfoBaseWithoutAccess.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -120,11 +106,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\HistoryConnection.cs" />
-    <Compile Include="Models\InfoBase.cs" />
-    <Compile Include="Models\ListNoAccessBase.cs" />
-    <Compile Include="Models\NotifyPropertyChangedClass.cs" />
-    <Compile Include="Models\Session.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -152,18 +133,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="V83">
-      <Guid>{98AC3B5B-5323-418F-8F07-E32F231D2393}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    <Resource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
+    <ProjectReference Include="..\ConsoleServer1C.Connector\ConsoleServer1C.Connector.csproj">
+      <Project>{40c2f399-e358-4f2b-9e5f-dfa4eb03f86c}</Project>
+      <Name>ConsoleServer1C.Connector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConsoleServer1C.Settings\ConsoleServer1C.Settings.csproj">
+      <Project>{d0c0570b-20d3-493a-914d-9216a00475cc}</Project>
+      <Name>ConsoleServer1C.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConsoleServer1C.TaskbarIcon\ConsoleServer1C.TaskbarIcon.csproj">
+      <Project>{5c898c16-1b96-48cf-84dc-85080a998a41}</Project>
+      <Name>ConsoleServer1C.TaskbarIcon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

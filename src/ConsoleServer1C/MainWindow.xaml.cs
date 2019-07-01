@@ -1,12 +1,10 @@
-﻿using Hardcodet.Wpf.TaskbarNotification;
+﻿using ConsoleServer1C.Connector;
+using ConsoleServer1C.Settings;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,7 +26,7 @@ namespace ConsoleServer1C
     {
         #region Private fields
 
-        private Models.InfoBase _selectedItemListBases = new Models.InfoBase();
+        private Connector.Models.InfoBase _selectedItemListBases = new Connector.Models.InfoBase();
         private readonly timers.Timer _timer = new timers.Timer();
         private bool _formIsWidenSizeWE = false;
         private bool _formIsWidenSizeNS = false;
@@ -42,8 +40,6 @@ namespace ConsoleServer1C
         private double _lastWidth;
         private double _lastHeight;
 
-        private readonly TaskbarIcon _taskbarIcon = new TaskbarIcon();
-
         #endregion
 
         public MainWindow()
@@ -54,11 +50,11 @@ namespace ConsoleServer1C
 
             #region Events
 
-            Events.UpdateInfoMainWindowEvents.UpdateListBasesMainWindowEvent += (bool updateSessions) =>
+            Connector.Events.UpdateInfoMainWindowEvents.UpdateListBasesMainWindowEvent += (bool updateSessions) =>
             {
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
-                    RefreshDataContextListBase(Events.UpdateInfoMainWindowEvents.InfoBases);
+                    RefreshDataContextListBase(Connector.Events.UpdateInfoMainWindowEvents.InfoBases);
                     if (!updateSessions)
                         ListBasesNotFiltered = ListBases.ToList();
                     NotUpdating = true;
@@ -67,11 +63,11 @@ namespace ConsoleServer1C
                 }));
             };
 
-            Events.ConnectionStatusEvents.ConnectionStatusEvent += () =>
+            Connector.Events.ConnectionStatusEvents.ConnectionStatusEvent += () =>
             {
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
-                    ProgressBarValue = Events.ConnectionStatusEvents.CurrentStateProgress;
+                    ProgressBarValue = Connector.Events.ConnectionStatusEvents.CurrentStateProgress;
                     UpdateBindingTarget(ProgressBarStatusConnection, ProgressBar.ValueProperty);
                     UpdateBindingTarget(TextBlockStatusConnection, TextBlock.TextProperty);
                 }));
@@ -82,24 +78,24 @@ namespace ConsoleServer1C
                 Dispatcher.Invoke(new ThreadStart(delegate { UpdateListBases(true); }));
             };
 
-            Events.TaskbarIconEvents.TaskbarIconEvent += (string title, string message) =>
+            TaskbarIcon.Events.TaskbarIconEvents.TaskbarIconEvent += (string title, string message) =>
             {
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
                     if (AppSettings.NotifyWhenBlockingTimeDBIsExceeded && !_refreshData)
-                        _taskbarIcon.ShowBalloonTip(title, message, BalloonIcon.Info);
+                        TaskbarIcon.Icon.ShowBalloonTip(title, message);
 
                     _refreshData = false;
                 }));
             };
 
-            Events.ChangeFilterEvents.ChangeFilterFindBaseEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListBase(); })); };
-            Events.ChangeFilterEvents.ChangeFilterFindUserEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListUser(); })); };
+            Settings.Events.ChangeFilterEvents.ChangeFilterFindBaseEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListBase(); })); };
+            Settings.Events.ChangeFilterEvents.ChangeFilterFindUserEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListUser(); })); };
 
             #endregion
 
-            _taskbarIcon.IconSource = new BitmapImage(new Uri("pack://application:,,,/Консоль сервера 1С;component/" + "icon.ico"));
-            _taskbarIcon.ToolTipText = "Консоль сервера 1С";
+            TaskbarIcon.Icon.SetIconSource(new BitmapImage(new Uri("pack://application:,,,/Консоль сервера 1С;component/" + "icon.ico")));
+            TaskbarIcon.Icon.SetToolTipText("Консоль сервера 1С");
 
             InitializeTaskbarIcon();
 
@@ -111,15 +107,15 @@ namespace ConsoleServer1C
         /// <summary>
         /// Список полученного списка баз данных (с учетом пользовательского фильтра)
         /// </summary>
-        public ObservableCollection<Models.InfoBase> ListBases { get; private set; } = new ObservableCollection<Models.InfoBase>();
+        public ObservableCollection<Connector.Models.InfoBase> ListBases { get; private set; } = new ObservableCollection<Connector.Models.InfoBase>();
         /// <summary>
         /// Список полученного списка баз данных 
         /// </summary>
-        public List<Models.InfoBase> ListBasesNotFiltered { get; private set; } = new List<Models.InfoBase>();
+        public List<Connector.Models.InfoBase> ListBasesNotFiltered { get; private set; } = new List<Connector.Models.InfoBase>();
         /// <summary>
         /// Выделенный объект базы данных
         /// </summary>
-        public Models.InfoBase SelectedItemListBases
+        public Connector.Models.InfoBase SelectedItemListBases
         {
             get => _selectedItemListBases;
             set { _selectedItemListBases = value; SetItemSourceListSession(); }
@@ -127,7 +123,7 @@ namespace ConsoleServer1C
         /// <summary>
         /// Выделенный объект сессии
         /// </summary>
-        public Models.Session SelectedItemSession { get; set; }
+        public Connector.Models.Session SelectedItemSession { get; set; }
 
         private void SetItemSourceListSession()
         {
@@ -369,7 +365,7 @@ namespace ConsoleServer1C
 
         private void MenuItemSelectedHistory(object sender, RoutedEventArgs e)
         {
-            Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(f => f.Date == (DateTime)((MenuItem)sender).Tag);
+            Settings.Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(f => f.Date == (DateTime)((MenuItem)sender).Tag);
 
             if (elementHistory != null)
             {
@@ -386,12 +382,14 @@ namespace ConsoleServer1C
         /// </summary>
         private void AddCurrentConnectionToHistory()
         {
-            Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(
+            Settings.Models.HistoryConnection elementHistory = AppSettings.ListHistoryConnection.FirstOrDefault(
                 f => f.Server == AppSettings.ServerName && f.FilterBase == AppSettings.FilterInfoBaseName);
             if (elementHistory != null)
                 AppSettings.ListHistoryConnection.Remove(elementHistory);
 
-            AppSettings.ListHistoryConnection.Insert(0, new Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName, true));
+            AppSettings.ListHistoryConnection.Insert(
+                0,
+                new Settings.Models.HistoryConnection(AppSettings.ServerName, AppSettings.FilterInfoBaseName, true));
         }
 
         #endregion
@@ -422,7 +420,7 @@ namespace ConsoleServer1C
                     connectToAgent.UpdateSessions = updateSessionInfo;
 
                     connectToAgent.InfoBases.Clear();
-                    foreach (Models.InfoBase item in ListBases)
+                    foreach (Connector.Models.InfoBase item in ListBases)
                         connectToAgent.InfoBases.Add(item);
 
                     await connectToAgent.GetListBaseAsync();
@@ -459,12 +457,12 @@ namespace ConsoleServer1C
         /// Обновление текущего списка баз данных по новым данным обновления
         /// </summary>
         /// <param name="newListBases"></param>
-        private void RefreshDataContextListBase(List<Models.InfoBase> newListBases)
+        private void RefreshDataContextListBase(List<Connector.Models.InfoBase> newListBases)
         {
-            List<Models.InfoBase> deletingRow = new List<Models.InfoBase>();
-            foreach (Models.InfoBase itemRow in ListBases)
+            List<Connector.Models.InfoBase> deletingRow = new List<Connector.Models.InfoBase>();
+            foreach (Connector.Models.InfoBase itemRow in ListBases)
             {
-                Models.InfoBase newInfoBase = newListBases.FirstOrDefault(f => f.NameToUpper == itemRow.NameToUpper);
+                Connector.Models.InfoBase newInfoBase = newListBases.FirstOrDefault(f => f.NameToUpper == itemRow.NameToUpper);
                 if (newInfoBase == null)
                     deletingRow.Add(itemRow);
                 else
@@ -473,10 +471,10 @@ namespace ConsoleServer1C
                     newListBases.Remove(newInfoBase);
                 }
             }
-            foreach (Models.InfoBase item in deletingRow)
+            foreach (Connector.Models.InfoBase item in deletingRow)
                 ListBases.Remove(item);
 
-            foreach (Models.InfoBase item in newListBases)
+            foreach (Connector.Models.InfoBase item in newListBases)
                 ListBases.Add(item);
 
             SortListBasesToDbProcTook();
@@ -528,9 +526,9 @@ namespace ConsoleServer1C
             {
                 if (AppSettings.SortDbProcTook)
                 {
-                    ListBases = new ObservableCollection<Models.InfoBase>(ListBases.OrderBy(f => -f.DbProcTook));
+                    ListBases = new ObservableCollection<Connector.Models.InfoBase>(ListBases.OrderBy(f => -f.DbProcTook));
                     for (int i = 0; i < ListBases.Count; i++)
-                        ListBases[i].ListSessions = new List<Models.Session>(ListBases[i].ListSessions.OrderBy(f => -f.DbProcTook));
+                        ListBases[i].ListSessions = new List<Connector.Models.Session>(ListBases[i].ListSessions.OrderBy(f => -f.DbProcTook));
                 }
                 SetItemSourceListSession();
                 RefreshUI();
@@ -596,7 +594,7 @@ namespace ConsoleServer1C
 
             #endregion
 
-            _taskbarIcon.ContextMenu = new ContextMenu()
+            TaskbarIcon.Icon.SetContextMenu(new ContextMenu()
             {
                 Items =
                 {
@@ -604,7 +602,7 @@ namespace ConsoleServer1C
                     new Separator(),
                     menuItemExit
                 }
-            };
+            });
         }
 
         private static FrameworkElementFactory CreateHeaderTemplate_VisualTree(string header, ImageSource image = null)
@@ -637,9 +635,9 @@ namespace ConsoleServer1C
             Safe.SafeAction(() =>
             {
                 if (string.IsNullOrWhiteSpace(AppSettings.FindBase))
-                    ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered);
+                    ListBases = new ObservableCollection<Connector.Models.InfoBase>(ListBasesNotFiltered);
                 else
-                    ListBases = new ObservableCollection<Models.InfoBase>(ListBasesNotFiltered.Where(f => f.Name.ToUpper().Contains(AppSettings.FindBase.ToUpper())).ToList());
+                    ListBases = new ObservableCollection<Connector.Models.InfoBase>(ListBasesNotFiltered.Where(f => f.Name.ToUpper().Contains(AppSettings.FindBase.ToUpper())).ToList());
 
                 RefreshUI();
             });
