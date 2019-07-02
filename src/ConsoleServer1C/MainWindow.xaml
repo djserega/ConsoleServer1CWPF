@@ -74,7 +74,8 @@
                         <StackPanel Grid.Column="1"
                                     Orientation="Horizontal"
                                     x:Name="GridConnection"
-                                    Margin="3,2">
+                                    Margin="3,2"
+                                    IsEnabled="{Binding ElementName=WindowMain, Path=NotUpdating}">
                             <Button Content="Подключиться"
                                     Margin="1 0"
                                     IsTabStop="False"

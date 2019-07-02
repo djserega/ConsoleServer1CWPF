@@ -46,6 +46,8 @@ namespace ConsoleServer1C
         {
             InitializeComponent();
 
+            NotUpdating = true;
+
             DataContext = this;
 
             #region Events
@@ -58,7 +60,6 @@ namespace ConsoleServer1C
                     if (!updateSessions)
                         ListBasesNotFiltered = ListBases.ToList();
                     NotUpdating = true;
-                    GridConnection.IsEnabled = NotUpdating;
                     StartStopAutoUpdating();
                 }));
             };
@@ -133,9 +134,24 @@ namespace ConsoleServer1C
 
         public AppSettings AppSettings { get; set; } = new AppSettings();
         public int ProgressBarValue { get; set; } = 0;
-        public bool NotUpdating { get; private set; } = true;
         public int CountElementsListBases { get => ListBases.Count; }
         public int CountElementsListSession { get => SelectedItemListBases?.SessionCount ?? 0; }
+
+
+
+        public bool NotUpdating
+        {
+            get { return (bool)GetValue(NotUpdatingProperty); }
+            set { SetValue(NotUpdatingProperty, value); }
+        }
+
+        public static readonly DependencyProperty NotUpdatingProperty =
+            DependencyProperty.Register(
+                "NotUpdating",
+                typeof(bool),
+                typeof(MainWindow));
+
+
 
         #endregion
 
@@ -403,7 +419,6 @@ namespace ConsoleServer1C
         private async void UpdateListBases(bool updateSessionInfo = false)
         {
             NotUpdating = false;
-            GridConnection.IsEnabled = NotUpdating;
             StartStopAutoUpdating();
 
             if (!updateSessionInfo)
