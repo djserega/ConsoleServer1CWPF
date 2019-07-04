@@ -207,7 +207,8 @@
                                VerticalAlignment="Bottom"/>
                         <Grid Grid.Column="2"
                               Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=35}">
-                            <TextBox Text="{Binding ElementName=WindowMain, Path=AppSettings.FindBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox x:Name="TextBoxAppSettingsFindBase"
+                                     Text="{Binding ElementName=WindowMain, Path=AppSettings.FindBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <Button Content="{md:PackIcon Kind=Close}"
                                     HorizontalAlignment="Right"
                                     Background="{x:Null}"
@@ -228,7 +229,7 @@
                                VerticalAlignment="Bottom"/>
                         <Grid Grid.Column="1"
                               Width="{Binding ElementName=BorderListUsers, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=50}">
-                            <TextBox x:Name="TextBoxFindUser"
+                            <TextBox x:Name="TextBoxAppSettingsFindUser"
                                      Text="{Binding ElementName=WindowMain, Path=AppSettings.FindUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <Button Content="{md:PackIcon Kind=Close}"
                                     HorizontalAlignment="Right"

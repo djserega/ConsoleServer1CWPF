@@ -90,8 +90,20 @@ namespace ConsoleServer1C
                 }));
             };
 
-            Settings.Events.ChangeFilterEvents.ChangeFilterFindBaseEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListBase(); })); };
-            Settings.Events.ChangeFilterEvents.ChangeFilterFindUserEvent += () => { Dispatcher.Invoke(new ThreadStart(delegate { ApplyFilterListUser(); })); };
+            Settings.Events.ChangeFilterEvents.ChangeFilterFindBaseEvent 
+                += ()
+                => { Dispatcher.Invoke(new ThreadStart(delegate 
+                {
+                    ApplyFilterListBase();
+                    TextBoxAppSettingsFindBase.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+                })); };
+            Settings.Events.ChangeFilterEvents.ChangeFilterFindUserEvent 
+                += ()
+                => { Dispatcher.Invoke(new ThreadStart(delegate
+                {
+                    ApplyFilterListUser();
+                    TextBoxAppSettingsFindUser.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+                })); };
 
             #endregion
 
