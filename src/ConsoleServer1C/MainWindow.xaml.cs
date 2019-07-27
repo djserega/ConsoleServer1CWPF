@@ -90,20 +90,26 @@ namespace ConsoleServer1C
                 }));
             };
 
-            Settings.Events.ChangeFilterEvents.ChangeFilterFindBaseEvent 
+            Settings.Events.ChangeFilterEvents.ChangeFilterFindBaseEvent
                 += ()
-                => { Dispatcher.Invoke(new ThreadStart(delegate 
+                =>
                 {
-                    ApplyFilterListBase();
-                    TextBoxAppSettingsFindBase.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-                })); };
-            Settings.Events.ChangeFilterEvents.ChangeFilterFindUserEvent 
+                    Dispatcher.Invoke(new ThreadStart(delegate
+               {
+                   ApplyFilterListBase();
+                   TextBoxAppSettingsFindBase.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+               }));
+                };
+            Settings.Events.ChangeFilterEvents.ChangeFilterFindUserEvent
                 += ()
-                => { Dispatcher.Invoke(new ThreadStart(delegate
+                =>
                 {
-                    ApplyFilterListUser();
-                    TextBoxAppSettingsFindUser.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-                })); };
+                    Dispatcher.Invoke(new ThreadStart(delegate
+               {
+                   ApplyFilterListUser();
+                   TextBoxAppSettingsFindUser.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+               }));
+                };
 
             #endregion
 
@@ -804,5 +810,94 @@ namespace ConsoleServer1C
             AppSettings.UpdateSessionMinute = int.Parse((string)((MenuItem)sender).Tag);
             TextBoxUpdateSessionMinute.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
+
+        private void DataGridListBases_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (PressedKeyLetterOrNumber(e.Key))
+            {
+                TextBoxAppSettingsFindBase.Focus();
+            }
+        }
+
+        private void DataGridListSessions_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (PressedKeyLetterOrNumber(e.Key))
+            {
+                TextBoxAppSettingsFindUser.Focus();
+            }
+        }
+
+        private bool PressedKeyLetterOrNumber(Key key)
+        {
+            bool result = false;
+
+            switch (key)
+            {
+                case Key.A:
+                case Key.B:
+                case Key.C:
+                case Key.D:
+                case Key.E:
+                case Key.F:
+                case Key.G:
+                case Key.H:
+                case Key.I:
+                case Key.J:
+                case Key.K:
+                case Key.L:
+                case Key.M:
+                case Key.N:
+                case Key.O:
+                case Key.P:
+                case Key.Q:
+                case Key.R:
+                case Key.S:
+                case Key.T:
+                case Key.U:
+                case Key.V:
+                case Key.W:
+                case Key.X:
+                case Key.Y:
+                case Key.Z:
+
+                case Key.OemOpenBrackets:
+                case Key.Oem6:
+                case Key.Oem1:
+                case Key.OemQuotes:
+                case Key.OemComma:
+                case Key.OemPeriod:
+                case Key.OemQuestion:
+                case Key.Oem5:
+                case Key.Oem3:
+
+                case Key.D0:
+                case Key.D1:
+                case Key.D2:
+                case Key.D3:
+                case Key.D4:
+                case Key.D5:
+                case Key.D6:
+                case Key.D7:
+                case Key.D8:
+                case Key.D9:
+
+                case Key.NumPad0:
+                case Key.NumPad1:
+                case Key.NumPad2:
+                case Key.NumPad3:
+                case Key.NumPad4:
+                case Key.NumPad5:
+                case Key.NumPad6:
+                case Key.NumPad7:
+                case Key.NumPad8:
+                case Key.NumPad9:
+
+                    result = true;
+                    break;
+            }
+
+            return result;
+        }
+
     }
 }

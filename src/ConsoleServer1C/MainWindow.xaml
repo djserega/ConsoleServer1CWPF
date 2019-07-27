@@ -281,7 +281,8 @@
                                   CanUserResizeRows="False"
                                   Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=-45}"
                                   SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}">
+                                  ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}"
+                                  PreviewKeyDown="DataGridListBases_PreviewKeyDown">
                             <DataGrid.Columns>
                                 <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
                                 <md:MaterialDataGridTextColumn Header="Сеансов"         Binding="{Binding ConnectionCount}"/>
@@ -319,7 +320,8 @@
                                   CanUserResizeColumns="False"
                                   CanUserResizeRows="False"
                                   Width="{Binding ElementName=BorderListUsers, Path=ActualWidth}"
-                                  SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,-2">
+                                  SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,2,0,-2"
+                                  PreviewKeyDown="DataGridListSessions_PreviewKeyDown">
                             <DataGrid.Columns>
                                 <md:MaterialDataGridTextColumn Header="Приложение"              Binding="{Binding AppID}"/>
                                 <md:MaterialDataGridTextColumn Header="№ сеанса"                Binding="{Binding SessionID}"/>
