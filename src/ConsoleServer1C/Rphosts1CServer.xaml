@@ -17,7 +17,8 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         Height="550" Width="400"
-        Title="Список процессов rphost сервера" x:Name="Window">
+        Title="Список процессов rphost сервера" x:Name="Window"
+        PreviewKeyDown="Window_PreviewKeyDown">
     <Border Background="{DynamicResource MaterialDesignPaper}"
             BorderThickness="2"
             CornerRadius="10 10 5 5"

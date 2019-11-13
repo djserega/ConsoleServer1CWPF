@@ -900,5 +900,13 @@ namespace ConsoleServer1C
             return result;
         }
 
+        private void WindowMain_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                _refreshData = true;
+                UpdateListBases(true);
+            }
+        }
     }
 }

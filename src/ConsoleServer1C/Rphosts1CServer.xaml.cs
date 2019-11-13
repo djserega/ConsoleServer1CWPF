@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ConsoleServer1C
 {
@@ -53,8 +54,6 @@ namespace ConsoleServer1C
                 typeof(ObservableCollection<Models.RphostObject>),
                 typeof(Rphosts1CServer));
 
-
-
         public Models.RphostObject ListProcessesSelectedItem
         {
             get { return (Models.RphostObject)GetValue(ListProcessesSelectedItemProperty); }
@@ -67,7 +66,13 @@ namespace ConsoleServer1C
                 typeof(Models.RphostObject),
                 typeof(Rphosts1CServer));
 
-
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                Close();
+            else if (e.Key == Key.F5)
+                LoadProcesses();
+        }
 
         private void ButtonUpdateListProcesses_Click(object sender, RoutedEventArgs e)
         {
@@ -94,5 +99,6 @@ namespace ConsoleServer1C
                 if (new Rphosts().KillProcess(_serverName, _connectSettings, ListProcessesSelectedItem.PID))
                     LoadProcesses();
         }
+
     }
 }

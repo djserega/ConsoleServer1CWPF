@@ -18,6 +18,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         WindowStyle="None"
         MouseLeftButtonDown="WindowMain_MouseLeftButtonDown"
+        PreviewKeyDown="WindowMain_PreviewKeyDown"
         Loaded="WindowMain_Loaded"
         Closing="WindowMain_Closing"
         x:Name="WindowMain">
