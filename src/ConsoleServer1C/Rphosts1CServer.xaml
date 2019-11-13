@@ -16,7 +16,7 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Height="400" Width="400"
+        Height="600" Width="400"
         Title="Список процессов rphost сервера" x:Name="Window">
     <Border Background="{DynamicResource MaterialDesignPaper}"
             BorderThickness="2"
