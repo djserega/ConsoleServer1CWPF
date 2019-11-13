@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -32,6 +33,9 @@ namespace ConsoleServer1C
                 Dispatcher.Invoke(new ThreadStart(delegate
                 {
                     ListProcesses.Add(rphost);
+
+                    ListProcesses = new ObservableCollection<Models.RphostObject>(ListProcesses.OrderByDescending(f => f.Size));
+
                     DataGridListProcesses.GetBindingExpression(DataGrid.ItemsSourceProperty).UpdateSource();
                 }));
             };
