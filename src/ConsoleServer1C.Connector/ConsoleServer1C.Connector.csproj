@@ -56,17 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="V83">
-      <Guid>{98AC3B5B-5323-418F-8F07-E32F231D2393}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ConsoleServer1C.Settings\ConsoleServer1C.Settings.csproj">
       <Project>{d0c0570b-20d3-493a-914d-9216a00475cc}</Project>
       <Name>ConsoleServer1C.Settings</Name>

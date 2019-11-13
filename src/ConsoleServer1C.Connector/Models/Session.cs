@@ -1,6 +1,5 @@
 ﻿using ConsoleServer1C.TaskbarIcon.Events;
 using System;
-using V83;
 
 namespace ConsoleServer1C.Connector.Models
 {
@@ -16,7 +15,8 @@ namespace ConsoleServer1C.Connector.Models
         /// </summary>
         /// <param name="clusterInfo">Данные кластера</param>
         /// <param name="sessionInfo">Данные интерфейса сессии</param>
-        public Session(IClusterInfo clusterInfo, ISessionInfo sessionInfo)
+        //public Session(IClusterInfo clusterInfo, ISessionInfo sessionInfo)
+        public Session(dynamic clusterInfo, dynamic sessionInfo)
         {
             if (clusterInfo == null || sessionInfo == null)
                 return;
@@ -40,17 +40,20 @@ namespace ConsoleServer1C.Connector.Models
         /// <summary>
         /// Кластер сессии
         /// </summary>
-        public IClusterInfo ClusterInfo { get; private set; }
+        //public IClusterInfo ClusterInfo { get; private set; }
+        public dynamic ClusterInfo { get; private set; }
 
         /// <summary>
         /// Краткая информация о базе данных сессии
         /// </summary>
-        public IInfoBaseShort InfoBaseShort { get; private set; }
+        //public IInfoBaseShort InfoBaseShort { get; private set; }
+        public dynamic InfoBaseShort { get; private set; }
 
         /// <summary>
         /// Источник данных сессии
         /// </summary>
-        public ISessionInfo SessionInfo { get; private set; }
+        //public ISessionInfo SessionInfo { get; private set; }
+        public dynamic SessionInfo { get; private set; }
 
         /// <summary>
         /// Идентификатор приложения
@@ -70,12 +73,14 @@ namespace ConsoleServer1C.Connector.Models
         /// <summary>
         /// Данные рабочего процесса
         /// </summary>
-        public IWorkingProcessInfo Process { get; private set; }
+        //public IWorkingProcessInfo Process { get; private set; }
+        public dynamic Process { get; private set; }
 
         /// <summary>
         /// Краткая информация соединения 
         /// </summary>
-        public IConnectionShort Connection { get; private set; }
+        //public IConnectionShort Connection { get; private set; }
+        public dynamic Connection { get; private set; }
 
         /// <summary>
         /// Время захвата СУБД

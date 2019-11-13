@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using V83;
 
 namespace ConsoleServer1C.Connector
 {
@@ -23,11 +22,13 @@ namespace ConsoleServer1C.Connector
         /// <summary>
         /// Объект подключения
         /// </summary>
-        private COMConnector _comConnector;
+        //private COMConnector _comConnector;
+        private dynamic _comConnector;
         /// <summary>
         /// Данные подключения к агенту сервера 1С
         /// </summary>
-        private IServerAgentConnection _serverAgent;
+        //private IServerAgentConnection _serverAgent;
+        private dynamic _serverAgent;
         /// <summary>
         /// Список отбора баз
         /// </summary>
@@ -121,12 +122,14 @@ namespace ConsoleServer1C.Connector
 
             try
             {
-                foreach (IClusterInfo itemClusterInfo in _serverAgent.GetClusters())
+                //foreach (IClusterInfo itemClusterInfo in _serverAgent.GetClusters())
+                foreach (dynamic itemClusterInfo in _serverAgent.GetClusters())
                 {
                     _serverAgent.Authenticate(itemClusterInfo, "", "");
 
                     // Terminate
-                    foreach (ISessionInfo itemSessionInfo in _serverAgent.GetSessions(itemClusterInfo))
+                    //foreach (ISessionInfo itemSessionInfo in _serverAgent.GetSessions(itemClusterInfo))
+                    foreach (dynamic itemSessionInfo in _serverAgent.GetSessions(itemClusterInfo))
                     {
                         if (itemSessionInfo.infoBase.Name == session.InfoBaseShort.Name
                             && itemSessionInfo.SessionID == session.SessionID)
@@ -185,7 +188,8 @@ namespace ConsoleServer1C.Connector
             }
             catch (Exception ex)
             {
-                Dialogs.Show(ex.Message);
+                Dialogs.Show("Не обработанная ошибка получения списка баз: \n" + ex.Message);
+                Dialogs.Show(ex.StackTrace);
             }
 
             Events.UpdateInfoMainWindowEvents.InfoBases = InfoBases;
@@ -202,13 +206,15 @@ namespace ConsoleServer1C.Connector
 
             Events.ConnectionStatusEvents.CountClusters = arrayClusters.Length;
 
-            foreach (IClusterInfo clusterInfo in arrayClusters)
+            //foreach (IClusterInfo clusterInfo in arrayClusters)
+            foreach (dynamic clusterInfo in arrayClusters)
             {
                 _serverAgent.Authenticate(clusterInfo, "", "");
 
                 if (!UpdateSessions)
                 {
-                    List<Models.InfoBase> infoBasesCluster = await Task.Run(() => GetListInfoBaseFromClusterInfo(_comConnector, _serverAgent, clusterInfo));
+                    //List<Models.InfoBase> infoBasesCluster = await Task.Run(() => GetListInfoBaseFromClusterInfo(_comConnector, _serverAgent, clusterInfo)).Result;
+                    List<Models.InfoBase> infoBasesCluster = GetListInfoBaseFromClusterInfo(_comConnector, _serverAgent, clusterInfo).Result;
 
                     foreach (Models.InfoBase item in infoBasesCluster)
                         InfoBases.Add(item);
@@ -233,7 +239,8 @@ namespace ConsoleServer1C.Connector
         /// <param name="serverAgent">Подключение к агенту сервера 1С</param>
         /// <param name="clusterInfo">Кластер со списком баз данных</param>
         /// <returns>Задача с результатом: список баз данных</returns>
-        private async Task<List<Models.InfoBase>> GetListInfoBaseFromClusterInfo(COMConnector comConnector, IServerAgentConnection serverAgent, IClusterInfo clusterInfo)
+        //private async Task<List<Models.InfoBase>> GetListInfoBaseFromClusterInfo(COMConnector comConnector, IServerAgentConnection serverAgent, IClusterInfo clusterInfo)
+        private async Task<List<Models.InfoBase>> GetListInfoBaseFromClusterInfo(dynamic comConnector, dynamic serverAgent, dynamic clusterInfo)
         {
             List<Models.InfoBase> infoBasesCluster = new List<Models.InfoBase>();
 
@@ -255,7 +262,8 @@ namespace ConsoleServer1C.Connector
 
             Events.ConnectionStatusEvents.CountWorkProcesses += workingProcesses.Length;
 
-            foreach (IWorkingProcessInfo workProcess in workingProcesses)
+            //foreach (IWorkingProcessInfo workProcess in workingProcesses)
+            foreach (dynamic workProcess in workingProcesses)
                 tasks.Add(FillInfoBaseFromWorkProcessAsync(comConnector, workProcess));
 
             await Task.WhenAll(tasks);
@@ -287,7 +295,8 @@ namespace ConsoleServer1C.Connector
         /// <param name="comConnector">COM объект подключения к серверу 1С</param>
         /// <param name="workProcess">Рабочий процесс</param>
         /// <returns>Задача с результатом: Список баз данных</returns>
-        private async Task<List<Models.InfoBase>> FillInfoBaseFromWorkProcessAsync(COMConnector comConnector, IWorkingProcessInfo workProcess)
+        //private async Task<List<Models.InfoBase>> FillInfoBaseFromWorkProcessAsync(COMConnector comConnector, IWorkingProcessInfo workProcess)
+        private async Task<List<Models.InfoBase>> FillInfoBaseFromWorkProcessAsync(dynamic comConnector, dynamic workProcess)
         {
             return await Task.Run(() => FillInfoBaseFromWorkProcess(GetWorkingProcessConnection(comConnector, workProcess)));
         }
@@ -297,7 +306,8 @@ namespace ConsoleServer1C.Connector
         /// </summary>
         /// <param name="workingProcessConnection"></param>
         /// <returns>Список баз данных</returns>
-        private List<Models.InfoBase> FillInfoBaseFromWorkProcess(IWorkingProcessConnection workingProcessConnection)
+        //private List<Models.InfoBase> FillInfoBaseFromWorkProcess(IWorkingProcessConnection workingProcessConnection)
+        private List<Models.InfoBase> FillInfoBaseFromWorkProcess(dynamic workingProcessConnection)
         {
             List<Models.InfoBase> listInfoBasesTask = new List<Models.InfoBase>();
 
@@ -308,11 +318,13 @@ namespace ConsoleServer1C.Connector
 
             Events.ConnectionStatusEvents.CountInfoBases += infoBases.Length;
 
-            foreach (IInfoBaseInfo infoBaseInfo in infoBases)
+            //foreach (IInfoBaseInfo infoBaseInfo in infoBases)
+            foreach (dynamic infoBaseInfo in infoBases)
             {
                 if (CurrentInfoBaseNameContainedInListFilter(infoBaseInfo.Name.ToUpper()))
                 {
-                    IInfoBaseConnectionInfo infoBaseConnectionComConsole = FillInfoBase(workingProcessConnection, infoBaseInfo, listInfoBasesTask);
+                    //IInfoBaseConnectionInfo infoBaseConnectionComConsole = FillInfoBase(workingProcessConnection, infoBaseInfo, listInfoBasesTask);
+                    dynamic infoBaseConnectionComConsole = FillInfoBase(workingProcessConnection, infoBaseInfo, listInfoBasesTask);
                     if (infoBaseConnectionComConsole != null)
                     {
                         try
@@ -337,7 +349,8 @@ namespace ConsoleServer1C.Connector
         /// <param name="infoBaseInfo">Информация о базе данных</param>
         /// <param name="listInfoBasesTask">Список баз данных</param>
         /// <returns>Информация о подключении COMConsole</returns>
-        private IInfoBaseConnectionInfo FillInfoBase(IWorkingProcessConnection workingProcessConnection, IInfoBaseInfo infoBaseInfo, List<Models.InfoBase> listInfoBasesTask)
+        //private IInfoBaseConnectionInfo FillInfoBase(IWorkingProcessConnection workingProcessConnection, IInfoBaseInfo infoBaseInfo, List<Models.InfoBase> listInfoBasesTask)
+        private dynamic FillInfoBase(dynamic workingProcessConnection, dynamic infoBaseInfo, List<Models.InfoBase> listInfoBasesTask)
         {
             if (workingProcessConnection == null)
                 return null;
@@ -345,12 +358,14 @@ namespace ConsoleServer1C.Connector
             if (InfoBaseWithoutAccess.InfoBaseContains(infoBaseInfo.DBName))
                 return null;
 
-            IInfoBaseConnectionInfo infoBaseConnectionComConsole = null;
+            //IInfoBaseConnectionInfo infoBaseConnectionComConsole = null;
+            dynamic infoBaseConnectionComConsole = null;
             bool haveAccess = true;
             int connections = 0;
             try
             {
-                foreach (IInfoBaseConnectionInfo infoBaseConnectionInfo in workingProcessConnection.GetInfoBaseConnections(infoBaseInfo))
+                //foreach (IInfoBaseConnectionInfo infoBaseConnectionInfo in workingProcessConnection.GetInfoBaseConnections(infoBaseInfo))
+                foreach (dynamic infoBaseConnectionInfo in workingProcessConnection.GetInfoBaseConnections(infoBaseInfo))
                     if (infoBaseConnectionInfo.AppID == "COMConsole")
                         infoBaseConnectionComConsole = infoBaseConnectionInfo;
                     else if (infoBaseConnectionInfo.AppID != "SrvrConsole")
@@ -390,10 +405,12 @@ namespace ConsoleServer1C.Connector
         /// </summary>
         /// <param name="serverAgent">Подключение к агенту сервера 1С</param>
         /// <param name="clusterInfo">Данные кластера 1С</param>
-        private void GetInfoSessions(IServerAgentConnection serverAgent, IClusterInfo clusterInfo)
+        //private void GetInfoSessions(IServerAgentConnection serverAgent, IClusterInfo clusterInfo)
+        private void GetInfoSessions(dynamic serverAgent, dynamic clusterInfo)
         {
             Array sessions = serverAgent.GetSessions(clusterInfo);
-            foreach (ISessionInfo sessionInfo in sessions)
+            //foreach (ISessionInfo sessionInfo in sessions)
+            foreach (dynamic sessionInfo in sessions)
             {
                 if (CurrentInfoBaseNameContainedInListFilter(sessionInfo.infoBase.Name.ToUpper()))
                 {
@@ -419,9 +436,11 @@ namespace ConsoleServer1C.Connector
         /// <param name="comConnector">COM объект подключения к серверу 1С</param>
         /// <param name="workProcess">Рабочий процесс</param>
         /// <returns></returns>
-        private IWorkingProcessConnection GetWorkingProcessConnection(COMConnector comConnector, IWorkingProcessInfo workProcess)
+        //private IWorkingProcessConnection GetWorkingProcessConnection(COMConnector comConnector, IWorkingProcessInfo workProcess)
+        private dynamic GetWorkingProcessConnection(dynamic comConnector, dynamic workProcess)
         {
-            IWorkingProcessConnection workingProcessConnection;
+            //IWorkingProcessConnection workingProcessConnection;
+            dynamic workingProcessConnection;
             try
             {
                 workingProcessConnection = comConnector.ConnectWorkingProcess($"{_serverName}:{workProcess.MainPort}");
@@ -440,7 +459,8 @@ namespace ConsoleServer1C.Connector
         /// Аутентификация к рабочему процессу
         /// </summary>
         /// <param name="workingProcessConnection">Рабочий процесс</param>
-        private static void AddAuthentificationWorkingProcess(IWorkingProcessConnection workingProcessConnection)
+        //private static void AddAuthentificationWorkingProcess(IWorkingProcessConnection workingProcessConnection)
+        private static void AddAuthentificationWorkingProcess(dynamic workingProcessConnection)
         {
             if (_connectSettings == null)
                 workingProcessConnection.AddAuthentication("", "");
@@ -462,7 +482,12 @@ namespace ConsoleServer1C.Connector
 
             try
             {
-                _comConnector = new COMConnector();
+                //_comConnector = new COMConnector();
+                Type typeConnector = Type.GetTypeFromProgID("V83.COMConnector");
+                if (typeConnector == null)
+                    throw new Exception("Не удалось создать тип V83.COMConnector.");
+
+                _comConnector = Activator.CreateInstance(typeConnector);
             }
             catch (Exception ex)
             {

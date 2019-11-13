@@ -479,7 +479,8 @@ namespace ConsoleServer1C
             }
             catch (Exception ex)
             {
-                Dialogs.Show(ex.Message);
+                Dialogs.Show("Не обработанная ошибка: \n" + ex.Message);
+                Dialogs.Show(ex.StackTrace);
             }
 
             ApplyFilterListBase();
