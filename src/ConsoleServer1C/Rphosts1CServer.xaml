@@ -52,11 +52,11 @@
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       CanUserResizeRows="False"
-                      SelectedItem="{Binding ElementName=Window, Path=DataContext.ListProcessesSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding ElementName=Window, Path=DataContext.ListProcesses, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                      SelectedItem="{Binding DataContext.ListProcessesSelectedItem}"
+                      ItemsSource="{Binding DataContext.ListProcesses}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn         Header="PID"            Binding="{Binding PID}"/>
-                    <DataGridTextColumn         Header="Размер (KB)"    Binding="{Binding SizeText}" Width="*" SortMemberPath="Size"/>
+                    <DataGridTextColumn     Header="PID"            Binding="{Binding PID}"/>
+                    <DataGridTextColumn     Header="Размер (KB)"    Binding="{Binding SizeText}"    Width="*"   SortMemberPath="Size"/>
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
@@ -64,6 +64,20 @@
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
+
+            <Grid Grid.Row="1"
+                  VerticalAlignment="Bottom"
+                  HorizontalAlignment="Right"
+                  Margin="10 0"
+                  Opacity=".5">
+                <Grid.RowDefinitions/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Итого: "/>
+                    <TextBlock Text="{Binding DataContext.ListProcesses.Count}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
 
         </Grid>
     </Border>
