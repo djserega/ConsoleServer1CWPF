@@ -22,7 +22,7 @@
     <Border Background="{DynamicResource PrimaryHueLightBrush}"
             BorderThickness="2"
             CornerRadius="10 10 5 5"
-            BorderBrush="#6600b6">
+            BorderBrush="{DynamicResource PrimaryHueDarkBrush}">
         <Grid Margin="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
