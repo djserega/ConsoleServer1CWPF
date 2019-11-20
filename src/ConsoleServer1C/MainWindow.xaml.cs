@@ -119,7 +119,7 @@ namespace ConsoleServer1C
 
             InitializeTaskbarIcon();
 
-            InitializeContextMenuListTheme();
+            _styleApplication.InitializeContentSelectorColor(ButtonChangeColor);
 
             Topmost = AppSettings.IsTopmost;
         }
@@ -906,11 +906,6 @@ namespace ConsoleServer1C
             }
 
             return result;
-        }
-
-        private void InitializeContextMenuListTheme()
-        {
-            _styleApplication.InitializeContentSelectorColor(ButtonChangeColor);
         }
     }
 }
