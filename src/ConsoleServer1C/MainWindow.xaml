@@ -172,7 +172,7 @@
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="3"/>
+                        <ColumnDefinition Width="2"/>
                         <ColumnDefinition x:Name="ColumnListUsers" Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -246,55 +246,61 @@
                             x:Name="BorderListUsers"
                             Width="{Binding ElementName=ColumnListUsers, Path=Width}"/>
 
-                    <Grid Grid.Column="0" Grid.Row="2"
-                          x:Name="GridListBases">
-                        <DataGrid x:Name="DataGridListBases"
-                                  Background="{DynamicResource PrimaryHueLightBrush}"
-                                  BorderThickness="1"
-                                  BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserAddRows="False"
-                                  CanUserDeleteRows="False"
-                                  CanUserReorderColumns="False"
-                                  CanUserResizeColumns="False"
-                                  CanUserResizeRows="False"
-                                  Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=-45}"
-                                  SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}"
-                                  PreviewKeyDown="DataGridListBases_PreviewKeyDown" Grid.ColumnSpan="2">
-                            <DataGrid.Columns>
-                                <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
-                                <md:MaterialDataGridTextColumn Header="Сеансов"         Binding="{Binding ConnectionCount}"/>
-                                <md:MaterialDataGridTextColumn Header="Соединений"      Binding="{Binding SessionCount}"/>
-                                <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}">
-                                    <md:MaterialDataGridTextColumn.CellStyle>
-                                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="Background" Value="{Binding DbProcTook, Converter={StaticResource ExceededThresholdDbProcTook}}"/>
-                                        </Style>
-                                    </md:MaterialDataGridTextColumn.CellStyle>
-                                </md:MaterialDataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                    <Border Grid.Column="0" Grid.Row="2"
+                            x:Name="GridListBases"
+                            Background="{DynamicResource PrimaryHueLightBrush}"
+                            BorderThickness="1"
+                            CornerRadius="10 10 5 5"
+                            BorderBrush="{DynamicResource PrimaryHueDarkBrush}">
+                        <Grid>
+                            <DataGrid x:Name="DataGridListBases"
+                                      Background="Transparent"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      CanUserReorderColumns="False"
+                                      CanUserResizeColumns="False"
+                                      CanUserResizeRows="False"
+                                      Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=-45}"
+                                      SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}"
+                                      PreviewKeyDown="DataGridListBases_PreviewKeyDown" Grid.ColumnSpan="2">
+                                <DataGrid.Columns>
+                                    <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
+                                    <md:MaterialDataGridTextColumn Header="Сеансов"         Binding="{Binding ConnectionCount}"/>
+                                    <md:MaterialDataGridTextColumn Header="Соединений"      Binding="{Binding SessionCount}"/>
+                                    <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}">
+                                        <md:MaterialDataGridTextColumn.CellStyle>
+                                            <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="Background" Value="{Binding DbProcTook, Converter={StaticResource ExceededThresholdDbProcTook}}"/>
+                                            </Style>
+                                        </md:MaterialDataGridTextColumn.CellStyle>
+                                    </md:MaterialDataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
 
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Bottom"
-                                    Opacity=".5"
-                                    Margin="0,0,15,0" Grid.Column="1">
-                            <Label Content="Итого:"/>
-                            <Label x:Name="LabelCountElementsListBases"
-                                   Content="{Binding ElementName=WindowMain, Path=CountElementsListBases, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Opacity=".5"
+                                        Margin="0,0,15,0" Grid.Column="1">
+                                <Label Content="Итого:"/>
+                                <Label x:Name="LabelCountElementsListBases"
+                                       Content="{Binding ElementName=WindowMain, Path=CountElementsListBases, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
 
-                    </Grid>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Column="2" Grid.Row="2"
+                            Background="{DynamicResource PrimaryHueLightBrush}"
+                            BorderThickness="1"
+                            CornerRadius="10 10 5 5"
+                            BorderBrush="{DynamicResource PrimaryHueDarkBrush}">
+                        <Grid >
 
-                    <Grid Grid.Column="2" Grid.Row="2">
-
-                        <DataGrid x:Name="DataGridListSessions"
-                                  Background="{DynamicResource PrimaryHueLightBrush}"
-                                  BorderThickness="1"
-                                  BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                            <DataGrid x:Name="DataGridListSessions"
+                                  Background="Transparent"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
                                   CanUserAddRows="False"
@@ -305,58 +311,60 @@
                                   Width="{Binding ElementName=BorderListUsers, Path=ActualWidth}"
                                   SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   PreviewKeyDown="DataGridListSessions_PreviewKeyDown">
-                            <DataGrid.Columns>
-                                <md:MaterialDataGridTextColumn Header="Приложение"              Binding="{Binding AppID}"/>
-                                <md:MaterialDataGridTextColumn Header="№ сеанса"                Binding="{Binding SessionID}"/>
-                                <md:MaterialDataGridTextColumn Header="Пользователь"            Binding="{Binding UserName}"/>
-                                <md:MaterialDataGridTextColumn Header="Компьютер"               Binding="{Binding Host}"/>
-                                <md:MaterialDataGridTextColumn Header="Захвачено СУБД"          Binding="{Binding DbProcTook}">
-                                    <md:MaterialDataGridTextColumn.CellStyle>
-                                        <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
-                                            <Setter Property="Background" Value="{Binding DbProcTook, Converter={StaticResource ExceededThresholdDbProcTook}}"/>
-                                        </Style>
-                                    </md:MaterialDataGridTextColumn.CellStyle>
-                                </md:MaterialDataGridTextColumn>
-                                <md:MaterialDataGridTextColumn Header="Дата начала сеанса"      Binding="{Binding StartedAt, StringFormat=\{0:dd.MM.yyyy HH:mm:ss\}}"/>
-                                <md:MaterialDataGridTextColumn Header="Данных за 5 минут"       Binding="{Binding DbmsBytesLast5MinString}"/>
-                                <md:MaterialDataGridTextColumn Header="Объем памяти за 5 минут" Binding="{Binding MemoryLast5MinString}"/>
-                            </DataGrid.Columns>
+                                <DataGrid.Columns>
+                                    <md:MaterialDataGridTextColumn Header="Приложение"              Binding="{Binding AppID}"/>
+                                    <md:MaterialDataGridTextColumn Header="№ сеанса"                Binding="{Binding SessionID}"/>
+                                    <md:MaterialDataGridTextColumn Header="Пользователь"            Binding="{Binding UserName}"/>
+                                    <md:MaterialDataGridTextColumn Header="Компьютер"               Binding="{Binding Host}"/>
+                                    <md:MaterialDataGridTextColumn Header="Захвачено СУБД"          Binding="{Binding DbProcTook}">
+                                        <md:MaterialDataGridTextColumn.CellStyle>
+                                            <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                                <Setter Property="Background" Value="{Binding DbProcTook, Converter={StaticResource ExceededThresholdDbProcTook}}"/>
+                                            </Style>
+                                        </md:MaterialDataGridTextColumn.CellStyle>
+                                    </md:MaterialDataGridTextColumn>
+                                    <md:MaterialDataGridTextColumn Header="Дата начала сеанса"      Binding="{Binding StartedAt, StringFormat=\{0:dd.MM.yyyy HH:mm:ss\}}"/>
+                                    <md:MaterialDataGridTextColumn Header="Данных за 5 минут"       Binding="{Binding DbmsBytesLast5MinString}"/>
+                                    <md:MaterialDataGridTextColumn Header="Объем памяти за 5 минут" Binding="{Binding MemoryLast5MinString}"/>
+                                </DataGrid.Columns>
 
-                            <DataGrid.Resources>
+                                <DataGrid.Resources>
 
-                                <ContextMenu x:Key="DataGridSessionContextMenuItem">
-                                    <MenuItem Header="Отключить сеанс" Click="MenuItemSessionTerminateSession_Click"/>
-                                </ContextMenu>
+                                    <ContextMenu x:Key="DataGridSessionContextMenuItem">
+                                        <MenuItem Header="Отключить сеанс" Click="MenuItemSessionTerminateSession_Click"/>
+                                    </ContextMenu>
 
-                                <ContextMenu x:Key="DataGridSessionContextMenuHeader"
+                                    <ContextMenu x:Key="DataGridSessionContextMenuHeader"
                                          x:Name="DataGridSessionContextMenuHeader"/>
 
-                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                    <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuHeader}"/>
-                                </Style>
+                                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                        <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuHeader}"/>
+                                    </Style>
 
-                                <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
-                                    <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuItem}"/>
-                                </Style>
+                                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                                        <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuItem}"/>
+                                    </Style>
 
-                            </DataGrid.Resources>
+                                </DataGrid.Resources>
 
-                        </DataGrid>
+                            </DataGrid>
 
-                        <StackPanel Orientation="Horizontal"
+                            <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Bottom"
                                     Opacity=".5"
                                     Margin="15 0">
-                            <Label Content="Итого:"/>
-                            <Label x:Name="LabelCountElementsListSession"
+                                <Label Content="Итого:"/>
+                                <Label x:Name="LabelCountElementsListSession"
                                    Content="{Binding ElementName=WindowMain, Path=CountElementsListSession, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
+                            </StackPanel>
 
-                    </Grid>
+                        </Grid>
+                    </Border>
                 </Grid>
 
-                <Grid Grid.Row="3">
+                <Grid Grid.Row="3"
+                      Margin="0 3 0 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
