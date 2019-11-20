@@ -97,11 +97,13 @@
                                 <Button.ContextMenu>
                                     <ContextMenu>
                                         <ContextMenu.ItemContainerStyle>
-                                            <Style TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}">
+                                            <Style TargetType="MenuItem"
+                                                   BasedOn="{StaticResource MaterialDesignMenuItem}">
                                                 <Setter Property="Header"   Value="{Binding Header}"/>
                                                 <Setter Property="Tag"      Value="{Binding Date}"/>
                                                 <Setter Property="ToolTip"  Value="{Binding ToolTip}"/>
-                                                <EventSetter Event="Click" Handler="MenuItemSelectedHistory"/>
+                                                <EventSetter Event="Click"
+                                                             Handler="MenuItemSelectedHistory"/>
                                             </Style>
                                         </ContextMenu.ItemContainerStyle>
                                     </ContextMenu>
@@ -122,9 +124,16 @@
 
                             <TextBox x:Name="TextBoxFilterInfoBaseName"
                                      Width="150"
-                                     ToolTip="Текст поиска в названии базы. Без учета регистра. Можно указать несколько баз через ';'."
                                      Text="{Binding ElementName=WindowMain, Path=AppSettings.FilterInfoBaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     KeyDown="TextBoxFilterInfoBaseName_KeyDown"/>
+                                     KeyDown="TextBoxFilterInfoBaseName_KeyDown">
+                                <TextBox.ToolTip>
+                                    <TextBlock>
+                                        Текст поиска в названии базы.
+                                        <LineBreak/>
+                                        Без учета регистра. Можно указать несколько баз через ';'.
+                                    </TextBlock>
+                                </TextBox.ToolTip>
+                            </TextBox>
                         </StackPanel>
 
                         <StackPanel Grid.Column="3"
@@ -209,7 +218,7 @@
                             <Button Content="{md:PackIcon Kind=Close}"
                                     HorizontalAlignment="Right"
                                     Background="{x:Null}"
-                                    Foreground="{DynamicResource MaterialDesignToolTipBackground}"
+                                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     BorderThickness="0"
                                     Click="ButtonClearAppSettingsFindBase"/>
                         </Grid>
@@ -231,7 +240,7 @@
                             <Button Content="{md:PackIcon Kind=Close}"
                                     HorizontalAlignment="Right"
                                     Background="{x:Null}"
-                                    Foreground="{DynamicResource MaterialDesignToolTipBackground}"
+                                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                     BorderThickness="0"
                                     Click="ButtonClearAppSettingsFindUser"/>
                         </Grid>
@@ -254,6 +263,7 @@
                             BorderBrush="{DynamicResource PrimaryHueDarkBrush}">
                         <Grid>
                             <DataGrid x:Name="DataGridListBases"
+                                      Grid.ColumnSpan="2"
                                       Background="Transparent"
                                       AutoGenerateColumns="False"
                                       IsReadOnly="True"
@@ -265,14 +275,15 @@
                                       Width="{Binding ElementName=BorderListBases, Path=ActualWidth, Converter={localConverters:ElementsFormConverter}, ConverterParameter=-45}"
                                       SelectedItem="{Binding ElementName=WindowMain, Path=DataContext.SelectedItemListBases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       ItemsSource="{Binding ElementName=WindowMain, Path=DataContext.ListBases}"
-                                      PreviewKeyDown="DataGridListBases_PreviewKeyDown" Grid.ColumnSpan="2">
+                                      PreviewKeyDown="DataGridListBases_PreviewKeyDown">
                                 <DataGrid.Columns>
                                     <md:MaterialDataGridTextColumn Header="Имя БД"          Binding="{Binding Name}"/>
                                     <md:MaterialDataGridTextColumn Header="Сеансов"         Binding="{Binding ConnectionCount}"/>
                                     <md:MaterialDataGridTextColumn Header="Соединений"      Binding="{Binding SessionCount}"/>
                                     <md:MaterialDataGridTextColumn Header="Захвачено СУБД"  Binding="{Binding DbProcTook}">
                                         <md:MaterialDataGridTextColumn.CellStyle>
-                                            <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Style TargetType="{x:Type DataGridCell}"
+                                                   BasedOn="{StaticResource {x:Type DataGridCell}}">
                                                 <Setter Property="Background" Value="{Binding DbProcTook, Converter={StaticResource ExceededThresholdDbProcTook}}"/>
                                             </Style>
                                         </md:MaterialDataGridTextColumn.CellStyle>
@@ -280,13 +291,16 @@
                                 </DataGrid.Columns>
                             </DataGrid>
 
-                            <StackPanel Orientation="Horizontal"
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Bottom"
-                                        Opacity=".5"
-                                        Margin="0,0,15,0" Grid.Column="1">
-                                <Label Content="Итого:"/>
+                                        Opacity=".7"
+                                        Margin="0,0,15,0">
+                                <Label Content="Итого:"
+                                       Foreground="{DynamicResource PrimaryHueDarkBrush}"/>
                                 <Label x:Name="LabelCountElementsListBases"
+                                       Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                        Content="{Binding ElementName=WindowMain, Path=CountElementsListBases, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
 
@@ -300,17 +314,17 @@
                         <Grid >
 
                             <DataGrid x:Name="DataGridListSessions"
-                                  Background="Transparent"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  CanUserAddRows="False"
-                                  CanUserDeleteRows="False"
-                                  CanUserReorderColumns="False"
-                                  CanUserResizeColumns="False"
-                                  CanUserResizeRows="False"
-                                  Width="{Binding ElementName=BorderListUsers, Path=ActualWidth}"
-                                  SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  PreviewKeyDown="DataGridListSessions_PreviewKeyDown">
+                                      Background="Transparent"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      CanUserReorderColumns="False"
+                                      CanUserResizeColumns="False"
+                                      CanUserResizeRows="False"
+                                      Width="{Binding ElementName=BorderListUsers, Path=ActualWidth}"
+                                      SelectedItem="{Binding ElementName=WindowMain, Path=SelectedItemSession, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      PreviewKeyDown="DataGridListSessions_PreviewKeyDown">
                                 <DataGrid.Columns>
                                     <md:MaterialDataGridTextColumn Header="Приложение"              Binding="{Binding AppID}"/>
                                     <md:MaterialDataGridTextColumn Header="№ сеанса"                Binding="{Binding SessionID}"/>
@@ -318,7 +332,8 @@
                                     <md:MaterialDataGridTextColumn Header="Компьютер"               Binding="{Binding Host}"/>
                                     <md:MaterialDataGridTextColumn Header="Захвачено СУБД"          Binding="{Binding DbProcTook}">
                                         <md:MaterialDataGridTextColumn.CellStyle>
-                                            <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                            <Style TargetType="{x:Type DataGridCell}"
+                                                   BasedOn="{StaticResource {x:Type DataGridCell}}">
                                                 <Setter Property="Background" Value="{Binding DbProcTook, Converter={StaticResource ExceededThresholdDbProcTook}}"/>
                                             </Style>
                                         </md:MaterialDataGridTextColumn.CellStyle>
@@ -331,17 +346,20 @@
                                 <DataGrid.Resources>
 
                                     <ContextMenu x:Key="DataGridSessionContextMenuItem">
-                                        <MenuItem Header="Отключить сеанс" Click="MenuItemSessionTerminateSession_Click"/>
+                                        <MenuItem Header="Отключить сеанс"
+                                                  Click="MenuItemSessionTerminateSession_Click"/>
                                     </ContextMenu>
 
                                     <ContextMenu x:Key="DataGridSessionContextMenuHeader"
-                                         x:Name="DataGridSessionContextMenuHeader"/>
+                                                 x:Name="DataGridSessionContextMenuHeader"/>
 
-                                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                    <Style TargetType="DataGridColumnHeader"
+                                           BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
                                         <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuHeader}"/>
                                     </Style>
 
-                                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                                    <Style TargetType="DataGridRow"
+                                           BasedOn="{StaticResource MaterialDesignDataGridRow}">
                                         <Setter Property="ContextMenu" Value="{StaticResource DataGridSessionContextMenuItem}"/>
                                     </Style>
 
@@ -350,13 +368,15 @@
                             </DataGrid>
 
                             <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Bottom"
-                                    Opacity=".5"
-                                    Margin="15 0">
-                                <Label Content="Итого:"/>
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Opacity=".7"
+                                        Margin="15 0">
+                                <Label Content="Итого:"
+                                       Foreground="{DynamicResource PrimaryHueDarkBrush}"/>
                                 <Label x:Name="LabelCountElementsListSession"
-                                   Content="{Binding ElementName=WindowMain, Path=CountElementsListSession, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                       Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                       Content="{Binding ElementName=WindowMain, Path=CountElementsListSession, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
 
                         </Grid>
@@ -373,10 +393,10 @@
                     <WrapPanel Grid.Column="0">
 
                         <Button Content="{md:PackIcon Settings}"
-                                    Margin="1 0"
-                                    IsTabStop="False"
-                                    ToolTip="Параметры подключения к серверу 1С"
-                                    Click="ButtonConnectTo1CServerSettings_Click"/>
+                                Margin="1 0"
+                                IsTabStop="False"
+                                ToolTip="Параметры подключения к серверу 1С"
+                                Click="ButtonConnectTo1CServerSettings_Click"/>
                         <Button Content="{md:PackIcon LanConnect}"
                                 Margin="1 0"
                                 ToolTip="Открыть форму списка rphost'ов сервера."
@@ -386,11 +406,11 @@
                             <Label Content="Автообновление"
                                    VerticalAlignment="Bottom"/>
                             <Border x:Name="BorderUpdateSessionMinute"
+                                    BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
                                     VerticalAlignment="Bottom"
                                     Height="30"
                                     BorderThickness="1"
-                                    CornerRadius="10 10 5 5"
-                                    BorderBrush="#6600b6">
+                                    CornerRadius="10 10 5 5">
                                 <TextBox x:Name="TextBoxUpdateSessionMinute"
                                          Width="30"
                                          HorizontalContentAlignment="Center"
@@ -433,17 +453,18 @@
                                 Orientation="Horizontal">
                         <ProgressBar x:Name="ProgressBarStatusConnection"
                                      Width="200"
+                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                      Value="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
                         <StackPanel Orientation="Horizontal"
                                     Margin="5 0 0 0">
                             <TextBlock x:Name="TextBlockStatusConnection"
                                        Width="25"
                                        VerticalAlignment="Center"
-                                       Foreground="#FFAA5CE8"
+                                       Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                        Text="{Binding ElementName=WindowMain, Path=ProgressBarValue}"/>
                             <Label Content="%"
                                    VerticalAlignment="Center"
-                                   Foreground="#FFAA5CE8"/>
+                                   Foreground="{DynamicResource PrimaryHueDarkBrush}"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

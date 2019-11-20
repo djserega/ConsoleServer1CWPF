@@ -71,13 +71,15 @@
                   VerticalAlignment="Bottom"
                   HorizontalAlignment="Right"
                   Margin="10 0"
-                  Opacity=".5">
+                  Opacity=".7">
                 <Grid.RowDefinitions/>
 
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Итого: "/>
+                    <Label Content="Итого: "
+                           Foreground="{DynamicResource PrimaryHueDarkBrush}"/>
                     <TextBlock Text="{Binding DataContext.ListProcesses.Count}"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource PrimaryHueDarkBrush}"/>
                 </StackPanel>
             </Grid>
 
