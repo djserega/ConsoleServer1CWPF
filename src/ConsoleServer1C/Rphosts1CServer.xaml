@@ -19,7 +19,7 @@
         Height="550" Width="400"
         Title="Список процессов rphost сервера" x:Name="Window"
         PreviewKeyDown="Window_PreviewKeyDown">
-    <Border Background="{DynamicResource MaterialDesignPaper}"
+    <Border Background="{DynamicResource PrimaryHueLightBrush}"
             BorderThickness="2"
             CornerRadius="10 10 5 5"
             BorderBrush="#6600b6">
@@ -50,6 +50,7 @@
 
             <DataGrid Grid.Row="1"
                       x:Name="DataGridListProcesses"
+                      Background="{DynamicResource PrimaryHueLightBrush}"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       CanUserResizeRows="False"
