@@ -40,6 +40,7 @@ namespace ConsoleServer1C
         private double _lastWidth;
         private double _lastHeight;
 
+        private readonly StyleApplication _styleApplication = new StyleApplication();
         #endregion
 
         public MainWindow()
@@ -118,6 +119,8 @@ namespace ConsoleServer1C
 
             InitializeTaskbarIcon();
 
+            InitializeContextMenuListTheme();
+
             Topmost = AppSettings.IsTopmost;
         }
 
@@ -155,8 +158,6 @@ namespace ConsoleServer1C
         public int CountElementsListBases { get => ListBases.Count; }
         public int CountElementsListSession { get => SelectedItemListBases?.SessionCount ?? 0; }
 
-
-
         public bool NotUpdating
         {
             get { return (bool)GetValue(NotUpdatingProperty); }
@@ -168,8 +169,6 @@ namespace ConsoleServer1C
                 "NotUpdating",
                 typeof(bool),
                 typeof(MainWindow));
-
-
 
         #endregion
 
@@ -209,6 +208,15 @@ namespace ConsoleServer1C
             if (e.LeftButton == MouseButtonState.Pressed)
                 if (!_formIsWidenSizeWE && !_formIsWidenSizeNS)
                     DragMove();
+        }
+
+        private void WindowMain_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                _refreshData = true;
+                UpdateListBases(true);
+            }
         }
 
         #endregion
@@ -900,13 +908,9 @@ namespace ConsoleServer1C
             return result;
         }
 
-        private void WindowMain_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void InitializeContextMenuListTheme()
         {
-            if (e.Key == Key.F5)
-            {
-                _refreshData = true;
-                UpdateListBases(true);
-            }
+            _styleApplication.InitializeContentSelectorColor(ButtonChangeColor);
         }
     }
 }

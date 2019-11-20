@@ -144,6 +144,14 @@
                                 Margin="1 2"
                                 VerticalAlignment="Top"
                                 Orientation="Horizontal">
+                        <Button x:Name="ButtonChangeColor"
+                                Margin="1 0"
+                                Content="{md:PackIcon ColorLens}"
+                                ToolTip="Сменить стиль приложения">
+                            <Button.ContextMenu>
+                                <ContextMenu x:Name="ContextMenuListColorsTheme"/>
+                            </Button.ContextMenu>
+                        </Button>
                         <Button Margin="1 0"
                                 VerticalContentAlignment="Bottom"
                                 Content="{md:PackIcon WindowMinimize}"

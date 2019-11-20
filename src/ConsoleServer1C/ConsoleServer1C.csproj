@@ -78,6 +78,7 @@
       <DependentUpon>Rphosts1CServer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Safe.cs" />
+    <Compile Include="StyleApplication.cs" />
     <Page Include="ConnectTo1CServerSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
